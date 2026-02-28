@@ -21,6 +21,10 @@ class Draw extends Model
         'start_time',
         'end_time',
         'draw_time',
+        'selection_type',
+        'winning_digit',
+        'prize_pool_total',
+        'total_sales',
     ];
 
     protected $casts = [
@@ -30,11 +34,33 @@ class Draw extends Model
         'winner_selected_at' => 'datetime',
         'ticket_price' => 'decimal:2',
         'total_pool' => 'decimal:2',
+        'prize_pool_total' => 'decimal:2',
+        'total_sales' => 'decimal:2',
     ];
 
     public function tickets()
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    public function winners()
+    {
+        return $this->hasMany(Ticket::class)->where('is_winner', true);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function isLocked(): bool
+    {
+        if ($this->status !== 'live') {
+            return true;
+        }
+
+        // Lock 30 minutes before draw time
+        return now()->addMinutes(30)->greaterThanOrEqualTo($this->draw_time);
     }
 
     public function creator()

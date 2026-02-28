@@ -57,7 +57,7 @@
     </style>
 </head>
 
-<body class="bg-royal-blue text-white antialiased overflow-x-hidden">
+<body class="bg-slate-950 text-white antialiased overflow-x-hidden selection:bg-amber-400 selection:text-slate-900">
     <!-- Navbar -->
     <nav class="fixed w-full z-50 bg-royal-blue/80 backdrop-blur-lg border-b border-white/10">
         <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
@@ -65,7 +65,7 @@
                 <div class="w-10 h-10 bg-gold rounded-lg flex items-center justify-center shadow-lg">
                     <span class="text-royal-blue font-bold text-xl">L</span>
                 </div>
-                <span class="text-2xl font-bold tracking-tight">LuckyDraw<span class="text-gold">Pro</span></span>
+                <span class="text-2xl font-black tracking-tighter lowercase italic">lucky<span class="text-amber-400">draw</span></span>
             </div>
 
             <div class="hidden md:flex items-center space-x-8">
@@ -88,15 +88,22 @@
 
     <!-- Hero Section -->
     <section class="hero-gradient min-h-screen flex items-center pt-20">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="max-w-7xl mx-auto px-6">
+            @if(session('status'))
+                <div class="mb-8 p-4 bg-amber-400/10 border border-amber-400/20 rounded-2xl text-amber-400 font-bold flex items-center space-x-3 animate-fade-in">
+                    <span>👋</span>
+                    <span>{{ session('status') }}</span>
+                </div>
+            @endif
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div class="space-y-8 animate-fade-in">
                 <div
                     class="inline-block px-4 py-1 bg-blue-500/10 border border-blue-400/20 rounded-full text-blue-400 text-sm font-semibold tracking-wide">
                     ✨ THE MOST TRUSTED DRAW PLATFORM
                 </div>
-                <h1 class="text-5xl lg:text-7xl font-bold text-white leading-tight">
-                    Transform Your <br>
-                    <span class="text-gold">Luck into Reality</span>
+                <h1 class="text-6xl lg:text-8xl font-black text-white leading-[0.9] tracking-tighter lowercase italic mb-6">
+                    luck into <br>
+                    <span class="text-amber-400">reality.</span>
                 </h1>
                 <p class="text-gray-400 text-xl max-w-xl leading-relaxed">
                     Experience the gold standard of online draws. Verifiable transparency, instant payouts, and huge

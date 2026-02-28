@@ -1,0 +1,442 @@
+there will be some architectural change here . 1. System Overview
+1.1 Core Functionality
+The Lucky Draw web application operates on the following basic principles:
+
+User purchases products - Each purchase includes entries into draws
+
+Unique entry code - Every product comes with a unique entry code
+
+Scheduled draws - Draws occur at specified times
+
+Winner selection - After draw completion, winners receive prizes
+
+2. User Management
+2.1 Account Features
+2.1.1 Account Creation
+Registration via Email or Phone number
+
+OTP verification for account activation
+
+2.1.2 Authentication
+Login/Logout functionality
+
+Password reset with OTP verification
+
+Remember me option
+
+2.1.3 Profile Management
+User profile with:
+
+Name (required)
+
+Profile picture (optional)
+
+Contact information
+
+Account settings
+
+2.1.4 Account Status
+Active - Full access to all features
+
+Suspended - Limited/Restricted access (due to violations or admin decision)
+
+2.1.5 Agent Integration
+Users can see which agent referred them
+
+Agent name displayed in user account
+
+Important for commission tracking when users win prizes
+
+3. Wallet & Balance System
+3.1 Wallet Features
+3.1.1 Balance Management
+View current wallet balance
+
+Real-time balance updates
+
+Separate display for:
+
+Available balance
+
+Pending balance
+
+Total earnings
+
+3.1.2 Withdrawal System
+For small agents only - Withdrawal request feature
+
+Withdrawal request form with:
+
+Amount specification
+
+Payment method selection
+
+Account details
+
+Request tracking
+
+Admin approval workflow
+
+Withdrawal history
+
+3.1.3 Deposit History
+Complete record of all deposits
+
+Filter by:
+
+Date range
+
+Amount
+
+Status (Pending/Completed/Failed)
+
+Payment method
+
+Downloadable receipts
+
+3.1.4 Transaction History
+Comprehensive transaction log showing:
+
+Credits (deposits, winnings, referrals)
+
+Debits (purchases, withdrawals)
+
+Balance before and after
+
+Transaction ID
+
+Date and time
+
+Transaction type
+
+Related draw/entry information
+
+4. Ticket/Entry System
+4.1 Product & Ticket Management
+4.1.1 Product Display
+Clear product price display
+
+Product details page
+
+Information about how many entries per product
+
+Product images and descriptions
+
+4.1.2 Multiple Product Purchase
+Add multiple products to cart
+
+Bulk purchase option
+
+Quantity selection
+
+Combined entry calculation
+
+Total price calculation
+
+Checkout process
+
+4.1.3 Entry Confirmation
+Instant confirmation after successful payment
+
+Unique entry codes generation
+
+Email/SMS confirmation
+
+Entry summary display
+
+4.1.4 Entry Lock System
+Entries become locked before draw time
+
+Lock timing: Before draw starts
+
+No modifications possible after lock
+
+Visual indicator showing locked status
+
+Countdown to lock displayed
+
+4.1.5 Ticket History
+Complete ticket purchase history
+
+Each entry shows:
+
+Draw ID
+
+Product purchased
+
+Entry code
+
+Purchase date/time
+
+Draw date/time
+
+Status (Active/Locked/Completed/Won)
+
+Accessible from user dashboard
+
+Search and filter options
+
+5. Prize Pool Structure
+5.1 Prize Distribution Calculation
+Total Prize Pool: 55% of total ticket sales
+
+Distribution Breakdown:
+
+Prize	Percentage	Winner Type	Description
+1st Prize	30%	Single winner	Grand prize winner
+2nd Prize	10%	Single winner	Runner-up
+3rd Prize	7%	Single winner	Second runner-up
+Lucky Draw/4th Prize	5%	Multiple winners	Users with matching last digit of ticket
+Fortune Wheel/5th Prize	3%	Multiple winners	Users who purchased 50+ tickets
+Total: 55% (30% + 10% + 7% + 5% + 3%)
+
+5.2 Detailed Prize Structure
+5.2.1 Grand Prize (1st Prize) - 30%
+Winner: Single winner
+
+Selection: Random draw from all entries
+
+Prize amount: 30% of total ticket sales pool
+
+Special features:
+
+Featured winner announcement
+
+Certificate of win
+
+Public recognition (with consent)
+
+5.2.2 Second Prize - 10%
+Winner: Single winner
+
+Selection: Random draw from remaining entries
+
+Prize amount: 10% of total ticket sales pool
+
+Special features: Runner-up recognition
+
+5.2.3 Third Prize - 7%
+Winner: Single winner
+
+Selection: Random draw from remaining entries
+
+Prize amount: 7% of total ticket sales pool
+
+5.2.4 Lucky Draw Prize (4th Prize) - 5%
+Winners: Multiple winners possible
+
+Selection Criteria: Users whose ticket numbers match a specific digit
+
+Prize amount: 5% of total ticket sales pool (distributed among winners)
+
+Distribution: Equal share among all qualifying winners
+
+Example: If the winning digit is "5", all tickets ending with "5" win
+
+5.2.5 Fortune Wheel Prize (5th Prize) - 3%
+Eligibility: Users who purchased 50 or more tickets
+
+Winners: Multiple winners possible
+
+Selection: Random draw from eligible users
+
+Prize amount: 3% of total ticket sales pool (distributed among winners)
+
+Purpose: Reward bulk purchasers and loyal customers
+
+6. Draw & Result System
+6.1 Draw Management
+6.1.1 Draw Countdown Timer
+Visible to logged-in users
+
+Display on dashboard
+
+Real-time countdown
+
+Visual alerts when approaching draw time
+
+Shows:
+
+Days remaining
+
+Hours remaining
+
+Minutes remaining
+
+Seconds remaining
+
+6.1.2 Entry Cutoff
+Automatic cutoff when draw starts
+
+No ticket purchases allowed after draw begins
+
+Clear messaging about cutoff time
+
+Warning notifications before cutoff
+
+6.1.3 Winner Selection Methods
+A. Automatic Random Selection
+
+System-generated random winners
+
+Algorithm ensures fairness
+
+No human intervention
+
+Instant results
+
+Audit trail maintained
+
+B. Manual Winner Selection
+
+Admin can manually select winners (if needed)
+
+Used for special circumstances
+
+Requires admin authorization
+
+Logged for transparency
+
+Verification process
+
+6.2 Result Display
+6.2.1 Final Result Status
+Clear result status indicator
+
+Visible in user dashboard
+
+Visible in agent dashboard
+
+Status types:
+
+Pending - Draw not yet conducted
+
+Processing - Winner selection in progress
+
+Completed - Final results declared
+
+Verified - Results verified by admin
+
+6.2.2 Winner List Display
+Public winner list with ID masking
+
+Privacy protection (partial ID display)
+
+Shows:
+
+Winner rank
+
+Prize amount
+
+Ticket number (masked)
+
+Date of win
+
+Draw ID
+
+7. Prize Distribution
+7.1 Distribution Methods
+7.1.1 Grand Prize Distribution (1st, 2nd, 3rd)
+Processed through agent system
+
+Agent mediates the prize handover
+
+Verification required
+
+Photo/video documentation (optional)
+
+Formal prize ceremony (optional for big wins)
+
+Signed acknowledgment
+
+7.1.2 Small Prize Distribution (4th & 5th Prizes)
+Direct wallet credit
+
+Instant addition to user wallet
+
+No manual intervention needed
+
+Immediate notification
+
+Available for use/withdrawal
+
+7.1.3 Instant Credit System
+Small wins credited automatically
+
+Real-time wallet update
+
+Transaction record created
+
+Notification sent
+
+Available for:
+
+Further ticket purchases
+
+Withdrawal (subject to rules)
+
+7.1.4 Manual Review Process
+For big wins: Optional manual review
+
+Admin verification
+
+Fraud check
+
+Compliance verification
+
+Approval workflow
+
+Release after verification
+
+8. History & Transparency
+8.1 Draw Archive
+Complete history of all past draws
+
+Searchable by:
+
+Date range
+
+Draw ID
+
+Prize type
+
+Export functionality
+
+Permanent record
+
+8.2 Draw Details Page
+For each draw, show:
+
+Total ticket sales
+
+Prize pool amount
+
+Complete winner list
+
+Prize distribution breakdown
+
+Draw date and time
+
+Number of participants
+
+Total tickets sold
+
+8.3 User Ticket History
+Personal purchase history
+
+Entry status tracking
+
+Win/loss record
+
+Total spent
+
+Total won
+
+Net balance
+
+8.4 Receipt System
+Downloadable receipts for:
+
+Ticket purchases
+
+Prize wins --otp not needed .. systyem admin creates admin , admin creates agent with specific districts as , 64 districts overall , agents will create user / user can manually register with district so that the user will be created within  asssociated agent . there can be one or multi[le agents for a districts , if many , agent selection for a user would be random//round robin . and the lottery .. in stead of direct showcase the lottery , we will show as the products . when user byus one/multiple quantity of a product /as there can be many products . he will get a token or as like ticket number .. and then we the products offer have a timing as like the fdraw start and end and draw selection .. the system should have way for automatic selection for a winner or admin can manually select some as per his choice . 

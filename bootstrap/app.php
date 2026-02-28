@@ -16,6 +16,19 @@ return Application::configure(basePath: dirname(__DIR__))
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
+
+        $middleware->redirectUsersTo(function () {
+            $user = auth()->user();
+            if (!$user) return '/';
+            
+            if ($user->hasRole('admin') || $user->hasRole('super-admin')) {
+                return route('admin.dashboard');
+            }
+            if ($user->hasRole('agent')) {
+                return route('agent.dashboard');
+            }
+            return route('dashboard');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

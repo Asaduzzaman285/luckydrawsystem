@@ -26,6 +26,8 @@ class User extends Authenticatable
         'is_active',
         'last_login_at',
         'created_by',
+        'district_id',
+        'agent_id',
     ];
 
     /**
@@ -67,6 +69,31 @@ class User extends Authenticatable
     public function createdUsers()
     {
         return $this->hasMany(User::class, 'created_by');
+    }
+
+    public function agent()
+    {
+        return $this->belongsTo(User::class, 'agent_id');
+    }
+
+    public function assignedUsers()
+    {
+        return $this->hasMany(User::class, 'agent_id');
+    }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function districts()
+    {
+        return $this->belongsToMany(District::class, 'district_user');
+    }
+
+    public function withdrawalRequests()
+    {
+        return $this->hasMany(WithdrawalRequest::class);
     }
 
     public function tickets()

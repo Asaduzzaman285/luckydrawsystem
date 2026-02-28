@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class="bg-slate-900 border-b border-white/5 shadow-xl">
+<nav x-data="{ open: false }" class="bg-slate-900 border-b border-white/5 relative z-50">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20">
@@ -7,11 +7,11 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ url('/') }}" class="flex items-center space-x-2 group">
                         <div
-                            class="w-10 h-10 bg-amber-400 rounded-lg flex items-center justify-center shadow-lg group-hover:rotate-12 transition">
-                            <span class="text-slate-900 font-bold text-xl uppercase">L</span>
+                            class="w-10 h-10 bg-amber-400 rounded-lg flex items-center justify-center shadow-lg group-hover:rotate-12 transition shrink-0 font-black italic">
+                            L
                         </div>
-                        <span class="text-white font-bold text-xl tracking-tight">LuckyDraw<span
-                                class="text-amber-400">Pro</span></span>
+                        <span class="text-white font-black text-xl tracking-tighter lowercase italic">lucky<span
+                                class="text-amber-400">draw</span></span>
                     </a>
                 </div>
 
@@ -19,27 +19,43 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')"
                         class="text-gray-300 hover:text-amber-400 hover:border-amber-400 transition">
-                        {{ __('Member Hub') }}
+                        @if(Auth::user()->hasRole('super-admin') || Auth::user()->hasRole('admin'))
+                            {{ __('Admin Hub') }}
+                        @elseif(Auth::user()->hasRole('agent'))
+                            {{ __('Agent Hub') }}
+                        @else
+                            {{ __('Member Hub') }}
+                        @endif
                     </x-nav-link>
 
-                    @can('approve-withdrawal')
-                    <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')"
-                        class="text-gray-300 hover:text-amber-400 hover:border-amber-400 transition">
-                        {{ __('Operations') }}
+                    <x-nav-link :href="route('results.index')" :active="request()->routeIs('results.*')">
+                        {{ __('Draw Results') }}
+                    </x-nav-link>
+
+                    @can('create-draw')
+                    <x-nav-link :href="route('draws.index')" :active="request()->routeIs('draws.*')">
+                        {{ __('Draws') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                        {{ __('Products') }}
                     </x-nav-link>
                     @endcan
 
-                    @can('create-draw')
-                    <x-nav-link :href="route('draws.index')" :active="request()->routeIs('draws.*')"
-                        class="text-gray-300 hover:text-amber-400 hover:border-amber-400 transition">
-                        {{ __('Management') }}
+                    @can('approve-withdrawal')
+                    <x-nav-link :href="route('admin.withdrawals.index')" :active="request()->routeIs('admin.withdrawals.*')">
+                        {{ __('Withdrawals') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                        {{ __('Staff') }}
                     </x-nav-link>
                     @endcan
 
                     @can('deposit-to-user')
-                    <x-nav-link :href="route('agent.dashboard')" :active="request()->routeIs('agent.dashboard')"
-                        class="text-gray-300 hover:text-amber-400 hover:border-amber-400 transition">
+                    <x-nav-link :href="route('agent.dashboard')" :active="request()->routeIs('agent.dashboard')">
                         {{ __('Agent Portal') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('agent.prizes.index')" :active="request()->routeIs('agent.prizes.*')">
+                        {{ __('Prize Handover') }}
                     </x-nav-link>
                     @endcan
                 </div>
@@ -49,16 +65,15 @@
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button
-                            class="inline-flex items-center px-4 py-2 border border-white/10 text-sm leading-4 font-semibold rounded-xl text-gray-300 bg-white/5 hover:text-amber-400 hover:bg-white/10 focus:outline-none transition ease-in-out duration-150">
+                        <button class="inline-flex items-center px-3 py-2 border border-white/10 text-xs leading-4 font-black rounded-xl text-slate-300 bg-slate-800/50 hover:text-white transition ease-in-out duration-150">
+                            <div class="w-6 h-6 bg-amber-400 rounded-lg flex items-center justify-center text-[10px] text-slate-900 font-black mr-2">
+                                {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                            </div>
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                        clip-rule="evenodd" />
+                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </button>
@@ -103,20 +118,39 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')"
                 class="text-gray-300">
-                {{ __('Member Hub') }}
+                @if(Auth::user()->hasRole('super-admin') || Auth::user()->hasRole('admin'))
+                    {{ __('Admin Hub') }}
+                @elseif(Auth::user()->hasRole('agent'))
+                    {{ __('Agent Hub') }}
+                @else
+                    {{ __('Member Hub') }}
+                @endif
             </x-responsive-nav-link>
 
-            @can('approve-withdrawal')
-            <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')"
+            <x-responsive-nav-link :href="route('results.index')" :active="request()->routeIs('results.index')"
                 class="text-gray-300">
-                {{ __('Operations') }}
+                {{ __('Draw Results') }}
             </x-responsive-nav-link>
-            @endcan
 
             @can('create-draw')
             <x-responsive-nav-link :href="route('draws.index')" :active="request()->routeIs('draws.*')"
                 class="text-gray-300">
-                {{ __('Management') }}
+                {{ __('Draws') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')"
+                class="text-gray-300">
+                {{ __('Products') }}
+            </x-responsive-nav-link>
+            @endcan
+
+            @can('approve-withdrawal')
+            <x-responsive-nav-link :href="route('admin.withdrawals.index')" :active="request()->routeIs('admin.withdrawals.*')"
+                class="text-gray-300">
+                {{ __('Withdrawals') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')"
+                class="text-gray-300">
+                {{ __('Staff Management') }}
             </x-responsive-nav-link>
             @endcan
 
@@ -124,6 +158,10 @@
             <x-responsive-nav-link :href="route('agent.dashboard')" :active="request()->routeIs('agent.dashboard')"
                 class="text-gray-300">
                 {{ __('Agent Portal') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('agent.prizes.index')" :active="request()->routeIs('agent.prizes.*')"
+                class="text-gray-300">
+                {{ __('Prize Handover') }}
             </x-responsive-nav-link>
             @endcan
         </div>

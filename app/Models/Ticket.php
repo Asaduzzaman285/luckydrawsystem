@@ -10,6 +10,7 @@ class Ticket extends Model
         'ticket_number',
         'user_id',
         'draw_id',
+        'product_id',
         'transaction_id',
         'is_winner',
         'prize_tier_id',
@@ -28,6 +29,11 @@ class Ticket extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 
     public function draw()

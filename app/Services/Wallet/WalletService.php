@@ -24,18 +24,16 @@ class WalletService
     public function deposit(User $user, float $amount, string $referenceId = null, int $processedBy = null): Transaction
     {
         return DB::transaction(function () use ($user, $amount, $referenceId, $processedBy) {
+            // Get or create wallet and lock it in one go if possible
             $wallet = $user->wallet()->firstOrCreate([], ['balance' => 0]);
-
-            // Lock for update
             $wallet = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
 
             $wallet->increment('balance', $amount);
             $wallet->increment('lifetime_deposit', $amount);
             $wallet->update(['last_transaction_at' => now()]);
 
-            $this->auditService->log('wallet_deposit', $wallet, null, ['balance' => $wallet->balance], "Deposited {$amount}");
-
-            return Transaction::create([
+            // Create transaction first to ensure it's recorded
+            $transaction = Transaction::create([
                 'user_id' => $user->id,
                 'wallet_id' => $wallet->id,
                 'type' => 'deposit',
@@ -44,6 +42,11 @@ class WalletService
                 'processed_by' => $processedBy,
                 'status' => 'completed',
             ]);
+
+            // Log outside of heavy write block if possible, but still within transaction for safety
+            $this->auditService->log('wallet_deposit', $wallet, null, ['balance' => $wallet->balance], "Deposited {$amount}");
+
+            return $transaction;
         });
     }
 
@@ -130,6 +133,57 @@ class WalletService
                 'reference_id' => $referenceId ?? (string) Str::uuid(),
                 'processed_by' => $processedBy,
                 'status' => 'completed',
+            ]);
+        });
+    }
+
+    /**
+     * Atomically transfer funds between two users.
+     */
+    public function transfer(User $sender, User $receiver, float $amount, string $referenceId = null): Transaction
+    {
+        return DB::transaction(function () use ($sender, $receiver, $amount, $referenceId) {
+            $senderWallet = $sender->wallet()->lockForUpdate()->first();
+            $receiverWallet = $receiver->wallet()->firstOrCreate([], ['balance' => 0]);
+            $receiverWallet = Wallet::where('id', $receiverWallet->id)->lockForUpdate()->first();
+
+            if (!$senderWallet || $senderWallet->balance < $amount) {
+                throw new \Exception('Insufficient balance for transfer');
+            }
+
+            // Deduct from sender
+            $senderWallet->decrement('balance', $amount);
+            $senderWallet->update(['last_transaction_at' => now()]);
+
+            // Add to receiver
+            $receiverWallet->increment('balance', $amount);
+            $receiverWallet->increment('lifetime_deposit', $amount);
+            $receiverWallet->update(['last_transaction_at' => now()]);
+
+            $ref = $referenceId ?? (string) Str::uuid();
+
+            // Log transaction for sender (Debit)
+            Transaction::create([
+                'user_id' => $sender->id,
+                'wallet_id' => $senderWallet->id,
+                'type' => 'transfer_out',
+                'amount' => $amount,
+                'reference_id' => (string) Str::uuid(),
+                'processed_by' => auth()->id(),
+                'status' => 'completed',
+                'description' => "Transfer to {$receiver->name} (Ref: {$ref})",
+            ]);
+
+            // Log transaction for receiver (Credit)
+            return Transaction::create([
+                'user_id' => $receiver->id,
+                'wallet_id' => $receiverWallet->id,
+                'type' => 'transfer_in',
+                'amount' => $amount,
+                'reference_id' => (string) Str::uuid(),
+                'processed_by' => auth()->id(),
+                'status' => 'completed',
+                'description' => "Transfer from {$sender->name} (Ref: {$ref})",
             ]);
         });
     }

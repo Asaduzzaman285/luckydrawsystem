@@ -15,21 +15,15 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <style>
-        body {
-            font-family: 'Outfit', sans-serif;
-        }
-    </style>
 </head>
 
-<body class="font-sans antialiased text-slate-900">
-    <div class="min-h-screen bg-slate-50">
+<body class="font-sans antialiased text-white bg-gray-900">
+    <div class="min-h-screen bg-gray-900">
         @include('layouts.navigation')
 
         <!-- Page Heading -->
         @isset($header)
-            <header class="bg-white border-b border-slate-200">
+            <header class="bg-gray-900/50 backdrop-blur-sm border-b border-white/5">
                 <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
@@ -37,12 +31,14 @@
         @endisset
 
         <!-- Page Content -->
-        <main class="py-12">
+        <main class="py-12 relative overflow-visible">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 {{ $slot }}
             </div>
         </main>
     </div>
+
+    @stack('scripts')
 </body>
 
 </html>

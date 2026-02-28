@@ -31,14 +31,17 @@ class AuthenticatedSessionController extends Controller
         $user = Auth::user();
 
         if ($user->hasRole('admin') || $user->hasRole('super-admin')) {
-            return redirect()->intended(route('admin.dashboard'));
+            return redirect()->intended(route('admin.dashboard'))
+                ->with('success', 'Terminal Access Granted. Welcome back, Administrator.');
         }
 
         if ($user->hasRole('agent')) {
-            return redirect()->intended(route('agent.dashboard'));
+            return redirect()->intended(route('agent.dashboard'))
+                ->with('success', 'Agent Portal Authorized. Welcome back.');
         }
 
-        return redirect()->intended(route('dashboard'));
+        return redirect()->intended(route('dashboard'))
+            ->with('success', 'Welcome to your LuckyDraw Hub!');
     }
 
     /**
@@ -52,6 +55,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/')
+            ->with('status', 'Session terminated. We look forward to your return.');
     }
 }

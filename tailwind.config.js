@@ -12,7 +12,11 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Outfit', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                bkash: '#e2136e',
+                maroon: '#9b1c1c',
             },
         },
     },

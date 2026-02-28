@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\District;
+use App\Services\Agent\AgentAssignmentService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +21,9 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $districts = District::orderBy('name')->get();
+
+        return view('auth.register', compact('districts'));
     }
 
     /**
@@ -27,19 +31,28 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, AgentAssignmentService $agentAssignmentService): RedirectResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'phone' => ['required', 'string', 'max:20', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'district_id' => ['required', 'exists:districts,id'],
         ]);
+
+        $agentId = $agentAssignmentService->getAgentForDistrictRoundRobin($request->district_id);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password),
+            'district_id' => $request->district_id,
+            'agent_id' => $agentId,
         ]);
+
+        $user->assignRole('user');
 
         event(new Registered($user));
 

@@ -36,16 +36,16 @@
                     <span class="text-slate-900 font-bold text-3xl">L</span>
                 </div>
                 <div>
-                    <div class="text-white font-bold text-3xl tracking-tight">LuckyDraw<span
-                            class="text-amber-400">Pro</span></div>
-                    <div class="text-amber-400/60 text-xs font-semibold tracking-widest uppercase">Premium Draw Platform
+                    <div class="text-white font-black text-3xl tracking-tighter lowercase italic">lucky<span
+                            class="text-amber-400">draw</span></div>
+                    <div class="text-amber-400/40 text-[10px] font-black tracking-[0.3em] uppercase">Security Protocol v4.0
                     </div>
                 </div>
             </a>
         </div>
 
         <div
-            class="w-full sm:max-w-md mt-6 px-10 py-10 bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden sm:rounded-3xl">
+            class="w-full {{ $maxWidth ?? 'sm:max-w-md' }} mt-6 px-10 py-10 bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden sm:rounded-3xl">
             {{ $slot }}
         </div>
 

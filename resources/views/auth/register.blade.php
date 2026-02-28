@@ -10,6 +10,27 @@
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
+        <!-- Phone -->
+        <div class="mt-4">
+            <x-input-label for="phone" :value="__('Phone Number')" />
+            <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required />
+            <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+        </div>
+
+        <!-- District -->
+        <div class="mt-4">
+            <x-input-label for="district_id" :value="__('District')" />
+            <select id="district_id" name="district_id" class="block mt-1 w-full border-white/10 bg-white/5 text-gray-300 focus:border-amber-500/50 focus:ring-amber-500/50 rounded-lg shadow-sm transition" required>
+                <option value="">{{ __('Select District') }}</option>
+                @foreach($districts as $district)
+                    <option value="{{ $district->id }}" {{ old('district_id') == $district->id ? 'selected' : '' }}>
+                        {{ $district->name }}
+                    </option>
+                @endforeach
+            </select>
+            <x-input-error :messages="$errors->get('district_id')" class="mt-2" />
+        </div>
+
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
@@ -43,8 +64,8 @@
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button>
-                {{ __('Create Account') }}
+            <x-primary-button class="w-full justify-center py-4 bg-amber-400 text-slate-900 font-black rounded-2xl shadow-xl hover:bg-white transition duration-300 uppercase tracking-widest text-xs">
+                {{ __('Create Member Account') }}
             </x-primary-button>
         </div>
 

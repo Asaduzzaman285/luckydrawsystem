@@ -39,8 +39,8 @@
                 </a>
             @endif
 
-            <x-primary-button>
-                {{ __('Log in to Portal') }}
+            <x-primary-button class="w-full justify-center py-4 bg-amber-400 text-slate-900 font-black rounded-2xl shadow-xl hover:bg-white transition duration-300 uppercase tracking-widest text-xs">
+                {{ __('Authorize Access') }}
             </x-primary-button>
         </div>
 
