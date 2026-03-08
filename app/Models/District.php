@@ -17,4 +17,9 @@ class District extends Model
     {
         return $this->belongsToMany(User::class, 'district_user');
     }
+
+    public function upazillas()
+    {
+        return $this->hasMany(Upazilla::class);
+    }
 }

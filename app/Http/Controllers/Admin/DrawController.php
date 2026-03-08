@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+
 use App\Models\Draw;
 
 class DrawController extends Controller
@@ -61,6 +62,16 @@ class DrawController extends Controller
 
     public function show(Draw $draw)
     {
+        // Auto-sync financial data if it's missing or to ensure accuracy
+        $actualSales = $draw->tickets()->sum('purchase_price');
+        if ($draw->total_sales != $actualSales) {
+            $draw->update([
+                'total_sales' => $actualSales,
+                'prize_pool_total' => $actualSales * 0.55,
+                'sold_tickets' => $draw->tickets()->count()
+            ]);
+        }
+
         $winners = $draw->tickets()
             ->where('is_winner', true)
             ->with(['user', 'product'])
@@ -112,12 +123,26 @@ class DrawController extends Controller
             return back()->with('error', 'A winner has already been selected for this draw.');
         }
 
+        if ($draw->tickets()->count() === 0) {
+            return back()->with('error', 'No tickets have been sold for this draw. Cannot select winners.');
+        }
+
         try {
             // Transition to drawing state as required by the service
             $draw->update(['status' => 'drawing']);
 
             $selector->conductDraw($draw);
             
+            // Check if any winners were actually selected
+            $winnerCount = \App\Models\Ticket::where('draw_id', $draw->id)
+                ->where('is_winner', true)
+                ->count();
+
+            if ($winnerCount === 0) {
+                $draw->update(['status' => 'live']);
+                return back()->with('error', 'Draw completed but no winners were selected (check prize pool and ticket criteria).');
+            }
+
             // Fetch the Tier 1 winner to display
             $winner = \App\Models\Ticket::where('draw_id', $draw->id)
                 ->where('is_winner', true)
@@ -125,7 +150,12 @@ class DrawController extends Controller
                 ->with('user')
                 ->first();
 
-            return back()->with('success', 'Full draw sequence completed. Tier 1 winner: ' . ($winner ? $winner->ticket_number . ' (User: ' . $winner->user->name . ')' : 'None selected'));
+            $msg = "Full draw sequence completed. {$winnerCount} winners identified.";
+            if ($winner) {
+                $msg .= " Tier 1 winner: {$winner->ticket_number} (User: {$winner->user->name})";
+            }
+
+            return back()->with('success', $msg);
         } catch (\Exception $e) {
             // Restore live status if something went wrong
             $draw->update(['status' => 'live']);
@@ -225,12 +255,31 @@ class DrawController extends Controller
     }
 
     /**
-     * Finalize the draw.
+     * Mark a manual prize (Tier 1-3) as given/delivered.
+     */
+    public function finalizePrize(\App\Models\Ticket $ticket, \App\Services\Draw\WinnerSelector $selector)
+    {
+        try {
+            $selector->finalizePrizeFulfillment($ticket);
+            return back()->with('success', "Tier {$ticket->prize_tier_id} prize marked as GIVEN.");
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Finalize the draw manually (as a fallback).
      */
     public function finalizeDraw(Draw $draw)
     {
         if ($draw->status === 'completed') {
             return back()->with('error', 'Draw is already completed.');
+        }
+
+        // Validate that winners exist
+        $winnerCount = $draw->tickets()->where('is_winner', true)->count();
+        if ($winnerCount === 0) {
+            return back()->with('error', 'Cannot finalize draw: No winners have been selected yet. Use the Winner Console to award prizes first.');
         }
 
         $draw->update([

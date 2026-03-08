@@ -11,20 +11,20 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased text-white bg-gray-900">
-    <div class="min-h-screen bg-gray-900">
+<body class="font-sans antialiased bg-[#f8fafc]">
+    <div class="min-h-screen">
         @include('layouts.navigation')
 
         <!-- Page Heading -->
         @isset($header)
-            <header class="bg-gray-900/50 backdrop-blur-sm border-b border-white/5">
-                <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+            <header class="bg-white border-b border-slate-100 shadow-sm relative z-40">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {{ $header }}
                 </div>
             </header>

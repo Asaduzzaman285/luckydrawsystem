@@ -36,21 +36,35 @@
                             <input type="text" name="name" value="{{ old('name', $user->name) }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-amber-400 transition" required>
                         </div>
                         <div class="space-y-2">
-                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
-                            <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-amber-400 transition" required>
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Phone Number</label>
+                            <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-amber-400 transition" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email Address (Optional)</label>
+                            <input type="email" name="email" value="{{ old('email', $user->email) }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-amber-400 transition">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Assigned District</label>
-                            <select name="district_id" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-amber-400 transition text-sm">
+                            <select id="district_id" name="district_id" onchange="fetchUpazillas(this.value)" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-amber-400 transition text-sm">
                                 <option value="">Global / Unassigned</option>
                                 @foreach($districts as $district)
                                     <option value="{{ $district->id }}" {{ old('district_id', $user->district_id) == $district->id ? 'selected' : '' }}>{{ $district->name }}</option>
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Regional Upazilla</label>
+                            <select id="upazilla_id" name="upazilla_id" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-amber-400 transition text-sm">
+                                <option value="">Select Upazilla</option>
+                            </select>
+                        </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Access Status</label>
                             <select name="is_active" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-amber-400 transition text-sm" required>
@@ -59,6 +73,38 @@
                             </select>
                         </div>
                     </div>
+
+                    <script>
+                        function fetchUpazillas(districtId) {
+                            const upazillaSelect = document.getElementById('upazilla_id');
+                            if (!upazillaSelect) return;
+
+                            upazillaSelect.innerHTML = '<option value="">Loading...</option>';
+                            
+                            if (!districtId) {
+                                upazillaSelect.innerHTML = '<option value="">Select Upazilla</option>';
+                                return;
+                            }
+
+                            fetch(`/districts/${districtId}/upazillas`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    upazillaSelect.innerHTML = '<option value="">Select Upazilla</option>';
+                                    data.forEach(upazilla => {
+                                        const option = document.createElement('option');
+                                        option.value = upazilla.id;
+                                        option.text = upazilla.name;
+                                        if ("{{ old('upazilla_id', $user->upazilla_id) }}" == upazilla.id) option.selected = true;
+                                        upazillaSelect.appendChild(option);
+                                    });
+                                });
+                        }
+
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const districtId = document.getElementById('district_id')?.value;
+                            if (districtId) fetchUpazillas(districtId);
+                        });
+                    </script>
 
                     <div class="pt-8 flex items-center space-x-6">
                         <button type="submit" class="btn-pro-primary !py-4 !px-12 uppercase tracking-[0.2em] text-[10px]">

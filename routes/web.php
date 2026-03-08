@@ -65,6 +65,7 @@ Route::middleware(['auth', 'role:admin|super-admin'])->group(function () {
     Route::get('/draws/{draw}/preview/{tierId}', [DrawController::class, 'preview'])->name('draws.preview');
     Route::post('/draws/{draw}/confirm/{tierId}', [DrawController::class, 'confirm'])->name('draws.confirm');
     Route::post('/draws/{draw}/finalize', [DrawController::class, 'finalizeDraw'])->name('draws.finalize');
+    Route::post('/tickets/{ticket}/finalize-prize', [DrawController::class, 'finalizePrize'])->name('tickets.finalize-prize');
     
     Route::get('/withdrawals', [WithdrawalController::class, 'index'])->name('admin.withdrawals.index');
     Route::post('/withdrawals/{request}/approve', [WithdrawalController::class, 'approve'])->name('admin.withdrawals.approve');
@@ -73,6 +74,7 @@ Route::middleware(['auth', 'role:admin|super-admin'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/products/{product}/buy', [\App\Http\Controllers\TicketController::class, 'purchase'])->name('products.buy');
+    Route::post('/withdraw/request', [\App\Http\Controllers\Agent\AgentController::class, 'requestWithdrawalFromAgent'])->name('withdraw.request');
 });
 
 Route::middleware(['auth', 'role:agent|super-admin'])->group(function () {
@@ -80,6 +82,8 @@ Route::middleware(['auth', 'role:agent|super-admin'])->group(function () {
     Route::post('/agent/users', [AgentController::class, 'createUser'])->name('agent.users.store');
     Route::post('/agent/deposit', [AgentController::class, 'deposit'])->name('agent.deposit.store');
     Route::post('/agent/withdraw', [AgentController::class, 'requestWithdrawal'])->name('agent.withdraw.store');
+    Route::post('/agent/withdrawals/{request}/approve', [AgentController::class, 'approveUserWithdrawal'])->name('agent.withdrawals.approve');
+    Route::post('/agent/withdrawals/{request}/reject', [AgentController::class, 'rejectUserWithdrawal'])->name('agent.withdrawals.reject');
     
     Route::get('/agent/prizes', [AgentController::class, 'prizes'])->name('agent.prizes.index');
     Route::post('/agent/prizes/{ticket}/distribute', [AgentController::class, 'distributePrize'])->name('agent.prizes.distribute');
@@ -87,5 +91,9 @@ Route::middleware(['auth', 'role:agent|super-admin'])->group(function () {
 
 Route::get('/results', [ResultController::class, 'index'])->name('results.index');
 Route::get('/results/{draw}', [ResultController::class, 'show'])->name('results.show');
+
+Route::get('/districts/{district}/upazillas', function (\App\Models\District $district) {
+    return $district->upazillas()->orderBy('name')->get();
+})->name('districts.upazillas');
 
 require __DIR__ . '/auth.php';

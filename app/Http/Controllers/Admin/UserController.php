@@ -54,10 +54,12 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'nullable|string|email|max:255|unique:users',
+            'phone' => 'required|string|max:20|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|string|in:admin,agent',
             'district_id' => 'nullable|exists:districts,id',
+            'upazilla_id' => 'nullable|exists:upazillas,id',
         ]);
 
         // Security Check: Only Super Admin can create Admins
@@ -68,8 +70,10 @@ class UserController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'phone' => $validated['phone'],
             'password' => Hash::make($validated['password']),
             'district_id' => $validated['role'] === 'agent' ? $validated['district_id'] : null,
+            'upazilla_id' => $validated['role'] === 'agent' ? $validated['upazilla_id'] : null,
             'created_by' => auth()->id(),
         ]);
 
@@ -97,8 +101,10 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'email' => 'nullable|string|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'required|string|max:20|unique:users,phone,' . $user->id,
             'district_id' => 'nullable|exists:districts,id',
+            'upazilla_id' => 'nullable|exists:upazillas,id',
             'is_active' => 'required|boolean',
         ]);
 

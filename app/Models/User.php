@@ -27,6 +27,7 @@ class User extends Authenticatable
         'last_login_at',
         'created_by',
         'district_id',
+        'upazilla_id',
         'agent_id',
     ];
 
@@ -89,6 +90,11 @@ class User extends Authenticatable
     public function districts()
     {
         return $this->belongsToMany(District::class, 'district_user');
+    }
+
+    public function upazilla()
+    {
+        return $this->belongsTo(Upazilla::class);
     }
 
     public function withdrawalRequests()

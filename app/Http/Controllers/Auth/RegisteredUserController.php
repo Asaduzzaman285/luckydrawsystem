@@ -35,10 +35,11 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['nullable', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'phone' => ['required', 'string', 'max:20', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'district_id' => ['required', 'exists:districts,id'],
+            'upazilla_id' => ['required', 'exists:upazillas,id'],
         ]);
 
         $agentId = $agentAssignmentService->getAgentForDistrictRoundRobin($request->district_id);
@@ -49,6 +50,7 @@ class RegisteredUserController extends Controller
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
             'district_id' => $request->district_id,
+            'upazilla_id' => $request->upazilla_id,
             'agent_id' => $agentId,
         ]);
 

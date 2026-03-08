@@ -24,8 +24,14 @@
         </div>
 
         <div>
+            <x-input-label for="phone" :value="__('Phone Number')" />
+            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" required autocomplete="tel" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+        </div>
+
+        <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
@@ -61,4 +67,45 @@
             @endif
         </div>
     </form>
+
+    @php 
+        $associateAgent = $user->agent ?? ($user->creator && $user->creator->hasRole('agent') ? $user->creator : null);
+    @endphp
+
+    @if ($associateAgent)
+    <div class="mt-10 border-t border-gray-100 pt-10">
+        <h2 class="text-lg font-medium text-gray-900">
+            {{ __('Associate Agent') }}
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-600">
+            {{ __("Information about the agent associated with your account.") }}
+        </p>
+
+        <div class="mt-6 space-y-6">
+            <div>
+                <x-input-label :value="__('Agent Name')" />
+                <div class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm p-2 text-gray-700">
+                    {{ $associateAgent->name }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <x-input-label :value="__('Agent Phone')" />
+                    <div class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm p-2 text-gray-700">
+                        {{ $associateAgent->phone ?? __('Not Available') }}
+                    </div>
+                </div>
+
+                <div>
+                    <x-input-label :value="__('Agent Email')" />
+                    <div class="mt-1 block w-full bg-gray-50 border-gray-300 rounded-md shadow-sm p-2 text-gray-700">
+                        {{ $associateAgent->email ?? __('Not Available') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 </section>

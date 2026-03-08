@@ -31,5 +31,12 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->respond(function ($response) {
+            if ($response->getStatusCode() === 419) {
+                return redirect()->back()
+                    ->withInput(request()->except('password', 'password_confirmation'))
+                    ->with('error', 'Security session expired. Please refresh and try again.');
+            }
+            return $response;
+        });
     })->create();
