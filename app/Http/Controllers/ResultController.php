@@ -13,6 +13,7 @@ class ResultController extends Controller
     public function index()
     {
         $draws = Draw::where('status', 'completed')
+            ->with(['winners.user'])
             ->orderBy('draw_time', 'desc')
             ->paginate(12);
 
