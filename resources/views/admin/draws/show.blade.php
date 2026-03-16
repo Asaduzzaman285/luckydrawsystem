@@ -8,7 +8,10 @@
             loading: false, 
             previewData: null,
             error: null,
-            winners: {{ json_encode($winners->mapWithKeys(fn($w, $k) => [$k => true])) }},
+            winners: {{ json_encode((object)$winners->mapWithKeys(fn($w, $k) => [$k => true])->toArray()) }},
+            isTierWon(id) {
+                return this.winners.hasOwnProperty(String(id));
+            },
             tierNames: {
                 1: '1st Prize / Grand Winner',
                 2: '2nd Prize / Runner Up',
@@ -167,11 +170,11 @@
                                         <input type="text" name="ticket_number" x-model="ticketNumber" placeholder="Enter Winning Code..." 
                                             class="w-full bg-slate-50 border-slate-200 rounded-2xl py-5 px-8 text-sm font-black text-slate-900 focus:ring-blue-600 focus:border-blue-600 transition shadow-inner" required :disabled="winners[selectedTier] || (selectionMethod === 'auto' && loading)">
                                         
-                                        <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 bg-blue-600 text-white text-[10px] font-black px-8 py-3 rounded-xl uppercase tracking-widest hover:bg-blue-700 transition shadow-lg italic disabled:opacity-50" :disabled="winners[selectedTier] || !ticketNumber || (selectionMethod === 'auto' && loading)">Award Now</button>
+                                        <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 bg-blue-600 text-white text-[10px] font-black px-8 py-3 rounded-xl uppercase tracking-widest hover:bg-blue-700 transition shadow-lg italic disabled:opacity-50" :disabled="isTierWon(selectedTier) || !ticketNumber || (selectionMethod === 'auto' && loading)">Award Now</button>
                                     </div>
                                     <p x-show="autoUserName" class="mt-2 text-[10px] font-black text-blue-600 italic uppercase">Selected: <span x-text="autoUserName"></span></p>
                                 </form>
-                                <template x-if="winners[selectedTier]">
+                                <template x-if="isTierWon(selectedTier)">
                                     <p class="text-[10px] font-black text-emerald-600 uppercase italic">✓ Tier already awarded.</p>
                                 </template>
                             </div>
@@ -179,10 +182,10 @@
                             <!-- Algorithmic Interaction (4-5) -->
                             <div x-show="selectedTier >= 4" class="space-y-4">
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic">Step 2: Run Selection Protocol</label>
-                                <button @click="fetchPreview()" :disabled="loading || winners[selectedTier]" class="w-full bg-slate-900 text-white text-[10px] font-black py-5 rounded-2xl uppercase tracking-widest hover:bg-blue-600 transition shadow-xl disabled:opacity-50 italic">
-                                    <span x-show="!loading && !winners[selectedTier]">Initialize Random Pick</span>
+                                <button @click="fetchPreview()" :disabled="loading || isTierWon(selectedTier)" class="w-full bg-slate-900 text-white text-[10px] font-black py-5 rounded-2xl uppercase tracking-widest hover:bg-blue-600 transition shadow-xl disabled:opacity-50 italic">
+                                    <span x-show="!loading && !isTierWon(selectedTier)">Initialize Random Pick</span>
                                     <span x-show="loading">Scanning Ledger...</span>
-                                    <span x-show="!loading && winners[selectedTier]">Tier Awarded</span>
+                                    <span x-show="!loading && isTierWon(selectedTier)">Tier Awarded</span>
                                 </button>
                             </div>
                         </div>
@@ -241,7 +244,7 @@
                                             <input type="hidden" name="ticket_ids[]" :value="ticket.id">
                                         </template>
 
-                                        <button type="submit" :disabled="previewData.tickets.length === 0 || winners[selectedTier]" 
+                                        <button type="submit" :disabled="!previewData || previewData.tickets.length === 0 || isTierWon(selectedTier)" 
                                             class="w-full bg-blue-600 text-white text-[11px] font-black py-5 rounded-3xl uppercase tracking-widest shadow-xl shadow-blue-900/20 hover:scale-[1.02] transition-all italic disabled:opacity-50 disabled:scale-100">
                                             Finalize & Credit Balance
                                         </button>
