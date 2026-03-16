@@ -289,5 +289,23 @@ class DrawController extends Controller
         ]);
 
         return back()->with('success', 'Draw finalized successfully.');
+    /**
+     * Get a random eligible ticket for Tiers 1-3 (Auto-pick).
+     */
+    public function getRandomTicket(Draw $draw)
+    {
+        $ticket = $draw->tickets()
+            ->where('is_winner', false)
+            ->inRandomOrder()
+            ->first();
+
+        if (!$ticket) {
+            return response()->json(['error' => 'No eligible tickets found.'], 404);
+        }
+
+        return response()->json([
+            'ticket_number' => $ticket->ticket_number,
+            'user_name' => $ticket->user->name
+        ]);
     }
 }
