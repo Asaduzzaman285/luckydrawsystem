@@ -7,20 +7,20 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::table('users', function (Blueprint ) {
+        Schema::table('users', function (Blueprint $table) {
             if (!Schema::hasColumn('users', 'upazilla_id')) {
-                ->unsignedBigInteger('upazilla_id')->nullable()->after('district_id');
-                ->foreign('upazilla_id')->references('id')->on('upazillas')->onDelete('set null');
+                $table->unsignedBigInteger('upazilla_id')->nullable()->after('district_id');
+                $table->foreign('upazilla_id')->references('id')->on('upazillas')->onDelete('set null');
             }
         });
     }
 
     public function down(): void
     {
-        Schema::table('users', function (Blueprint ) {
+        Schema::table('users', function (Blueprint $table) {
             if (Schema::hasColumn('users', 'upazilla_id')) {
-                ->dropForeign(['upazilla_id']);
-                ->dropColumn('upazilla_id');
+                $table->dropForeign(['upazilla_id']);
+                $table->dropColumn('upazilla_id');
             }
         });
     }

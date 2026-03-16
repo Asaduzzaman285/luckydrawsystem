@@ -16,7 +16,7 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-6 sm:-my-px sm:ms-10 sm:flex items-center">
+                <div class="hidden space-x-4 sm:-my-px sm:ms-10 sm:flex items-center text-nowrap">
                     @php
                         $dashboardRoute = route('dashboard');
                         if (Auth::user()->hasRole('agent')) {
@@ -26,7 +26,7 @@
                         }
                     @endphp
                     <x-nav-link :href="$dashboardRoute" :active="request()->routeIs('dashboard') || request()->routeIs('admin.dashboard') || request()->routeIs('agent.dashboard')"
-                        class="text-white/70 hover:text-white hover:border-blue-400 transition font-bold uppercase tracking-widest text-[10px]">
+                        class="text-white/70 hover:text-white hover:border-blue-400 transition font-bold uppercase tracking-tighter text-[9px]">
                         @if(Auth::user()->hasRole('super-admin') || Auth::user()->hasRole('admin'))
                             {{ __('Admin Hub') }}
                         @elseif(Auth::user()->hasRole('agent'))
@@ -36,33 +36,33 @@
                         @endif
                     </x-nav-link>
 
-                    <x-nav-link :href="route('results.index')" :active="request()->routeIs('results.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-widest text-[10px]">
+                    <x-nav-link :href="route('results.index')" :active="request()->routeIs('results.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
                         {{ __('Results') }}
                     </x-nav-link>
 
                     @can('create-draw')
-                    <x-nav-link :href="route('draws.index')" :active="request()->routeIs('draws.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-widest text-[10px]">
+                    <x-nav-link :href="route('draws.index')" :active="request()->routeIs('draws.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
                         {{ __('Draws') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-widest text-[10px]">
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
                         {{ __('Products') }}
                     </x-nav-link>
                     @endcan
 
                     @can('approve-withdrawal')
-                    <x-nav-link :href="route('admin.withdrawals.index')" :active="request()->routeIs('admin.withdrawals.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-widest text-[10px]">
+                    <x-nav-link :href="route('admin.withdrawals.index')" :active="request()->routeIs('admin.withdrawals.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
                         {{ __('Withdrawals') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-widest text-[10px]">
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
                         {{ __('Staff') }}
                     </x-nav-link>
                     @endcan
 
                     @can('deposit-to-user')
-                    <x-nav-link :href="route('agent.dashboard')" :active="request()->routeIs('agent.dashboard')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-widest text-[10px]">
+                    <x-nav-link :href="route('agent.dashboard')" :active="request()->routeIs('agent.dashboard')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
                         {{ __('Agent Portal') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('agent.prizes.index')" :active="request()->routeIs('agent.prizes.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-widest text-[10px]">
+                    <x-nav-link :href="route('agent.prizes.index')" :active="request()->routeIs('agent.prizes.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
                         {{ __('Prize Handover') }}
                     </x-nav-link>
                     @endcan
