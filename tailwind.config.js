@@ -12,7 +12,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Outfit', ...defaultTheme.fontFamily.sans],
+                sans: ['Syne', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 bkash: '#e2136e',
