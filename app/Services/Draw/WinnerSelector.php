@@ -147,8 +147,11 @@ class WinnerSelector
             ->where('is_winner', false)
             ->get();
 
-        if ($winners->isNotEmpty()) {
-            $prizePerWinner = $totalTierPrize / $winners->count();
+        if ($winners->isEmpty()) {
+            throw new Exception("No eligible tickets found for last digit '{$digit}'. Please try again to pick a different digit.");
+        }
+
+        $prizePerWinner = $totalTierPrize / $winners->count();
 
             foreach ($winners as $winner) {
                 $winner->update([

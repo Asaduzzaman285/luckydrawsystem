@@ -2,7 +2,9 @@
     <div class="min-h-screen bg-var(--background) pb-24" x-data="{ 
             winnerModal: false,
             selectedTier: 1, 
+            selectionMethod: 'manual',
             ticketNumber: '', 
+            autoUserName: '',
             loading: false, 
             previewData: null,
             error: null,
@@ -14,6 +16,23 @@
                 4: '4th Prize / Lucky Selection',
                 5: '5th Prize / Fortune Selection'
             },
+            async fetchRandomTicket() {
+                this.loading = true;
+                this.error = null;
+                this.ticketNumber = '';
+                this.autoUserName = '';
+                try {
+                    const response = await fetch(`/draws/{{ $draw->id }}/random-ticket`);
+                    const data = await response.json();
+                    if (data.error) throw new Error(data.error);
+                    this.ticketNumber = data.ticket_number;
+                    this.autoUserName = data.user_name;
+                } catch (e) {
+                    this.error = e.message;
+                } finally {
+                    this.loading = false;
+                }
+            },
             async fetchPreview() {
                 this.loading = true;
                 this.error = null;
@@ -21,7 +40,7 @@
                 try {
                     const response = await fetch(`/draws/{{ $draw->id }}/preview/${this.selectedTier}`);
                     const data = await response.json();
-                    if (data.error) throw new Error(data.error);
+                    // Don't throw if no tickets, just show the empty state
                     this.previewData = data;
                 } catch (e) {
                     this.error = e.message;
@@ -129,17 +148,28 @@
                                 </select>
                             </div>
 
+                            <!-- Selection Method (1-3) -->
+                            <div x-show="selectedTier <= 3" class="mb-4">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic">Selection Method</label>
+                                <div class="flex space-x-2">
+                                    <button @click="selectionMethod = 'manual'" :class="selectionMethod === 'manual' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'" class="flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition italic">Manual</button>
+                                    <button @click="selectionMethod = 'auto'; fetchRandomTicket()" :class="selectionMethod === 'auto' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'" class="flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition italic">Automatic</button>
+                                </div>
+                            </div>
+
                             <!-- Manual Interaction (1-3) -->
                             <div x-show="selectedTier <= 3" class="space-y-4">
-                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic">Step 2: Assign Manual Ticket</label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic" x-text="selectionMethod === 'manual' ? 'Step 2: Assign Manual Ticket' : 'Step 2: Automatic Selection Result'"></label>
                                 <form action="{{ route('draws.pick-tier', $draw->id) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="tier_id" :value="selectedTier">
                                     <div class="relative">
-                                        <input type="text" name="ticket_number" placeholder="Enter Winning Code..." 
-                                            class="w-full bg-slate-50 border-slate-200 rounded-2xl py-5 px-8 text-sm font-black text-slate-900 focus:ring-blue-600 focus:border-blue-600 transition shadow-inner" required :disabled="winners[selectedTier]">
-                                        <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 bg-blue-600 text-white text-[10px] font-black px-8 py-3 rounded-xl uppercase tracking-widest hover:bg-blue-700 transition shadow-lg italic disabled:opacity-50" :disabled="winners[selectedTier]">Award Now</button>
+                                        <input type="text" name="ticket_number" x-model="ticketNumber" placeholder="Enter Winning Code..." 
+                                            class="w-full bg-slate-50 border-slate-200 rounded-2xl py-5 px-8 text-sm font-black text-slate-900 focus:ring-blue-600 focus:border-blue-600 transition shadow-inner" required :disabled="winners[selectedTier] || (selectionMethod === 'auto' && loading)">
+                                        
+                                        <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 bg-blue-600 text-white text-[10px] font-black px-8 py-3 rounded-xl uppercase tracking-widest hover:bg-blue-700 transition shadow-lg italic disabled:opacity-50" :disabled="winners[selectedTier] || !ticketNumber || (selectionMethod === 'auto' && loading)">Award Now</button>
                                     </div>
+                                    <p x-show="autoUserName" class="mt-2 text-[10px] font-black text-blue-600 italic uppercase">Selected: <span x-text="autoUserName"></span></p>
                                 </form>
                                 <template x-if="winners[selectedTier]">
                                     <p class="text-[10px] font-black text-emerald-600 uppercase italic">✓ Tier already awarded.</p>

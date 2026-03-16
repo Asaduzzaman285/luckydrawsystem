@@ -59,7 +59,7 @@ class TicketController extends Controller
                         'draw_id' => $draw->id,
                         'product_id' => $product->id,
                         'transaction_id' => $transaction->id,
-                        'ticket_number' => 'TKT-' . strtoupper(bin2hex(random_bytes(4))),
+                        'ticket_number' => strtoupper(bin2hex(random_bytes(4))),
                         'purchase_price' => $product->price, // Simple product price
                         'status' => 'active',
                     ]);

@@ -59,6 +59,7 @@ Route::middleware(['auth', 'role:admin|super-admin'])->group(function () {
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
     Route::post('/users/{user}/credit', [\App\Http\Controllers\Admin\UserController::class, 'credit'])->name('users.credit');
     Route::post('/draws/{draw}/select-winner', [DrawController::class, 'selectWinner'])->name('draws.select-winner');
+    Route::get('/draws/{draw}/random-ticket', [DrawController::class, 'getRandomTicket'])->name('draws.random-ticket');
     Route::post('/draws/{draw}/pick-tier', [DrawController::class, 'pickTier'])->name('draws.pick-tier');
     Route::post('/draws/{draw}/trigger-lucky', [DrawController::class, 'triggerLucky'])->name('draws.trigger-lucky');
     Route::post('/draws/{draw}/trigger-fortune', [DrawController::class, 'triggerFortune'])->name('draws.trigger-fortune');
