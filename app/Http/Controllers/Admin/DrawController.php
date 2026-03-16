@@ -288,7 +288,8 @@ class DrawController extends Controller
             'winner_selection_method' => 'manual'
         ]);
 
-        return back()->with('success', 'Draw finalized successfully.');
+    }
+
     /**
      * Get a random eligible ticket for Tiers 1-3 (Auto-pick).
      */

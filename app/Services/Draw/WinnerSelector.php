@@ -163,7 +163,6 @@ class WinnerSelector
                 $this->walletService->creditPrize($winner->user, (float) $prizePerWinner, "LUCKY-DRAW-D{$draw->id}");
             }
             $this->checkAndAutoCompleteDraw($draw);
-        }
     }
 
     /**
