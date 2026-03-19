@@ -277,35 +277,51 @@
       <div class="fh">Welcome <em>Back!</em></div>
       <div class="fs">Sign in to shop, earn cashback & enter today's draw</div>
 
+      <!-- Session Status -->
+      <x-auth-session-status class="mb-4 font-bold text-xs text-emerald-600" :status="session('status')" />
+
+      <form method="POST" action="{{ route('login') }}">
+        @csrf
+
       <div class="fg">
         <label class="fl">Phone Number or Email</label>
         <div class="fw">
           <span class="fi">📱</span>
-          <input type="text" placeholder="Enter phone or email" />
+          <input type="text" name="login" value="{{ old('login') }}" placeholder="Enter phone or email" required autofocus />
         </div>
+        @error('login')
+            <p class="text-[10px] text-coral font-bold mt-1 uppercase tracking-tight">{{ $message }}</p>
+        @enderror
       </div>
 
       <div class="fg">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
           <label class="fl" style="margin-bottom:0">Password</label>
-          <a href="#" class="fl-link">Forgot password?</a>
+          @if (Route::has('password.request'))
+            <a href="{{ route('password.request') }}" class="fl-link">Forgot password?</a>
+          @endif
         </div>
         <div class="fw">
           <span class="fi">🔐</span>
-          <input type="password" id="pw" placeholder="Enter your password" />
+          <input type="password" name="password" id="pw" placeholder="Enter your password" required autocomplete="current-password" />
           <button class="pw-btn" onclick="togglePw()" type="button">👁</button>
         </div>
+        @error('password')
+            <p class="text-[10px] text-coral font-bold mt-1 uppercase tracking-tight">{{ $message }}</p>
+        @enderror
       </div>
 
       <div class="fr">
         <label class="rl">
-          <input type="checkbox" checked /> Keep me signed in
+          <input type="checkbox" name="remember" /> Keep me signed in
         </label>
       </div>
 
-      <button class="btn-p" type="button">🚀 &nbsp; Sign In & Start Earning</button>
+      <button class="btn-p" type="submit">🚀 &nbsp; Sign In & Start Earning</button>
+      </form>
+
       <div class="div-row">New to ShopWin?</div>
-      <a href="register.html" class="btn-g">🎁 Create Free Account — Get ৳200 Welcome Bonus!</a>
+      <a href="{{ route('register') }}" class="btn-g">🎁 Create Free Account — Get ৳200 Welcome Bonus!</a>
 
       <div class="trust">
         <div class="ti">SSL Secured</div>

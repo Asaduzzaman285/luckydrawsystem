@@ -262,7 +262,7 @@
   <main class="form-side">
     <div class="fc">
       <div class="form-topbar">
-        <a href="login.html" class="back-l">← Back to Sign In</a>
+        <a href="{{ route('login') }}" class="back-l">← Back to Sign In</a>
         <div class="bonus-pill"><span>🎁 ৳200 Welcome Bonus on Join!</span></div>
       </div>
 
@@ -270,6 +270,9 @@
 
       <div class="fh">Create <em>Account</em></div>
       <div class="fs">Join free and start shopping, earning & winning today</div>
+
+      <form method="POST" action="{{ route('register') }}">
+        @csrf
 
       <!-- what you get -->
       <div class="join-perks">
@@ -296,15 +299,21 @@
           <label class="fl">Full Name</label>
           <div class="fw">
             <span class="fi">✦</span>
-            <input type="text" placeholder="Your name" />
+            <input type="text" name="name" value="{{ old('name') }}" placeholder="Your name" required autofocus />
           </div>
+          @error('name')
+              <p class="text-[10px] text-coral font-bold mt-1 uppercase tracking-tight">{{ $message }}</p>
+          @enderror
         </div>
         <div class="fg">
           <label class="fl">Phone Number</label>
           <div class="fw">
             <span class="fi">📱</span>
-            <input type="text" placeholder="01711223344" />
+            <input type="text" name="phone" value="{{ old('phone') }}" placeholder="01711223344" required />
           </div>
+          @error('phone')
+              <p class="text-[10px] text-coral font-bold mt-1 uppercase tracking-tight">{{ $message }}</p>
+          @enderror
         </div>
       </div>
 
@@ -315,20 +324,28 @@
           <label class="fl">District</label>
           <div class="fw sel-wrap">
             <span class="fi">🗺</span>
-            <select id="district_id" onchange="loadUpazilla(this.value)">
+            <select name="district_id" id="district_id" onchange="loadUpazilla(this.value)" required>
               <option value="">Select District</option>
-              <option>Dhaka</option><option>Rajshahi</option><option>Chittagong</option>
-              <option>Khulna</option><option>Sylhet</option><option>Barisal</option>
-              <option>Rangpur</option><option>Mymensingh</option>
+              @foreach($districts ?? [] as $district)
+                <option value="{{ $district->id }}" {{ old('district_id') == $district->id ? 'selected' : '' }}>{{ $district->name }}</option>
+              @endforeach
             </select>
           </div>
+          @error('district_id')
+              <p class="text-[10px] text-coral font-bold mt-1 uppercase tracking-tight">{{ $message }}</p>
+          @enderror
         </div>
         <div class="fg">
           <label class="fl">Upazilla</label>
           <div class="fw sel-wrap">
             <span class="fi">📌</span>
-            <select id="upazilla_id"><option value="">Select Upazilla</option></select>
+            <select name="upazilla_id" id="upazilla_id" required>
+                <option value="">Select Upazilla</option>
+            </select>
           </div>
+          @error('upazilla_id')
+              <p class="text-[10px] text-coral font-bold mt-1 uppercase tracking-tight">{{ $message }}</p>
+          @enderror
         </div>
       </div>
 
@@ -336,8 +353,11 @@
         <label class="fl">Email Address <span class="opt-tag">Optional</span></label>
         <div class="fw">
           <span class="fi">✉</span>
-          <input type="email" placeholder="email@example.com" />
+          <input type="email" name="email" value="{{ old('email') }}" placeholder="email@example.com" />
         </div>
+        @error('email')
+            <p class="text-[10px] text-coral font-bold mt-1 uppercase tracking-tight">{{ $message }}</p>
+        @enderror
       </div>
 
       <!-- SECURITY -->
@@ -347,7 +367,7 @@
           <label class="fl">Password</label>
           <div class="fw">
             <span class="fi">🔐</span>
-            <input type="password" id="pw1" placeholder="Create password" oninput="checkStrength(this.value)" />
+            <input type="password" name="password" id="pw1" placeholder="Create password" oninput="checkStrength(this.value)" required autocomplete="new-password" />
             <button class="pw-btn" onclick="togglePw('pw1',this)" type="button">👁</button>
           </div>
           <div class="pw-strength">
@@ -355,20 +375,24 @@
             <div class="ps-bar" id="ps2"></div>
             <div class="ps-bar" id="ps3"></div>
           </div>
+          @error('password')
+              <p class="text-[10px] text-coral font-bold mt-1 uppercase tracking-tight">{{ $message }}</p>
+          @enderror
         </div>
         <div class="fg">
           <label class="fl">Confirm</label>
           <div class="fw">
             <span class="fi">🔐</span>
-            <input type="password" id="pw2" placeholder="Verify password" />
+            <input type="password" name="password_confirmation" id="pw2" placeholder="Verify password" required autocomplete="new-password" />
             <button class="pw-btn" onclick="togglePw('pw2',this)" type="button">👁</button>
           </div>
         </div>
       </div>
 
-      <button class="btn-p" type="button">🎰 &nbsp; Create Account & Start Winning!</button>
+      <button class="btn-p" type="submit">🎰 &nbsp; Create Account & Start Winning!</button>
+      </form>
 
-      <div class="signin-note">Already have an account? <a href="login.html">Sign In</a></div>
+      <div class="signin-note">Already have an account? <a href="{{ route('login') }}">Sign In</a></div>
       <div class="terms-note">By joining you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></div>
     </div>
   </main>
@@ -390,19 +414,26 @@ function checkStrength(val) {
 }
 function loadUpazilla(d) {
   const sel = document.getElementById('upazilla_id');
-  const map = {
-    'Dhaka':['Dhanmondi','Gulshan','Mirpur','Uttara','Mohammadpur','Tejgaon'],
-    'Rajshahi':['Boalia','Motihar','Rajpara','Shah Makhdum','Paba'],
-    'Chittagong':['Agrabad','Halishahar','Pahartali','Patenga','Double Mooring'],
-    'Khulna':['Sonadanga','Khalishpur','Daulatpur','Khan Jahan Ali'],
-    'Sylhet':['Sylhet Sadar','Beanibazar','Companiganj','Golapganj'],
-    'Barisal':['Barisal Sadar','Babuganj','Bakerganj','Wazirpur'],
-    'Rangpur':['Rangpur Sadar','Badarganj','Gangachhara','Mithapukur'],
-    'Mymensingh':['Mymensingh Sadar','Bhaluka','Fulbaria','Muktagacha']
-  };
-  sel.innerHTML='<option value="">Select Upazilla</option>';
-  if(!d||!map[d]) return;
-  map[d].forEach(u=>{ const o=document.createElement('option'); o.value=u; o.text=u; sel.appendChild(o); });
+  sel.innerHTML='<option value="">Loading...</option>';
+  if(!d) {
+    sel.innerHTML='<option value="">Select Upazilla</option>';
+    return;
+  }
+  fetch(`/districts/${d}/upazillas`)
+    .then(r => r.json())
+    .then(data => {
+      sel.innerHTML='<option value="">Select Upazilla</option>';
+      data.forEach(u=>{
+        const o=document.createElement('option');
+        o.value=u.id;
+        o.text=u.name;
+        sel.appendChild(o);
+      });
+    })
+    .catch(err => {
+      sel.innerHTML='<option value="">Error loading</option>';
+      console.error(err);
+    });
 }
 </script>
 </body>
