@@ -3,319 +3,324 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LuckyDraw Pro — Sign In</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>ShopWin — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --gold: #C9A84C;
-    --gold-light: #F0D080;
-    --gold-dark: #8B6914;
-    --bg: #0A0C12;
-    --surface: #12151F;
-    --surface2: #1A1E2E;
-    --border: rgba(201,168,76,0.15);
-    --text: #EEE8D5;
-    --muted: #6B7199;
+    --purple: #6C2FF2; --purple-dark: #4A1DB0; --purple-mid: #8B4FF8;
+    --electric: #FFD43B; --electric-dark: #E6BC1A;
+    --coral: #FF6B6B; --mint: #00D68F;
+    --bg: #FAFBFF; --surface: #F0F2FF; --border: #E4E7F8;
+    --text: #1A1A2E; --muted: #7B82A8; --white: #FFFFFF;
   }
-  html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+  html, body { height: 100%; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+  .page { display: flex; height: 100vh; width: 100vw; }
 
-  #canvas-bg { position: fixed; inset: 0; z-index: 0; opacity: 0.35; }
-
-  .page { position: relative; z-index: 1; display: flex; align-items: stretch; height: 100vh; width: 100vw; }
-
-  /* ── BRAND PANEL ── */
-  .brand-panel {
-    flex: 0 0 44%;
-    display: flex; flex-direction: column; justify-content: space-between;
-    padding: 52px 50px;
-    background: linear-gradient(145deg, #0E1120 0%, #161A2C 55%, #1E1430 100%);
-    border-right: 1px solid var(--border);
-    position: relative; overflow: hidden;
+  /* ══ BRAND LEFT ══ */
+  .brand {
+    flex: 0 0 48%; position: relative; overflow: hidden;
+    background: linear-gradient(155deg, #13073A 0%, #2B1080 45%, #5020C8 80%, #7B3EF5 100%);
+    display: flex; flex-direction: column; justify-content: space-between; padding: 42px 46px;
   }
-  .brand-panel::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 90% 60% at 15% 75%, rgba(201,168,76,0.09) 0%, transparent 65%),
-                radial-gradient(ellipse 50% 70% at 85% 15%, rgba(100,80,200,0.06) 0%, transparent 60%);
-    pointer-events: none;
+  .glow { position: absolute; border-radius: 50%; filter: blur(70px); pointer-events: none; }
+  .glow-1 { width: 320px; height: 320px; background: rgba(255,212,59,0.2); top: -100px; right: -80px; animation: breathe 7s ease-in-out infinite; }
+  .glow-2 { width: 240px; height: 240px; background: rgba(0,214,143,0.12); bottom: 60px; left: -70px; animation: breathe 9s ease-in-out infinite 2s; }
+  .glow-3 { width: 160px; height: 160px; background: rgba(255,107,107,0.14); top: 45%; right: 30px; animation: breathe 6s ease-in-out infinite 4s; }
+  @keyframes breathe { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(1.2);opacity:0.65;} }
+
+  /* floating prize card */
+  .prize-card {
+    position: absolute; top: 44px; right: 46px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(14px); border-radius: 20px; padding: 16px 20px;
+    animation: floatY 4s ease-in-out infinite; z-index: 4;
+  }
+  @keyframes floatY { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
+  .prize-label { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--electric); margin-bottom: 4px; }
+  .prize-amount { font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; color: #fff; line-height: 1; }
+  .prize-sub { font-size: 10px; color: rgba(255,255,255,0.5); margin-top: 3px; }
+
+  /* logo */
+  .brand-logo { position: relative; z-index: 3; display: flex; align-items: center; gap: 13px; }
+  .logo-box {
+    width: 46px; height: 46px; background: var(--electric);
+    border-radius: 14px; display: flex; align-items: center; justify-content: center;
+    font-size: 22px; box-shadow: 0 0 30px rgba(255,212,59,0.55);
+  }
+  .logo-name { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: #fff; }
+  .logo-name span { color: var(--electric); }
+  .logo-tagline { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+  /* center content */
+  .brand-center { position: relative; z-index: 3; }
+  .live-pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(255,107,107,0.18); border: 1px solid rgba(255,107,107,0.4);
+    border-radius: 100px; padding: 5px 13px; margin-bottom: 18px;
+  }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--coral); box-shadow: 0 0 8px var(--coral); animation: blink 1.2s infinite; }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+  .live-text { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--coral); }
+
+  .headline { font-family: 'Space Grotesk', sans-serif; font-size: clamp(30px,3vw,46px); font-weight: 700; line-height: 1.1; color: #fff; margin-bottom: 14px; }
+  .headline .hl { color: var(--electric); }
+  .sub-desc { font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.5); max-width: 300px; margin-bottom: 26px; }
+
+  /* reward pills */
+  .reward-pills { display: flex; flex-direction: column; gap: 10px; }
+  .rpill {
+    display: flex; align-items: center; gap: 13px;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px; padding: 13px 16px;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+  }
+  .rpill:hover { border-color: rgba(255,212,59,0.4); transform: translateX(5px); }
+  .rpill-icon { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+  .ri-y { background: rgba(255,212,59,0.18); }
+  .ri-r { background: rgba(255,107,107,0.18); }
+  .ri-g { background: rgba(0,214,143,0.15); }
+  .rpill-body { flex: 1; }
+  .rpill-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 1px; }
+  .rpill-sub { font-size: 10px; color: rgba(255,255,255,0.45); }
+  .rpill-val { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; padding: 3px 10px; border-radius: 100px; white-space: nowrap; }
+  .rv-y { background: rgba(255,212,59,0.18); color: var(--electric); }
+  .rv-r { background: rgba(255,107,107,0.18); color: var(--coral); }
+  .rv-g { background: rgba(0,214,143,0.15); color: var(--mint); }
+
+  /* live ticker */
+  .ticker-bar {
+    position: relative; z-index: 3;
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 100px; padding: 9px 16px; overflow: hidden;
+  }
+  .t-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--coral); flex-shrink: 0; }
+  .t-track { flex: 1; overflow: hidden; }
+  .t-inner { display: flex; gap: 28px; animation: scroll 20s linear infinite; white-space: nowrap; }
+  @keyframes scroll { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+  .t-item { font-size: 11px; color: rgba(255,255,255,0.55); flex-shrink: 0; }
+  .t-item b { color: var(--electric); }
+
+  /* ══ FORM RIGHT ══ */
+  .form-side {
+    flex: 1; background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    padding: 48px 44px; overflow-y: auto; position: relative;
+  }
+  .form-side::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #6C2FF2, #FFD43B, #FF6B6B, #00D68F);
   }
 
-  .ring {
-    position: absolute; border-radius: 50%;
-    border: 1px solid rgba(201,168,76,0.1);
-    animation: spin linear infinite;
+  .fc { width: 100%; max-width: 370px; animation: up 0.5s ease; }
+  @keyframes up { from{opacity:0;transform:translateY(18px);} to{opacity:1;transform:translateY(0);} }
+
+  .cb-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg,#FFFAE6,#FFF3B0);
+    border: 1.5px solid #FFD43B; border-radius: 100px;
+    padding: 7px 16px; margin-bottom: 22px;
+    box-shadow: 0 4px 16px rgba(255,212,59,0.2);
   }
-  .ring-1 { width: 460px; height: 460px; top: -100px; right: -180px; animation-duration: 45s; }
-  .ring-2 { width: 280px; height: 280px; bottom: 40px; left: -90px; animation-duration: 32s; animation-direction: reverse; }
-  .ring-3 { width: 160px; height: 160px; top: 40%; right: 40px; animation-duration: 20s; border-color: rgba(201,168,76,0.06); }
-  @keyframes spin { to { transform: rotate(360deg); } }
+  .cb-pill span { font-size: 11px; font-weight: 700; color: #8B6000; }
 
-  /* floating ticket card */
-  .ticket-card {
-    position: absolute; bottom: 140px; right: 40px;
-    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
-    border: 1px solid rgba(201,168,76,0.25);
-    border-radius: 16px; padding: 18px 22px;
-    backdrop-filter: blur(10px);
-    animation: float 5s ease-in-out infinite;
-    z-index: 2;
-  }
-  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-  .ticket-label { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
-  .ticket-amount { font-family: 'Playfair Display', serif; font-size: 26px; color: #fff; font-weight: 700; }
-  .ticket-sub { font-size: 10px; color: var(--muted); margin-top: 3px; }
+  .fh { font-family: 'Space Grotesk', sans-serif; font-size: 27px; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+  .fh em { color: var(--purple); font-style: normal; }
+  .fs { font-size: 12px; color: var(--muted); margin-bottom: 26px; }
 
-  .brand-logo { display: flex; align-items: center; gap: 14px; position: relative; z-index: 2; }
-  .logo-icon {
-    width: 48px; height: 48px;
-    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-    border-radius: 15px;
-    display: flex; align-items: center; justify-content: center; font-size: 22px;
-    box-shadow: 0 0 28px rgba(201,168,76,0.35);
-  }
-  .logo-text { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--gold-light); line-height: 1.2; }
-  .logo-sub { font-size: 9px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-top: 2px; }
+  .fg { margin-bottom: 17px; }
+  .fl { display: block; font-size: 11px; font-weight: 700; color: #4A5080; margin-bottom: 7px; }
+  .fw { position: relative; }
+  .fi { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 15px; opacity: 0.45; transition: opacity 0.2s; pointer-events: none; }
+  .fw:focus-within .fi { opacity: 1; }
 
-  .brand-center { position: relative; z-index: 2; }
-  .brand-headline { font-family: 'Playfair Display', serif; font-size: clamp(36px,3.8vw,56px); font-weight: 700; line-height: 1.1; color: #fff; margin-bottom: 18px; }
-  .brand-headline em { color: var(--gold); font-style: italic; }
-  .brand-desc { font-size: 14px; line-height: 1.75; color: var(--muted); max-width: 290px; font-weight: 300; margin-bottom: 36px; }
-
-  .stats-row { display: flex; gap: 36px; }
-  .stat-num { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 700; color: var(--gold); line-height: 1; }
-  .stat-label { font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 5px; }
-
-  .brand-footer { position: relative; z-index: 2; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); opacity: 0.4; }
-
-  /* ── FORM PANEL ── */
-  .form-panel {
-    flex: 1; display: flex; align-items: center; justify-content: center;
-    padding: 48px 40px; position: relative; overflow-y: auto;
-  }
-  .form-panel::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 55% 45% at 65% 35%, rgba(201,168,76,0.04) 0%, transparent 65%);
-    pointer-events: none;
-  }
-
-  .form-card { width: 100%; max-width: 400px; position: relative; z-index: 2; animation: fadeUp 0.6s ease; }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
-
-  .security-badge {
-    display: flex; align-items: center; gap: 8px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; padding: 9px 14px; margin-bottom: 28px;
-    font-size: 10px; color: var(--muted); letter-spacing: 0.05em;
-  }
-  .security-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: #4ADE80; box-shadow: 0 0 6px rgba(74,222,128,0.7); flex-shrink:0; }
-
-  .form-heading { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: #fff; margin-bottom: 6px; line-height: 1.2; }
-  .form-heading em { color: var(--gold); font-style: italic; }
-  .form-sub { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 32px; }
-
-  .field-group { margin-bottom: 22px; }
-  .field-label { display: block; font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-bottom: 9px; transition: color 0.2s; }
-  .field-wrap { position: relative; }
-  .field-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 13px; pointer-events: none; transition: color 0.2s; }
-  .field-wrap:focus-within .field-icon { color: var(--gold); }
-
-  input[type=text], input[type=email], input[type=password] {
+  input[type=text], input[type=password] {
     width: 100%; background: var(--surface);
-    border: 1px solid rgba(255,255,255,0.07); border-radius: 13px;
-    padding: 14px 14px 14px 42px;
-    font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 400;
-    color: var(--text); outline: none; transition: all 0.25s ease;
+    border: 2px solid var(--border); border-radius: 13px;
+    padding: 13px 14px 13px 46px;
+    font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 500;
+    color: var(--text); outline: none; transition: all 0.22s;
   }
-  input::placeholder { color: #2E3352; }
-  input:focus { border-color: var(--gold); background: var(--surface2); box-shadow: 0 0 0 3px rgba(201,168,76,0.09); }
+  input::placeholder { color: #C0C6E0; font-weight: 400; }
+  input:focus { border-color: var(--purple); background: #fff; box-shadow: 0 0 0 4px rgba(108,47,242,0.07); }
 
-  .pw-toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; transition: color 0.2s; padding: 4px; }
-  .pw-toggle:hover { color: var(--gold); }
+  .pw-btn { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 15px; opacity: 0.35; transition: opacity 0.2s; }
+  .pw-btn:hover { opacity: 1; }
 
-  .field-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
-  .forgot-link { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; font-weight: 700; transition: color 0.2s; }
-  .forgot-link:hover { color: var(--gold); }
+  .fr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; }
+  .rl { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); cursor: pointer; }
+  .rl input[type=checkbox] { width: 15px; height: 15px; accent-color: var(--purple); }
+  .fl-link { font-size: 11px; font-weight: 700; color: var(--purple); text-decoration: none; }
+  .fl-link:hover { color: var(--purple-dark); }
 
-  .remember-label { display: flex; align-items: center; gap: 9px; font-size: 11px; color: var(--muted); cursor: pointer; font-weight: 500; margin-bottom: 28px; }
-  .remember-label input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--gold); }
-
-  .btn-primary {
+  .btn-p {
     width: 100%; padding: 15px;
-    background: linear-gradient(135deg, #D4A843 0%, #C9A84C 50%, #9A7420 100%);
-    color: #0A0C12; border: none; border-radius: 14px; cursor: pointer;
-    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 32px rgba(201,168,76,0.28), 0 2px 8px rgba(0,0,0,0.4);
-    position: relative; overflow: hidden; margin-bottom: 14px;
+    background: linear-gradient(135deg, #4A1DB0, #6C2FF2, #8B4FF8);
+    color: #fff; border: none; border-radius: 13px; cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700;
+    letter-spacing: 0.04em; transition: all 0.28s;
+    box-shadow: 0 8px 24px rgba(108,47,242,0.35);
+    margin-bottom: 12px; position: relative; overflow: hidden;
   }
-  .btn-primary::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%); opacity:0; transition: opacity 0.3s; }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(201,168,76,0.42), 0 4px 12px rgba(0,0,0,0.5); }
-  .btn-primary:hover::after { opacity: 1; }
-  .btn-primary:active { transform: translateY(0); }
+  .btn-p::after { content:''; position:absolute; inset:0; background: linear-gradient(135deg,rgba(255,255,255,0.15),transparent 55%); opacity:0; transition:opacity 0.3s; }
+  .btn-p:hover { transform:translateY(-2px); box-shadow:0 14px 36px rgba(108,47,242,0.45); }
+  .btn-p:hover::after { opacity:1; }
 
-  .btn-ghost {
-    width: 100%; padding: 14px; background: transparent; color: var(--muted);
-    border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; cursor: pointer;
-    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600;
-    letter-spacing: 0.12em; text-transform: uppercase; transition: all 0.25s ease;
-    text-decoration: none; display: block; text-align: center;
+  .div-row { display: flex; align-items: center; gap: 10px; margin: 4px 0 12px; color: var(--muted); font-size: 11px; }
+  .div-row::before, .div-row::after { content:''; flex:1; height:1px; background:var(--border); }
+
+  .btn-g {
+    width: 100%; padding: 14px; background: transparent;
+    border: 2px solid var(--border); border-radius: 13px; cursor: pointer;
+    font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700;
+    color: var(--muted); transition: all 0.22s; text-decoration: none; display: block; text-align: center;
   }
-  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.05); }
+  .btn-g:hover { border-color: var(--purple); color: var(--purple); background: rgba(108,47,242,0.04); }
 
-  .form-footer-note { text-align: center; margin-top: 24px; font-size: 9px; letter-spacing: 0.12em; color: #252840; text-transform: uppercase; }
-  .form-footer-note a { color: var(--gold-dark); text-decoration: none; }
-  .form-footer-note a:hover { color: var(--gold); }
+  .trust {
+    display: flex; justify-content: center; gap: 18px;
+    margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border);
+  }
+  .ti { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--muted); font-weight: 600; }
+  .ti::before { content:''; width:5px; height:5px; border-radius:50%; background: var(--mint); display:block; }
 
-  .form-panel::-webkit-scrollbar { width: 4px; }
-  .form-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-  @media (max-width: 768px) { .brand-panel { display: none; } .form-panel { padding: 32px 20px; } }
+  .form-side::-webkit-scrollbar { width: 4px; }
+  .form-side::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  @media(max-width:768px){ .brand{display:none;} }
 </style>
 </head>
 <body>
-<canvas id="canvas-bg"></canvas>
 <div class="page">
 
-  <!-- BRAND PANEL -->
-  <aside class="brand-panel">
-    <div class="ring ring-1"></div>
-    <div class="ring ring-2"></div>
-    <div class="ring ring-3"></div>
+  <!-- LEFT BRAND -->
+  <aside class="brand">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="glow glow-3"></div>
 
-    <div class="ticket-card">
-      <div class="ticket-label">Today's Jackpot</div>
-      <div class="ticket-amount">৳ 5,00,000</div>
-      <div class="ticket-sub">Draw at midnight · 3,241 entries</div>
+    <div class="prize-card">
+      <div class="prize-label">🏆 This Week's Jackpot</div>
+      <div class="prize-amount">৳ 10,00,000</div>
+      <div class="prize-sub">Draw: Sunday 11:59 PM · 12,340 tickets</div>
     </div>
 
     <div class="brand-logo">
-      <div class="logo-icon">🎲</div>
+      <div class="logo-box">🛍</div>
       <div>
-        <div class="logo-text">LuckyDraw Pro</div>
-        <div class="logo-sub">v4.0 · Premium Edition</div>
+        <div class="logo-name">Shop<span>Win</span></div>
+        <div class="logo-tagline">Shop · Earn Cashback · Win Big</div>
       </div>
     </div>
 
     <div class="brand-center">
-      <h2 class="brand-headline">Your Luck<br>Starts <em>Here</em></h2>
-      <p class="brand-desc">Bangladesh's most trusted lucky draw platform. Real prizes, transparent draws — every single day.</p>
-      <div class="stats-row">
-        <div class="stat">
-          <div class="stat-num">64K+</div>
-          <div class="stat-label">Members</div>
+      <div class="live-pill">
+        <div class="live-dot"></div>
+        <div class="live-text">Live Draws Every Week</div>
+      </div>
+      <h2 class="headline">Every Order is<br>Your <span class="hl">Lottery</span><br>Ticket 🎰</h2>
+      <p class="sub-desc">Shop from thousands of products, earn real cashback instantly, and get entered into our weekly leaderboard prize draws.</p>
+
+      <div class="reward-pills">
+        <div class="rpill">
+          <div class="rpill-icon ri-y">💸</div>
+          <div class="rpill-body">
+            <div class="rpill-title">Instant Cashback</div>
+            <div class="rpill-sub">Every purchase earns you real money back</div>
+          </div>
+          <div class="rpill-val rv-y">Up to 15%</div>
         </div>
-        <div class="stat">
-          <div class="stat-num">৳2.4Cr</div>
-          <div class="stat-label">Paid Out</div>
+        <div class="rpill">
+          <div class="rpill-icon ri-r">🎰</div>
+          <div class="rpill-body">
+            <div class="rpill-title">Jackpot Draw</div>
+            <div class="rpill-sub">1 ticket per ৳100 spent. Auto-entered.</div>
+          </div>
+          <div class="rpill-val rv-r">৳10 Lac</div>
         </div>
-        <div class="stat">
-          <div class="stat-num">100%</div>
-          <div class="stat-label">Verified</div>
+        <div class="rpill">
+          <div class="rpill-icon ri-g">📊</div>
+          <div class="rpill-body">
+            <div class="rpill-title">Leaderboard Prizes</div>
+            <div class="rpill-sub">Top 100 buyers win bonus every month</div>
+          </div>
+          <div class="rpill-val rv-g">Top 100</div>
         </div>
       </div>
     </div>
 
-    <div class="brand-footer">© 2025 LuckyDraw Pro · All rights reserved</div>
+    <div class="ticker-bar">
+      <div class="t-label">🔴 Live</div>
+      <div class="t-track">
+        <div class="t-inner">
+          <span class="t-item">Rahim K. won <b>৳25,000</b> cashback ·</span>
+          <span class="t-item">Sumaiya A. reached <b>#1 Leaderboard</b> 🏆 ·</span>
+          <span class="t-item">Karim M. won <b>৳2,50,000 Jackpot!</b> 🎉 ·</span>
+          <span class="t-item">Nadia B. earned <b>৳8,400</b> this week ·</span>
+          <span class="t-item">Rahim K. won <b>৳25,000</b> cashback ·</span>
+          <span class="t-item">Sumaiya A. reached <b>#1 Leaderboard</b> 🏆 ·</span>
+          <span class="t-item">Karim M. won <b>৳2,50,000 Jackpot!</b> 🎉 ·</span>
+          <span class="t-item">Nadia B. earned <b>৳8,400</b> this week ·</span>
+        </div>
+      </div>
+    </div>
   </aside>
 
-  <!-- FORM PANEL -->
-  <main class="form-panel">
-    <div class="form-card">
-      <div class="security-badge">
-        <div class="dot"></div>
-        Secured · 256-bit SSL Encrypted
+  <!-- RIGHT FORM -->
+  <main class="form-side">
+    <div class="fc">
+      <div class="cb-pill">
+        <span>🎁 Sign in & claim your pending ৳450 cashback reward!</span>
       </div>
 
-      <h2 class="form-heading">Welcome <em>Back</em></h2>
-      <p class="form-sub">Sign in to access your lucky draws</p>
+      <div class="fh">Welcome <em>Back!</em></div>
+      <div class="fs">Sign in to shop, earn cashback & enter today's draw</div>
 
-      {{-- Session Status --}}
-      @if (session('status'))
-          <div class="security-badge" style="border-color: #4ADE80; color: #4ADE80; margin-bottom: 20px;">
-              {{ session('status') }}
-          </div>
-      @endif
+      <div class="fg">
+        <label class="fl">Phone Number or Email</label>
+        <div class="fw">
+          <span class="fi">📱</span>
+          <input type="text" placeholder="Enter phone or email" />
+        </div>
+      </div>
 
-      <form method="POST" action="{{ route('login') }}">
-          @csrf
+      <div class="fg">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+          <label class="fl" style="margin-bottom:0">Password</label>
+          <a href="#" class="fl-link">Forgot password?</a>
+        </div>
+        <div class="fw">
+          <span class="fi">🔐</span>
+          <input type="password" id="pw" placeholder="Enter your password" />
+          <button class="pw-btn" onclick="togglePw()" type="button">👁</button>
+        </div>
+      </div>
 
-          <div class="field-group">
-            <label class="field-label">Phone or Email</label>
-            <div class="field-wrap">
-              <span class="field-icon">✦</span>
-              <input type="text" name="login" value="{{ old('login') }}" placeholder="Enter phone or email" required autofocus />
-            </div>
-            @error('login')
-                <div style="color: #ff4d4d; font-size: 10px; margin-top: 5px; font-weight: 700; letter-spacing: 0.05em;">{{ $message }}</div>
-            @enderror
-          </div>
+      <div class="fr">
+        <label class="rl">
+          <input type="checkbox" checked /> Keep me signed in
+        </label>
+      </div>
 
-          <div class="field-group">
-            <div class="field-label-row">
-              <label class="field-label" style="margin-bottom:0">Password</label>
-              @if (Route::has('password.request'))
-                  <a href="{{ route('password.request') }}" class="forgot-link">Forgot Password?</a>
-              @endif
-            </div>
-            <div class="field-wrap">
-              <span class="field-icon">◈</span>
-              <input type="password" id="pw-login" name="password" placeholder="Enter your password" required autocomplete="current-password" />
-              <button class="pw-toggle" onclick="togglePw('pw-login',this)" type="button">👁</button>
-            </div>
-            @error('password')
-                <div style="color: #ff4d4d; font-size: 10px; margin-top: 5px; font-weight: 700; letter-spacing: 0.05em;">{{ $message }}</div>
-            @enderror
-          </div>
+      <button class="btn-p" type="button">🚀 &nbsp; Sign In & Start Earning</button>
+      <div class="div-row">New to ShopWin?</div>
+      <a href="register.html" class="btn-g">🎁 Create Free Account — Get ৳200 Welcome Bonus!</a>
 
-          <label class="remember-label">
-            <input type="checkbox" name="remember" checked /> Remember me for 30 days
-          </label>
-
-          <button class="btn-primary" type="submit">✦ &nbsp; Sign In Now</button>
-      </form>
-
-      <a href="{{ route('register') }}" class="btn-ghost">Create New Account</a>
-
-      <div class="form-footer-note">
-        LuckyDraw Pro / v4.0 &nbsp;·&nbsp; <a href="#">Terms</a> &nbsp;·&nbsp; <a href="#">Privacy</a>
+      <div class="trust">
+        <div class="ti">SSL Secured</div>
+        <div class="ti">64K+ Members</div>
+        <div class="ti">Instant Payout</div>
       </div>
     </div>
   </main>
 </div>
-
 <script>
-function togglePw(id, btn) {
-  const el = document.getElementById(id);
-  el.type = el.type === 'password' ? 'text' : 'password';
-  btn.textContent = el.type === 'password' ? '👁' : '🙈';
+function togglePw() {
+  const el = document.getElementById('pw');
+  el.type = el.type==='password'?'text':'password';
+  el.nextElementSibling.textContent = el.type==='password'?'👁':'🙈';
 }
-(function(){
-  const canvas = document.getElementById('canvas-bg');
-  const ctx = canvas.getContext('2d');
-  let W, H, particles = [];
-  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-  resize(); window.addEventListener('resize', resize);
-  for(let i=0;i<80;i++) particles.push({ x:Math.random()*1920, y:Math.random()*1080, r:Math.random()*1.4+0.3, dx:(Math.random()-0.5)*0.28, dy:(Math.random()-0.5)*0.28, a:Math.random(), gold:Math.random()>0.55 });
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    particles.forEach(p => {
-      p.x+=p.dx; p.y+=p.dy;
-      if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle = p.gold ? `rgba(201,168,76,${p.a*0.65})` : `rgba(100,110,210,${p.a*0.4})`;
-      ctx.fill();
-    });
-    for(let i=0;i<particles.length;i++) for(let j=i+1;j<particles.length;j++) {
-      const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y, d=Math.sqrt(dx*dx+dy*dy);
-      if(d<120){ ctx.beginPath(); ctx.moveTo(particles[i].x,particles[i].y); ctx.lineTo(particles[j].x,particles[j].y); ctx.strokeStyle=`rgba(201,168,76,${(1-d/120)*0.07})`; ctx.lineWidth=0.5; ctx.stroke(); }
-    }
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
 </script>
 </body>
 </html>
