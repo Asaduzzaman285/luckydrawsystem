@@ -90,28 +90,30 @@
                         <div class="flex items-center gap-1.5 flex-shrink-0">
                             <span class="text-[12px] font-black text-emerald-600 italic" style="font-family:'Syne',sans-serif">+৳{{ number_format($winner->prize_amount, 0) }}</span>
 
-                            {{-- Eye button — now for all tiers --}}
+                            {{-- Eye button — only for 4th and 5th tier --}}
+                            @if($winner->prize_tier_id >= 4)
                             <button
                                 type="button"
                                 class="w-6 h-6 rounded-md border border-slate-200 bg-white flex items-center justify-center text-slate-400 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600 transition-colors flex-shrink-0"
                                 title="View winner details"
-                                onclick="openWinnerModal({
+                                onclick='openWinnerModal({
                                     tier: {{ json_encode($tiers[$winner->prize_tier_id] ?? 'Winner') }},
-                                    drawNo: {{ json_encode('#' . str_pad($draw->id, 3, '0', STR_PAD_LEFT)) }},
+                                    drawNo: {{ json_encode("#" . str_pad($draw->id, 3, "0", STR_PAD_LEFT)) }},
                                     draw: {{ json_encode($draw->title) }},
-                                    name: {{ json_encode(substr($winner->user->name, 0, 3) . '***' . substr($winner->user->name, -1)) }},
+                                    name: {{ json_encode(substr($winner->user->name, 0, 3) . "***" . substr($winner->user->name, -1)) }},
                                     ticket: {{ json_encode((string)$winner->ticket_number) }},
-                                    prize: {{ json_encode('৳' . number_format($winner->prize_amount, 0)) }},
-                                    pool: {{ json_encode('৳' . number_format($draw->prize_pool_total, 0)) }},
-                                    date: {{ json_encode($draw->draw_time->format('M d, Y')) }},
-                                    rank: {{ json_encode($loop->iteration . ' of ' . $sortedWinners->count()) }}
-                                })"
+                                    prize: {{ json_encode("৳" . number_format($winner->prize_amount, 0)) }},
+                                    pool: {{ json_encode("৳" . number_format($draw->prize_pool_total, 0)) }},
+                                    date: {{ json_encode($draw->draw_time->format("M d, Y")) }},
+                                    rank: {{ json_encode($loop->iteration . " of " . $sortedWinners->count()) }}
+                                })'
                             >
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                                     <circle cx="12" cy="12" r="3"/>
                                 </svg>
                             </button>
+                            @endif
                         </div>
                     </div>
                     @endforeach
