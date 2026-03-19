@@ -253,7 +253,7 @@
     <div class="form-card">
 
       <div class="form-top-bar">
-        <a href="login.html" class="back-link">← Back to Sign In</a>
+        <a href="{{ route('login') }}" class="back-link">← Back to Sign In</a>
         <div class="step-counter">Step <span>1</span> of 1</div>
       </div>
 
@@ -262,92 +262,114 @@
       <h2 class="form-heading">Create <em>Account</em></h2>
       <p class="form-sub">Join our lucky draw community — it's free</p>
 
-      <!-- PERSONAL -->
-      <div class="section-label">Personal Details</div>
+      <form method="POST" action="{{ route('register') }}">
+          @csrf
 
-      <div class="field-row">
-        <div class="field-group">
-          <label class="field-label">Full Name</label>
-          <div class="field-wrap">
-            <span class="field-icon">✦</span>
-            <input type="text" placeholder="Your full name" />
+          <!-- PERSONAL -->
+          <div class="section-label">Personal Details</div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label">Full Name</label>
+              <div class="field-wrap">
+                <span class="field-icon">✦</span>
+                <input type="text" name="name" value="{{ old('name') }}" placeholder="Your full name" required autofocus />
+              </div>
+              @error('name')
+                <div style="color: #ff4d4d; font-size: 10px; margin-top: 5px; font-weight: 700; letter-spacing: 0.05em;">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="field-group">
+              <label class="field-label">Phone Number</label>
+              <div class="field-wrap">
+                <span class="field-icon">◎</span>
+                <input type="text" name="phone" value="{{ old('phone') }}" placeholder="01711223344" required />
+              </div>
+              @error('phone')
+                <div style="color: #ff4d4d; font-size: 10px; margin-top: 5px; font-weight: 700; letter-spacing: 0.05em;">{{ $message }}</div>
+              @enderror
+            </div>
           </div>
-        </div>
-        <div class="field-group">
-          <label class="field-label">Phone Number</label>
-          <div class="field-wrap">
-            <span class="field-icon">◎</span>
-            <input type="text" placeholder="01711223344" />
+
+          <!-- LOCATION -->
+          <div class="section-label">Location</div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label">District</label>
+              <div class="field-wrap select-wrap">
+                <span class="field-icon">◈</span>
+                <select id="district_id" name="district_id" onchange="fetchUpazillas(this.value)" required>
+                  <option value="">Select District</option>
+                  @foreach($districts as $district)
+                      <option value="{{ $district->id }}" {{ old('district_id') == $district->id ? 'selected' : '' }}>
+                          {{ $district->name }}
+                      </option>
+                  @endforeach
+                </select>
+              </div>
+              @error('district_id')
+                <div style="color: #ff4d4d; font-size: 10px; margin-top: 5px; font-weight: 700; letter-spacing: 0.05em;">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="field-group">
+              <label class="field-label">Upazilla</label>
+              <div class="field-wrap select-wrap">
+                <span class="field-icon">◈</span>
+                <select id="upazilla_id" name="upazilla_id" required>
+                  <option value="">Select Upazilla</option>
+                </select>
+              </div>
+              @error('upazilla_id')
+                <div style="color: #ff4d4d; font-size: 10px; margin-top: 5px; font-weight: 700; letter-spacing: 0.05em;">{{ $message }}</div>
+              @enderror
+            </div>
           </div>
-        </div>
-      </div>
 
-      <!-- LOCATION -->
-      <div class="section-label">Location</div>
-
-      <div class="field-row">
-        <div class="field-group">
-          <label class="field-label">District</label>
-          <div class="field-wrap select-wrap">
-            <span class="field-icon">◈</span>
-            <select id="district_id" onchange="fetchUpazillas(this.value)">
-              <option value="">Select District</option>
-              <option>Dhaka</option>
-              <option>Rajshahi</option>
-              <option>Chittagong</option>
-              <option>Khulna</option>
-              <option>Sylhet</option>
-              <option>Barisal</option>
-              <option>Rangpur</option>
-              <option>Mymensingh</option>
-            </select>
+          <!-- EMAIL -->
+          <div class="field-group">
+            <label class="field-label">Email Address <span class="optional-badge">Optional</span></label>
+            <div class="field-wrap">
+              <span class="field-icon">@</span>
+              <input type="email" name="email" value="{{ old('email') }}" placeholder="email@example.com" />
+            </div>
+            @error('email')
+                <div style="color: #ff4d4d; font-size: 10px; margin-top: 5px; font-weight: 700; letter-spacing: 0.05em;">{{ $message }}</div>
+            @enderror
           </div>
-        </div>
-        <div class="field-group">
-          <label class="field-label">Upazilla</label>
-          <div class="field-wrap select-wrap">
-            <span class="field-icon">◈</span>
-            <select id="upazilla_id">
-              <option value="">Select Upazilla</option>
-            </select>
+
+          <!-- SECURITY -->
+          <div class="section-label">Security</div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label class="field-label">Password</label>
+              <div class="field-wrap">
+                <span class="field-icon">◈</span>
+                <input type="password" id="pw-reg1" name="password" placeholder="Create password" required autocomplete="new-password" />
+                <button class="pw-toggle" onclick="togglePw('pw-reg1',this)" type="button">👁</button>
+              </div>
+              @error('password')
+                <div style="color: #ff4d4d; font-size: 10px; margin-top: 5px; font-weight: 700; letter-spacing: 0.05em;">{{ $message }}</div>
+              @enderror
+            </div>
+            <div class="field-group">
+              <label class="field-label">Confirm</label>
+              <div class="field-wrap">
+                <span class="field-icon">◈</span>
+                <input type="password" id="pw-reg2" name="password_confirmation" placeholder="Verify password" required autocomplete="new-password" />
+                <button class="pw-toggle" onclick="togglePw('pw-reg2',this)" type="button">👁</button>
+              </div>
+              @error('password_confirmation')
+                <div style="color: #ff4d4d; font-size: 10px; margin-top: 5px; font-weight: 700; letter-spacing: 0.05em;">{{ $message }}</div>
+              @enderror
+            </div>
           </div>
-        </div>
-      </div>
 
-      <!-- EMAIL -->
-      <div class="field-group">
-        <label class="field-label">Email Address <span class="optional-badge">Optional</span></label>
-        <div class="field-wrap">
-          <span class="field-icon">@</span>
-          <input type="email" placeholder="email@example.com" />
-        </div>
-      </div>
+          <button class="btn-primary" type="submit">✦ &nbsp; Create My Account</button>
+      </form>
 
-      <!-- SECURITY -->
-      <div class="section-label">Security</div>
-
-      <div class="field-row">
-        <div class="field-group">
-          <label class="field-label">Password</label>
-          <div class="field-wrap">
-            <span class="field-icon">◈</span>
-            <input type="password" id="pw-reg1" placeholder="Create password" />
-            <button class="pw-toggle" onclick="togglePw('pw-reg1',this)" type="button">👁</button>
-          </div>
-        </div>
-        <div class="field-group">
-          <label class="field-label">Confirm</label>
-          <div class="field-wrap">
-            <span class="field-icon">◈</span>
-            <input type="password" id="pw-reg2" placeholder="Verify password" />
-            <button class="pw-toggle" onclick="togglePw('pw-reg2',this)" type="button">👁</button>
-          </div>
-        </div>
-      </div>
-
-      <button class="btn-primary" type="button">✦ &nbsp; Create My Account</button>
-
-      <div class="signin-link">Already have an account? <a href="login.html">Sign In</a></div>
+      <div class="signin-link">Already have an account? <a href="{{ route('login') }}">Sign In</a></div>
 
       <div class="terms-note">
         By joining you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
@@ -364,22 +386,37 @@ function togglePw(id, btn) {
 }
 function fetchUpazillas(districtId) {
   const sel = document.getElementById('upazilla_id');
-  const map = {
-    'Dhaka':['Dhanmondi','Gulshan','Mirpur','Uttara','Mohammadpur'],
-    'Rajshahi':['Boalia','Motihar','Rajpara','Shah Makhdum'],
-    'Chittagong':['Agrabad','Halishahar','Pahartali','Patenga'],
-    'Khulna':['Sonadanga','Khalishpur','Daulatpur'],
-    'Sylhet':['Sylhet Sadar','Beanibazar','Companiganj'],
-    'Barisal':['Barisal Sadar','Babuganj','Bakerganj'],
-    'Rangpur':['Rangpur Sadar','Badarganj','Gangachhara'],
-    'Mymensingh':['Mymensingh Sadar','Bhaluka','Fulbaria']
-  };
-  sel.innerHTML = '<option value="">Select Upazilla</option>';
-  if (!districtId || !map[districtId]) return;
-  map[districtId].forEach(u => {
-    const o = document.createElement('option'); o.value = u; o.text = u; sel.appendChild(o);
-  });
+  sel.innerHTML = '<option value="">Loading...</option>';
+  
+  if (!districtId) {
+    sel.innerHTML = '<option value="">Select Upazilla</option>';
+    return;
+  }
+
+  fetch(`/districts/${districtId}/upazillas`)
+    .then(response => response.json())
+    .then(data => {
+      sel.innerHTML = '<option value="">Select Upazilla</option>';
+      data.forEach(upazilla => {
+        const o = document.createElement('option');
+        o.value = upazilla.id;
+        o.text = upazilla.name;
+        sel.appendChild(o);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching upazillas:', error);
+      sel.innerHTML = '<option value="">Error loading</option>';
+    });
 }
+
+// Populate upazillas if district is already selected (on validation errors)
+document.addEventListener('DOMContentLoaded', function() {
+    const districtId = document.getElementById('district_id')?.value;
+    if (districtId) {
+        fetchUpazillas(districtId);
+    }
+});
 (function(){
   const canvas = document.getElementById('canvas-bg');
   const ctx = canvas.getContext('2d');

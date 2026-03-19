@@ -232,32 +232,52 @@
       <h2 class="form-heading">Welcome <em>Back</em></h2>
       <p class="form-sub">Sign in to access your lucky draws</p>
 
-      <div class="field-group">
-        <label class="field-label">Phone or Email</label>
-        <div class="field-wrap">
-          <span class="field-icon">✦</span>
-          <input type="text" placeholder="Enter phone or email" />
-        </div>
-      </div>
+      {{-- Session Status --}}
+      @if (session('status'))
+          <div class="security-badge" style="border-color: #4ADE80; color: #4ADE80; margin-bottom: 20px;">
+              {{ session('status') }}
+          </div>
+      @endif
 
-      <div class="field-group">
-        <div class="field-label-row">
-          <label class="field-label" style="margin-bottom:0">Password</label>
-          <a href="#" class="forgot-link">Forgot Password?</a>
-        </div>
-        <div class="field-wrap">
-          <span class="field-icon">◈</span>
-          <input type="password" id="pw-login" placeholder="Enter your password" />
-          <button class="pw-toggle" onclick="togglePw('pw-login',this)" type="button">👁</button>
-        </div>
-      </div>
+      <form method="POST" action="{{ route('login') }}">
+          @csrf
 
-      <label class="remember-label">
-        <input type="checkbox" checked /> Remember me for 30 days
-      </label>
+          <div class="field-group">
+            <label class="field-label">Phone or Email</label>
+            <div class="field-wrap">
+              <span class="field-icon">✦</span>
+              <input type="text" name="login" value="{{ old('login') }}" placeholder="Enter phone or email" required autofocus />
+            </div>
+            @error('login')
+                <div style="color: #ff4d4d; font-size: 10px; margin-top: 5px; font-weight: 700; letter-spacing: 0.05em;">{{ $message }}</div>
+            @enderror
+          </div>
 
-      <button class="btn-primary" type="button">✦ &nbsp; Sign In Now</button>
-      <a href="register.html" class="btn-ghost">Create New Account</a>
+          <div class="field-group">
+            <div class="field-label-row">
+              <label class="field-label" style="margin-bottom:0">Password</label>
+              @if (Route::has('password.request'))
+                  <a href="{{ route('password.request') }}" class="forgot-link">Forgot Password?</a>
+              @endif
+            </div>
+            <div class="field-wrap">
+              <span class="field-icon">◈</span>
+              <input type="password" id="pw-login" name="password" placeholder="Enter your password" required autocomplete="current-password" />
+              <button class="pw-toggle" onclick="togglePw('pw-login',this)" type="button">👁</button>
+            </div>
+            @error('password')
+                <div style="color: #ff4d4d; font-size: 10px; margin-top: 5px; font-weight: 700; letter-spacing: 0.05em;">{{ $message }}</div>
+            @enderror
+          </div>
+
+          <label class="remember-label">
+            <input type="checkbox" name="remember" checked /> Remember me for 30 days
+          </label>
+
+          <button class="btn-primary" type="submit">✦ &nbsp; Sign In Now</button>
+      </form>
+
+      <a href="{{ route('register') }}" class="btn-ghost">Create New Account</a>
 
       <div class="form-footer-note">
         LuckyDraw Pro / v4.0 &nbsp;·&nbsp; <a href="#">Terms</a> &nbsp;·&nbsp; <a href="#">Privacy</a>
