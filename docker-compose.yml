@@ -37,7 +37,7 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - mysqldata:/var/lib/mysql
+      - ./docker/mysql/data:/var/lib/mysql
 
   redis:
     image: redis:7
