@@ -8,6 +8,7 @@ use App\Models\District;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
+use App\Services\Agent\AgentReassignmentService;
 
 class UserController extends Controller
 {
@@ -50,7 +51,7 @@ class UserController extends Controller
     /**
      * Store a newly created staff member in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, AgentReassignmentService $reassignmentService)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -82,6 +83,10 @@ class UserController extends Controller
         // Ensure wallet is created for stats/commissions
         $user->wallet()->create(['balance' => 0]);
 
+        if ($validated['role'] === 'agent') {
+            $reassignmentService->reassignFromSystemAgent($user);
+        }
+
         return redirect()->route('users.index')->with('success', ucfirst($validated['role']) . ' account created successfully.');
     }
 
@@ -97,7 +102,7 @@ class UserController extends Controller
     /**
      * Update the specified user in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user, AgentReassignmentService $reassignmentService)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -109,6 +114,10 @@ class UserController extends Controller
         ]);
 
         $user->update($validated);
+
+        if ($user->hasRole('agent')) {
+            $reassignmentService->reassignFromSystemAgent($user);
+        }
 
         return redirect()->route('users.index')->with('success', 'User profile updated.');
     }

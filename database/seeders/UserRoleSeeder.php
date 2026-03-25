@@ -32,6 +32,10 @@ class UserRoleSeeder extends Seeder
             ]
         );
         $agent->assignRole('agent');
+        
+        // Assign agent to all districts for testing purposes
+        $districts = \App\Models\District::all();
+        $agent->districts()->sync($districts->pluck('id'));
 
         // Create Regular User
         $user = User::firstOrCreate(

@@ -42,7 +42,7 @@ class RegisteredUserController extends Controller
             'upazilla_id' => ['required', 'exists:upazillas,id'],
         ]);
 
-        $agentId = $agentAssignmentService->getAgentForDistrictRoundRobin($request->district_id);
+        $agentId = $agentAssignmentService->getAgentForLocation($request->district_id, $request->upazilla_id);
 
         $user = User::create([
             'name' => $request->name,

@@ -24,24 +24,32 @@ class AgentAssignmentService
     }
 
     /**
-     * Round-robin style (pick agent with least assigned users in that district)
+     * Get the fallback System Agent.
      */
-    public function getAgentForDistrictRoundRobin(int $districtId): ?int
+    public function getSystemAgent(): ?User
     {
-        $district = District::find($districtId);
+        return User::role('agent')->where('email', 'agent@luckydraw.com')->first();
+    }
 
-        if (!$district) {
-            return null;
-        }
-
+    /**
+     * Round-robin style (pick agent with least assigned users in that location)
+     * Granular match on District AND Upazilla. Fallback to System Agent.
+     */
+    public function getAgentForLocation(int $districtId, int $upazillaId): ?int
+    {
         $agent = User::role('agent')
-            ->whereHas('districts', function ($query) use ($districtId) {
-                $query->where('districts.id', $districtId);
-            })
+            ->where('district_id', $districtId)
+            ->where('upazilla_id', $upazillaId)
             ->withCount('assignedUsers')
             ->orderBy('assigned_users_count', 'asc')
             ->first();
 
-        return $agent ? $agent->id : null;
+        if ($agent) {
+            return $agent->id;
+        }
+
+        // Fallback to System Agent
+        $systemAgent = $this->getSystemAgent();
+        return $systemAgent ? $systemAgent->id : null;
     }
 }
