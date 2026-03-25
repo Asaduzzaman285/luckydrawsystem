@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="min-h-screen bg-var(--background) pb-24" x-data="{ agentModal: false }">
+    <div class="min-h-screen bg-var(--background) pb-24" x-data="{ agentModal: false, ticketsModal: false, selectedTickets: [], selectedDrawTitle: '' }">
         
         <!-- Professional Header -->
         <div class="bg-gradient-to-r from-[#1a56db] to-[#1e3a8a] pt-8 pb-20 px-4 sm:px-8 shadow-inner">
@@ -161,6 +161,45 @@
             </div>
         </div>
 
+        <!-- Tickets Full View Modal -->
+        <div x-show="ticketsModal" 
+             class="fixed inset-0 z-[120] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             x-cloak>
+            <div class="bg-white w-full max-w-4xl rounded-[3rem] p-10 shadow-2xl relative border border-white" @click.away="ticketsModal = false">
+                <button @click="ticketsModal = false" class="absolute top-8 right-8 text-slate-300 hover:text-blue-600 transition font-black text-xl">✕</button>
+                
+                <div class="mb-8">
+                    <h3 class="text-2xl font-black text-slate-900 tracking-tighter lowercase italic mb-2">all / <span class="text-blue-600" x-text="selectedDrawTitle"></span> / tickets</h3>
+                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Complete list of numbers for this participation</p>
+                </div>
+
+                <div class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 gap-3 max-h-[60vh] overflow-y-auto pr-4 no-scrollbar">
+                    <template x-for="ticket in selectedTickets" :key="ticket.id">
+                        <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 text-center shadow-inner group hover:bg-blue-600 transition-all duration-300">
+                            <div class="text-[10px] font-black tracking-tighter italic group-hover:text-white" 
+                                 :class="ticket.is_winner ? 'text-blue-600' : 'text-slate-400'"
+                                 x-text="ticket.ticket_number.slice(-6)">
+                            </div>
+                            <template x-if="ticket.is_winner">
+                                <div class="text-[6px] font-black text-blue-600 group-hover:text-white uppercase tracking-widest mt-1">Winner</div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+
+                <div class="mt-10 pt-8 border-t border-slate-50 flex justify-between items-center">
+                    <div class="text-xs font-black text-slate-400 uppercase tracking-widest italic">Total Entries: <span class="text-blue-600" x-text="selectedTickets.length"></span></div>
+                    <button @click="ticketsModal = false" class="bg-slate-900 text-white px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg hover:bg-blue-600 transition italic">Close View</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Main Content (Negative margin up) -->
         <div class="max-w-7xl mx-auto px-4 sm:px-8 -mt-12">
             
@@ -305,14 +344,20 @@
                                         <div class="text-[9px] text-slate-400 font-bold mt-1 italic tracking-widest uppercase">{{ $firstTicket->product->name ?? 'Direct' }}</div>
                                     </td>
                                     <td class="px-10 py-6">
-                                        <div class="flex flex-wrap gap-2 max-w-sm">
-                                            @foreach($ticketGroup->take(5) as $ticket)
+                                        <div class="flex flex-wrap items-center gap-2 max-w-sm">
+                                            @foreach($ticketGroup->take(10) as $ticket)
                                                 <span class="text-[9px] font-black {{ $ticket->is_winner ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400' }} px-3 py-1 rounded uppercase tracking-tighter italic border border-slate-200/50 shadow-sm">
                                                     {{ substr($ticket->ticket_number, -6) }}
                                                 </span>
                                             @endforeach
-                                            @if($ticketGroup->count() > 5)
-                                                <span class="text-[8px] font-black text-slate-300 uppercase tracking-tighter self-center italic ml-1">+{{ $ticketGroup->count() - 5 }} more</span>
+                                            
+                                            @if($ticketGroup->count() > 10)
+                                                <button @click="selectedTickets = {{ $ticketGroup->toJson() }}; selectedDrawTitle = '{{ strtolower($firstTicket->draw->title) }}'; ticketsModal = true" 
+                                                        class="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition shadow-sm border border-blue-100/50 ml-1 group" 
+                                                        title="View all {{ $ticketGroup->count() }} tickets">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                                </button>
+                                                <span class="text-[8px] font-black text-blue-600 uppercase tracking-tighter self-center italic ml-1">+{{ $ticketGroup->count() - 10 }}</span>
                                             @endif
                                         </div>
                                     </td>
