@@ -19,13 +19,12 @@
                         </div>
                     </div>
                     
-                    <!-- Balance Toggle Pill -->
                     <div x-data="{ show: false }" class="flex items-center space-x-2">
-                        <div @click="show = !show" class="balance-pill group scale-90 sm:scale-100 origin-right cursor-pointer bg-white/10 border-white/10 backdrop-blur-md">
+                        <div @click="show = !show" class="balance-pill group scale-90 sm:scale-100 origin-right cursor-pointer bg-white/10 border-white/10 backdrop-blur-md hover:bg-white transition-all duration-300">
                             <div class="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center text-white text-[10px] font-black italic shadow-lg">৳</div>
                             <div class="relative flex-1 overflow-hidden h-5 ml-2">
-                                <div x-show="!show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="opacity-0 -translate-y-4" class="text-[10px] font-black text-white uppercase tracking-widest pt-0.5 italic">tap for balance</div>
-                                <div x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="opacity-0 -translate-y-4" class="text-sm font-black text-white tracking-tighter pt-0 italic">৳ {{ number_format($wallet->balance ?? 0, 2) }}</div>
+                                <div x-show="!show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="opacity-0 -translate-y-4" class="balance-text text-[10px] font-black text-white uppercase tracking-widest pt-0.5 italic">tap for balance</div>
+                                <div x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="opacity-0 -translate-y-4" class="balance-text text-sm font-black text-white tracking-tighter pt-0 italic">৳ {{ number_format($wallet->balance ?? 0, 2) }}</div>
                             </div>
                         </div>
                         <button @click="$dispatch('open-withdraw-modal')" class="bg-white/10 hover:bg-white/20 text-white text-[8px] font-black px-4 py-2.5 rounded-xl uppercase tracking-widest transition shadow-lg border border-white/10 italic">
@@ -273,7 +272,11 @@
                                             <div class="w-full h-full bg-slate-50 flex items-center justify-center text-blue-100 text-3xl font-black italic">ASSET</div>
                                         @endif
                                         <div class="absolute top-4 left-4">
-                                            <span class="bg-blue-600 text-white text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-white/20 italic shadow-lg">Active</span>
+                                            @if($product->draw->max_tickets > 0 && $product->draw->sold_tickets >= $product->draw->max_tickets)
+                                                <span class="badge-sold-out text-white text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-white/20 italic shadow-lg">Sold Out</span>
+                                            @else
+                                                <span class="bg-blue-600 text-white text-[8px] font-black px-3 py-1 rounded-full uppercase tracking-widest border border-white/20 italic shadow-lg">Active</span>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="p-6 flex flex-col flex-1">
@@ -295,12 +298,22 @@
                                             </div>
                                         </div>
 
+                                        @php
+                                            $isSoldOut = $product->draw->max_tickets > 0 && $product->draw->sold_tickets >= $product->draw->max_tickets;
+                                        @endphp
+                                        
                                         <form action="{{ route('products.buy', $product) }}" method="POST" class="mt-auto">
                                             @csrf
                                             <div class="flex gap-3">
-                                                <input type="number" name="quantity" value="1" min="1" class="w-16 bg-slate-50 border-slate-200 rounded-xl py-3 text-slate-900 font-black text-center focus:ring-blue-600 transition text-xs shadow-inner">
-                                                <button type="submit" class="flex-1 bg-blue-600 text-white text-[10px] font-black py-3 rounded-xl uppercase tracking-widest shadow-lg shadow-blue-500/20 hover:bg-slate-900 transition-all duration-300 italic">
-                                                    Enter Draw
+                                                <input type="number" name="quantity" value="1" min="1" 
+                                                       @if($isSoldOut) disabled @endif
+                                                       class="w-16 bg-slate-50 border-slate-200 rounded-xl py-3 text-slate-900 font-black text-center focus:ring-blue-600 transition text-xs shadow-inner @if($isSoldOut) opacity-50 @endif">
+                                                
+                                                <button type="submit" 
+                                                        @if($isSoldOut) disabled @endif
+                                                        class="flex-1 text-[10px] font-black py-3 rounded-xl uppercase tracking-widest transition-all duration-300 italic shadow-lg 
+                                                        {{ $isSoldOut ? 'btn-sold-out' : 'bg-blue-600 text-white shadow-blue-500/20 hover:bg-slate-900' }}">
+                                                    {{ $isSoldOut ? 'Sold Out' : 'Enter Draw' }}
                                                 </button>
                                             </div>
                                         </form>

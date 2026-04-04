@@ -17,8 +17,9 @@
     body {
         background-color: var(--background);
         color: var(--text-dark);
-        font-family: 'Syne', sans-serif;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        letter-spacing: -0.01em;
     }
 
     ::selection {
@@ -294,7 +295,24 @@
     }
 
     .balance-pill:hover {
-        background: var(--primary-light);
+        background: #eff6ff;
+    }
+
+    .balance-pill:hover .balance-text {
+        color: #1a56db !important;
+    }
+
+    /* Sold Out State */
+    .btn-sold-out {
+        background: #f1f5f9 !important;
+        color: #94a3b8 !important;
+        cursor: not-allowed;
+        box-shadow: none !important;
+    }
+
+    .badge-sold-out {
+        background: #ef4444 !important;
+        color: white !important;
     }
 
     .balance-reveal {

@@ -35,11 +35,11 @@
                     </div>
                     
                     <!-- Balance Toggle Pill (Agent Earnings) -->
-                    <div x-data="{ show: false }" @click="show = !show" class="balance-pill group scale-90 sm:scale-100 origin-right border-white/10 bg-white/10 backdrop-blur-md">
+                    <div x-data="{ show: false }" @click="show = !show" class="balance-pill group scale-90 sm:scale-100 origin-right border-white/10 bg-white/10 backdrop-blur-md hover:bg-white transition-all duration-300">
                         <div class="w-7 h-7 bg-blue-600 rounded-full flex items-center justify-center text-white text-[10px] font-black italic shadow-lg">৳</div>
                         <div class="relative flex-1 overflow-hidden h-5 ml-2">
-                            <div x-show="!show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="opacity-0 -translate-y-4" class="text-[10px] font-black text-white uppercase tracking-widest pt-0.5 italic">tap for earnings</div>
-                            <div x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="opacity-0 -translate-y-4" class="text-sm font-black text-white tracking-tighter pt-0">৳ {{ number_format($stats['wallet_balance'], 2) }}</div>
+                            <div x-show="!show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="opacity-0 -translate-y-4" class="balance-text text-[10px] font-black text-white uppercase tracking-widest pt-0.5 italic">tap for earnings</div>
+                            <div x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="opacity-0 -translate-y-4" class="balance-text text-sm font-black text-white tracking-tighter pt-0">৳ {{ number_format($stats['wallet_balance'], 2) }}</div>
                         </div>
                     </div>
                 </div>
