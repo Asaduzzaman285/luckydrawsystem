@@ -286,8 +286,8 @@
         </div>
 
         <!-- Registration Modal -->
-        <div x-show="registerModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" x-cloak>
-            <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white">
+        <div x-show="registerModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" x-cloak>
+            <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <button @click="registerModal = false" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition font-black">✕</button>
                 <div class="mb-8">
                     <h3 class="text-2xl font-black text-slate-900 tracking-tighter lowercase italic">onboard / <span class="text-blue-600">user</span></h3>
@@ -317,8 +317,8 @@
         </div>
 
         <!-- Deposit Modal -->
-        <div x-show="depositModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" x-cloak>
-            <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white">
+        <div x-show="depositModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" x-cloak>
+            <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <button @click="depositModal = false" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition font-black">✕</button>
                 <div class="mb-8">
                     <h3 class="text-2xl font-black text-slate-900 tracking-tighter lowercase italic">credit / <span class="text-emerald-600">transfer</span></h3>
@@ -401,8 +401,8 @@
         </div>
 
         <!-- Payout Modal -->
-        <div x-show="payoutModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" x-cloak>
-            <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white">
+        <div x-show="payoutModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" x-cloak>
+            <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <button @click="payoutModal = false" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition font-black">✕</button>
                 <div class="mb-8">
                     <h3 class="text-2xl font-black text-slate-900 tracking-tighter lowercase italic">payout / <span class="text-blue-600">withdrawal</span></h3>

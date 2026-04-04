@@ -156,8 +156,8 @@
 
                 <!-- Create Staff Modal -->
                 <div x-show="createModal" 
-                     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" x-cloak>
-                    <div class="bg-white w-full max-w-2xl rounded-[3rem] p-12 shadow-2xl relative border border-white">
+                     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" x-cloak>
+                    <div class="bg-white w-full max-w-2xl rounded-[3rem] p-8 md:p-12 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
                         <button @click="createModal = false" class="absolute top-10 right-10 text-slate-400 hover:text-slate-900 transition font-black text-xl">✕</button>
                         <div class="mb-10 text-center text-slate-900">
                             <h3 class="text-3xl font-black tracking-tighter lowercase italic">appoint / <span class="text-blue-600">staff</span></h3>
@@ -247,8 +247,8 @@
 
                 <!-- Funding Modal -->
                 <div x-show="creditModal" 
-                     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" x-cloak>
-                    <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white">
+                     class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" x-cloak>
+                    <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
                         <button @click="creditModal = false" class="absolute top-8 right-8 text-slate-400 hover:text-slate-900 transition font-black">✕</button>
                         <div class="mb-8 text-slate-900">
                             <h3 class="text-2xl font-black tracking-tighter lowercase italic">fund / <span class="text-blue-600">wallet</span></h3>
