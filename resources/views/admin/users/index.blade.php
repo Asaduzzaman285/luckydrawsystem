@@ -27,16 +27,16 @@
             @endif
 
             <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-12">
                 <div class="stats-card stats-card-pro">
-                    <span class="stats-label">Total Staff</span>
-                    <div class="stats-value text-white">{{ $stats['total_staff'] }}</div>
-                    <span class="stats-subtext">Active personnel</span>
+                    <span class="stats-label">Total Users</span>
+                    <div class="stats-value text-white">{{ $stats['total_users'] }}</div>
+                    <span class="stats-subtext">Entire database</span>
                 </div>
                 <div class="stats-card stats-card-pro">
                     <span class="stats-label">Admins</span>
                     <div class="stats-value text-amber-400">{{ $stats['admins'] }}</div>
-                    <span class="stats-subtext">System controllers</span>
+                    <span class="stats-subtext">Controllers</span>
                 </div>
                 <div class="stats-card stats-card-pro">
                     <span class="stats-label">Agents</span>
@@ -44,10 +44,31 @@
                     <span class="stats-subtext">Regional operators</span>
                 </div>
                 <div class="stats-card stats-card-pro">
+                    <span class="stats-label">Members</span>
+                    <div class="stats-value text-emerald-400">{{ $stats['members'] }}</div>
+                    <span class="stats-subtext">Participants</span>
+                </div>
+                <div class="stats-card stats-card-pro">
                     <span class="stats-label">Wallet Pool</span>
                     <div class="stats-value text-white"><span class="text-amber-400 mr-1">৳</span>{{ number_format($stats['total_wallets_balance'], 0) }}</div>
-                    <span class="stats-subtext">Total agent liquidity</span>
+                    <span class="stats-subtext">Total liquidity</span>
                 </div>
+            </div>
+
+            <!-- Role Filtering Tabs -->
+            <div class="flex flex-wrap gap-2 mb-6">
+                <a href="{{ route('users.index', ['role' => 'all']) }}" 
+                   class="px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all {{ $roleFilter === 'all' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'bg-white text-slate-400 border border-slate-100 hover:bg-slate-50' }}">
+                   All Registry
+                </a>
+                <a href="{{ route('users.index', ['role' => 'staff']) }}" 
+                   class="px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all {{ $roleFilter === 'staff' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'bg-white text-slate-400 border border-slate-100 hover:bg-slate-50' }}">
+                   Staff Only
+                </a>
+                <a href="{{ route('users.index', ['role' => 'members']) }}" 
+                   class="px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all {{ $roleFilter === 'members' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'bg-white text-slate-400 border border-slate-100 hover:bg-slate-50' }}">
+                   Members Only
+                </a>
             </div>
 
             <!-- Table Section -->
@@ -57,7 +78,8 @@
                         <thead>
                             <tr class="bg-slate-50/50">
                                 <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Name & Role</th>
-                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Region</th>
+                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Location</th>
+                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Assigned Agent</th>
                                 <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Wallet Balance</th>
                                 <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Status</th>
                                 <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100 text-right">Actions</th>
@@ -91,6 +113,15 @@
                                     </td>
                                     <td class="px-8 py-6">
                                         <div class="text-xs font-black text-slate-900 tracking-tighter">{{ $user->district->name ?? 'Global' }}</div>
+                                        <div class="text-[9px] text-slate-400 font-bold mt-1">{{ $user->upazilla->name ?? '--' }}</div>
+                                    </td>
+                                    <td class="px-8 py-6">
+                                        @if($user->agent)
+                                            <div class="font-black text-blue-600 text-xs tracking-tight italic">{{ $user->agent->name }}</div>
+                                            <div class="text-[9px] text-slate-400 font-bold mt-0.5">{{ $user->agent->phone }}</div>
+                                        @else
+                                            <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest italic">No Agent</span>
+                                        @endif
                                     </td>
                                     <td class="px-8 py-6">
                                         <div class="text-sm font-black text-slate-900 tracking-tighter">৳ {{ number_format($user->wallet->balance ?? 0, 2) }}</div>

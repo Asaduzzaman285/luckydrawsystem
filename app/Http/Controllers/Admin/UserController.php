@@ -13,30 +13,41 @@ use App\Services\Agent\AgentReassignmentService;
 class UserController extends Controller
 {
     /**
-     * Display a listing of staff (Admins/Agents).
+     * Display a listing of all users (Staff & Members).
      */
-    public function index()
+    public function index(Request $request)
     {
-        $query = User::role(['admin', 'agent', 'super-admin'])->with('district');
+        $roleFilter = $request->get('role', 'all');
         
-        // If regular admin, only show agents
-        if (!auth()->user()->hasRole('super-admin')) {
-            $query->role('agent');
+        $query = User::with(['district', 'agent', 'roles']);
+
+        if ($roleFilter === 'staff') {
+            $query->role(['admin', 'agent', 'super-admin']);
+        } elseif ($roleFilter === 'members') {
+            $query->role('user');
+        } elseif ($roleFilter !== 'all') {
+            $query->role($roleFilter);
         }
 
-        $users = $query->latest()->paginate(20);
+        // Security: Non-super-admins cannot see other admins or super-admins
+        if (!auth()->user()->hasRole('super-admin')) {
+            $query->whereHas('roles', function($q) {
+                $q->whereIn('name', ['agent', 'user']);
+            });
+        }
+
+        $users = $query->latest()->paginate(50);
         $districts = \App\Models\District::orderBy('name')->get();
 
         $stats = [
-            'total_staff' => User::role(['admin', 'agent', 'super-admin'])->count(),
+            'total_users' => User::count(),
             'admins' => User::role(['admin', 'super-admin'])->count(),
             'agents' => User::role('agent')->count(),
-            'total_wallets_balance' => \App\Models\Wallet::whereHas('user', function($q) {
-                $q->role(['admin', 'agent', 'super-admin']);
-            })->sum('balance'),
+            'members' => User::role('user')->count(),
+            'total_wallets_balance' => \App\Models\Wallet::sum('balance'),
         ];
 
-        return view('admin.users.index', compact('users', 'stats', 'districts'));
+        return view('admin.users.index', compact('users', 'stats', 'districts', 'roleFilter'));
     }
 
     /**

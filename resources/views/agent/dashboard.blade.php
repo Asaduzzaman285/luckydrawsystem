@@ -3,7 +3,17 @@
         x-data="{ 
             registerModal: false, 
             depositModal: false, 
-            payoutModal: false 
+            payoutModal: false,
+            searchQuery: '',
+            selectedUser: null,
+            managedUsers: {{ $managedUsers->map(fn($u) => ['id' => $u->id, 'name' => $u->name, 'phone' => $u->phone])->toJson() }},
+            get filteredUsers() {
+                if (!this.searchQuery) return [];
+                return this.managedUsers.filter(u => 
+                    u.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+                    u.phone.includes(this.searchQuery)
+                );
+            }
         }"
         x-on:open-modal.window="
             if ($event.detail === 'register-member') registerModal = true;
@@ -316,14 +326,65 @@
                 </div>
                 <form action="{{ route('agent.deposit.store') }}" method="POST" class="space-y-4">
                     @csrf
-                    <div class="space-y-1">
+                    <div class="space-y-1 relative" x-data="{ open: false }">
                         <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Target Account</label>
-                        <select name="user_id" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-emerald-400 text-sm" required>
-                            <option value="">Choose member...</option>
-                            @foreach(\App\Models\User::role('user')->where('created_by', auth()->id())->get() as $u)
-                                <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->email }})</option>
-                            @endforeach
-                        </select>
+                        
+                        <!-- Search Input -->
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                x-model="searchQuery" 
+                                @focus="open = true"
+                                @click.away="setTimeout(() => open = false, 200)"
+                                class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-emerald-400 text-sm" 
+                                placeholder="Search by Phone or Name..."
+                                autocomplete="off"
+                            >
+                            <div class="absolute right-6 top-1/2 -translate-y-1/2">
+                                <span class="text-xs">🔍</span>
+                            </div>
+                        </div>
+
+                        <!-- Hidden Input for Form Submission -->
+                        <input type="hidden" name="user_id" :value="selectedUser?.id" required>
+
+                        <!-- Selected User Badge -->
+                        <template x-if="selectedUser">
+                            <div class="mt-2 p-3 bg-emerald-50 rounded-xl border border-emerald-100 flex justify-between items-center animate-fade-in">
+                                <div>
+                                    <div class="text-[10px] font-black text-emerald-600 uppercase tracking-widest leading-none">Selected Member</div>
+                                    <div class="text-xs font-black text-slate-900 mt-1" x-text="selectedUser.name"></div>
+                                    <div class="text-[9px] text-slate-400 font-bold" x-text="selectedUser.phone"></div>
+                                </div>
+                                <button type="button" @click="selectedUser = null; searchQuery = ''" class="text-slate-400 hover:text-red-500 font-black">✕</button>
+                            </div>
+                        </template>
+
+                        <!-- Dropdown List -->
+                        <div 
+                            x-show="open && filteredUsers.length > 0" 
+                            class="absolute z-[70] left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-100 max-h-48 overflow-y-auto"
+                            x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 translate-y-2"
+                            x-transition:leave="transition ease-in duration-100"
+                            x-transition:leave-end="opacity-0 translate-y-2"
+                        >
+                            <template x-for="user in filteredUsers" :key="user.id">
+                                <div 
+                                    @click="selectedUser = user; searchQuery = user.phone; open = false"
+                                    class="px-6 py-3 hover:bg-emerald-50 cursor-pointer border-b border-slate-50 last:border-0"
+                                >
+                                    <div class="text-xs font-black text-slate-900" x-text="user.name"></div>
+                                    <div class="text-[10px] text-emerald-600 font-black" x-text="user.phone"></div>
+                                </div>
+                            </template>
+                        </div>
+                        
+                        <template x-if="searchQuery && filteredUsers.length === 0 && !selectedUser">
+                            <div class="mt-2 text-[9px] font-black text-red-400 uppercase tracking-widest ml-1 animate-pulse">
+                                No members found matching your search
+                            </div>
+                        </template>
                     </div>
                     <div class="space-y-1">
                         <label class="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Credit Amount</label>
