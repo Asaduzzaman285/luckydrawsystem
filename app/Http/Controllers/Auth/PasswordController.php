@@ -15,10 +15,23 @@ class PasswordController extends Controller
      */
     public function update(Request $request): RedirectResponse
     {
-        $validated = $request->validateWithBag('updatePassword', [
+        $rules = [
             'current_password' => ['required', 'current_password'],
             'password' => ['required', Password::defaults(), 'confirmed'],
-        ]);
+        ];
+
+        if ($request->user()->hasRole('agent')) {
+            $rules['otp_code'] = ['required', 'string', 'size:6'];
+        }
+
+        $validated = $request->validateWithBag('updatePassword', $rules);
+
+        if ($request->user()->hasRole('agent')) {
+            $otpService = app(\App\Services\Auth\OtpService::class);
+            if (!$otpService->verify($request->user(), $validated['otp_code'], 'password_reset')) {
+                return back()->withErrors(['otp_code' => 'Invalid or expired verification code.'], 'updatePassword');
+            }
+        }
 
         $request->user()->update([
             'password' => Hash::make($validated['password']),

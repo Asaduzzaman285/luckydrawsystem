@@ -38,13 +38,8 @@ class WithdrawalController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
-                // 1. Deduct from wallet using WalletService
-                $this->walletService->withdraw(
-                    $request->user,
-                    (float) $request->amount,
-                    "WITHDRAW-APPROVE-REQ-{$request->id}",
-                    Auth::id()
-                );
+                // 1. Withdrawal was already deducted from wallet on request creation.
+                // No need to withdraw again.
 
                 // 2. Update request status
                 $request->update([
@@ -69,12 +64,22 @@ class WithdrawalController extends Controller
             return back()->with('error', 'This request has already been processed.');
         }
 
-        $withdrawalRequest->update([
-            'status' => 'rejected',
-            'admin_notes' => $request->admin_notes,
-            'processed_by' => Auth::id(),
-            'processed_at' => now(),
-        ]);
+        DB::transaction(function () use ($request, $withdrawalRequest) {
+            // REFUND: Balance was deducted on request, now we return it.
+            $this->walletService->refundWithdrawal(
+                $withdrawalRequest->user,
+                (float) $withdrawalRequest->amount,
+                "WITHDRAWAL-REFUND-REQ-{$withdrawalRequest->id}",
+                Auth::id()
+            );
+
+            $withdrawalRequest->update([
+                'status' => 'rejected',
+                'admin_notes' => $request->admin_notes,
+                'processed_by' => Auth::id(),
+                'processed_at' => now(),
+            ]);
+        });
 
         return back()->with('success', 'Withdrawal request rejected.');
     }

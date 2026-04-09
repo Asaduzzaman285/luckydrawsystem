@@ -155,14 +155,14 @@
                             <div x-show="selectedTier <= 3" class="mb-4">
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic">Selection Method</label>
                                 <div class="flex space-x-2">
-                                    <button @click="selectionMethod = 'manual'" :class="selectionMethod === 'manual' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'" class="flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition italic">Manual</button>
-                                    <button @click="selectionMethod = 'auto'; fetchRandomTicket()" :class="selectionMethod === 'auto' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'" class="flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition italic">Automatic</button>
+                                    <button @click="selectionMethod = 'manual'" :class="selectionMethod === 'manual' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'" class="flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition italic">Machine 1</button>
+                                    <button @click="selectionMethod = 'auto'; fetchRandomTicket()" :class="selectionMethod === 'auto' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'" class="flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition italic">Machine 2</button>
                                 </div>
                             </div>
 
                             <!-- Manual Interaction (1-3) -->
                             <div x-show="selectedTier <= 3" class="space-y-4">
-                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic" x-text="selectionMethod === 'manual' ? 'Step 2: Assign Manual Ticket' : 'Step 2: Automatic Selection Result'"></label>
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic" x-text="selectionMethod === 'manual' ? 'Step 2: Machine 1 (Manual Entry)' : 'Step 2: Machine 2 (Auto Result)'"></label>
                                 <form action="{{ route('draws.pick-tier', $draw->id) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="tier_id" :value="selectedTier">

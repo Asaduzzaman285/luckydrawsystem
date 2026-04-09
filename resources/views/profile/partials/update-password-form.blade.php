@@ -31,6 +31,26 @@
             <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
         </div>
 
+        @if(auth()->user()->hasRole('agent'))
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                <p class="text-xs font-bold text-blue-600 mb-4 tracking-widest uppercase italic">🔐 Security Verification Required</p>
+                
+                <div class="space-y-4">
+                    <x-input-label for="otp_code" :value="__('6-Digit Verification Code')" />
+                    <div class="flex gap-2">
+                        <x-text-input id="otp_code" name="otp_code" type="text" class="block w-full text-center font-black tracking-[0.5em]" placeholder="000000" maxlength="6" />
+                        <button type="button" 
+                                onclick="event.preventDefault(); document.getElementById('pw-otp-resend').submit();"
+                                class="px-4 py-2 bg-slate-900 text-white text-[10px] font-black rounded-xl uppercase tracking-widest hover:bg-slate-700 transition italic shrink-0">
+                            Get Code
+                        </button>
+                    </div>
+                    <x-input-error :messages="$errors->updatePassword->get('otp_code')" class="mt-2" />
+                    <p class="text-[9px] text-blue-400 font-bold italic mt-1">Codes are sent to your terminal/logs for security.</p>
+                </div>
+            </div>
+        @endif
+
         <div class="flex items-center gap-4">
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 

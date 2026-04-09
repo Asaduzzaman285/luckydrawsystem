@@ -130,11 +130,12 @@
                     @csrf
                     <div>
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 block mb-2 italic">Amount to Withdraw (৳)</label>
-                        <input type="number" name="amount" step="0.01" min="1" max="{{ $wallet->balance ?? 0 }}" 
+                        <input type="number" name="amount" step="0.01" min="1" max="{{ $withdrawableBalance ?? 0 }}" 
                                class="w-full bg-slate-50 border-slate-200 rounded-2xl py-5 px-6 font-black text-slate-900 focus:ring-blue-600 transition text-center text-2xl shadow-inner" 
                                placeholder="0.00" required>
-                        <div class="text-center mt-3">
-                            <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">Available Balance: <span class="text-blue-600">৳{{ number_format($wallet->balance ?? 0, 2) }}</span></span>
+                        <div class="text-center mt-3 space-y-1">
+                            <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">Available For Payout: <span class="text-blue-600">৳{{ number_format($withdrawableBalance ?? 0, 2) }}</span></div>
+                            <div class="text-[7px] text-slate-300 font-bold uppercase tracking-[0.2em] italic">Note: Only prize winnings are withdrawable.</div>
                         </div>
                     </div>
 

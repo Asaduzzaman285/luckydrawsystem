@@ -49,6 +49,10 @@
                         <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-slate-900 flex items-center justify-center text-xl sm:text-2xl group-hover:border-blue-600 border-transparent border-2 transition-all duration-300 shadow-sm">💰</div>
                         <span class="text-[9px] sm:text-[10px] font-black text-slate-900 uppercase tracking-widest mt-2 leading-tight">payouts</span>
                     </a>
+                    <a href="{{ route('admin.reports.agents') }}" class="flex flex-col items-center group text-center">
+                        <div class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-emerald-50 flex items-center justify-center text-xl sm:text-2xl group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 shadow-sm border border-emerald-100/50">📊</div>
+                        <span class="text-[9px] sm:text-[10px] font-black text-slate-600 uppercase tracking-widest mt-2 group-hover:text-emerald-600 leading-tight">agent reports</span>
+                    </a>
                 </div>
             </div>
 

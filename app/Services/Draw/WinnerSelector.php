@@ -139,16 +139,19 @@ class WinnerSelector
      */
     public function conductLuckyDrawTier(Draw $draw, float $totalTierPrize): void
     {
-        $digit = $draw->winning_digit ?? rand(0, 9);
+        $digit = $draw->winning_digit ?? str_pad(rand(0, 99), 2, '0', STR_PAD_LEFT);
         $draw->update(['winning_digit' => $digit]);
 
         $winners = Ticket::where('draw_id', $draw->id)
-            ->whereRaw("RIGHT(ticket_number, 1) = ?", [$digit])
+            ->whereRaw("RIGHT(ticket_number, 2) = ?", [$digit])
             ->where('is_winner', false)
             ->get();
 
         if ($winners->isEmpty()) {
-            throw new Exception("No eligible tickets found for last digit '{$digit}'. Please try again to pick a different digit.");
+            // Updated behavior: Don't throw exception, just log that no one won this tier.
+            $this->auditService->log('draw_no_winners_t4', $draw, null, null, "No winners for Tier 4 (Lucky Draw) with digit '{$digit}'.");
+            $this->checkAndAutoCompleteDraw($draw);
+            return;
         }
 
         $prizePerWinner = $totalTierPrize / $winners->count();
@@ -281,8 +284,8 @@ class WinnerSelector
 
     public function previewLuckyDraw(Draw $draw): array
     {
-        $digit = rand(0, 9);
-        $tickets = Ticket::where('draw_id', $draw->id)->whereRaw("RIGHT(ticket_number, 1) = ?", [$digit])->where('is_winner', false)->with('user')->get();
+        $digit = str_pad(rand(0, 99), 2, '0', STR_PAD_LEFT);
+        $tickets = Ticket::where('draw_id', $draw->id)->whereRaw("RIGHT(ticket_number, 2) = ?", [$digit])->where('is_winner', false)->with('user')->get();
         $totalSales = $this->getFreshTotalSales($draw);
         $totalTierPrize = ($totalSales * 0.55) * 0.05;
         $prizePerWinner = $tickets->isNotEmpty() ? $totalTierPrize / $tickets->count() : 0;

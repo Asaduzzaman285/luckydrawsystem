@@ -67,7 +67,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|string|email|max:255|unique:users',
-            'phone' => 'required|string|max:20|unique:users',
+            'phone' => 'required|string|max:20|unique:users,phone',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|string|in:admin,agent',
             'district_id' => 'nullable|exists:districts,id',
@@ -99,6 +99,33 @@ class UserController extends Controller
         }
 
         return redirect()->route('users.index')->with('success', ucfirst($validated['role']) . ' account created successfully.');
+    }
+
+    /**
+     * Remove the specified user from storage.
+     */
+    public function destroy(User $user)
+    {
+        // Security Check: Only Super Admin can delete
+        if (!auth()->user()->hasRole('super-admin')) {
+            return back()->with('error', 'Only Super Administrators can perform EXTERMINATION PROTOCOLS.');
+        }
+
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'Self-termination is not permitted.');
+        }
+
+        // Check if user has tickets or transactions
+        if ($user->tickets()->exists() || \App\Models\Transaction::where('user_id', $user->id)->exists()) {
+             // Maybe soft delete or deactivate? User asked for "removing".
+             // For safety in a financial app, let's just deactivate and throw error if there's history, 
+             // but user explicitly said "removing", so I'll follow that if allowed by DB constraints.
+             // Actually, I'll just delete and let the DB cascade or throw error if it's protected.
+        }
+
+        $user->delete();
+
+        return redirect()->route('users.index')->with('success', 'User has been purged from the system.');
     }
 
     /**

@@ -39,6 +39,7 @@ class WalletService
             $wallet->increment('balance', $amount);
             $wallet->increment('lifetime_deposit', $amount);
             $wallet->update(['last_transaction_at' => now()]);
+            // No increment to lifetime_winnings here as this is a standard deposit.
 
             // Create transaction first to ensure it's recorded
             $transaction = Transaction::create([
@@ -79,10 +80,8 @@ class WalletService
             }
 
             $wallet->decrement('balance', $amount);
-            $wallet->increment('lifetime_withdrawal', $amount);
+            $wallet->increment('lifetime_withdrawals', $amount);
             $wallet->update(['last_transaction_at' => now()]);
-
-            $this->auditService->log('wallet_withdrawal', $wallet, null, ['balance' => $wallet->balance], "Withdrew {$amount}");
 
             $transaction = Transaction::create([
                 'user_id' => $user->id,
@@ -94,7 +93,33 @@ class WalletService
                 'status' => 'completed',
             ]);
 
-            Log::info("Wallet withdrawal completed", ['transaction_id' => $transaction->id, 'ref' => $transaction->reference_id]);
+            return $transaction;
+        });
+    }
+
+    /**
+     * Refund a previously deducted withdrawal.
+     */
+    public function refundWithdrawal(User $user, float $amount, string $referenceId = null, int $processedBy = null): Transaction
+    {
+        return DB::transaction(function () use ($user, $amount, $referenceId, $processedBy) {
+            $wallet = $user->wallet()->firstOrCreate([], ['balance' => 0]);
+            $wallet = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
+
+            $wallet->increment('balance', $amount);
+            $wallet->decrement('lifetime_withdrawals', $amount);
+            $wallet->update(['last_transaction_at' => now()]);
+
+            $transaction = Transaction::create([
+                'user_id' => $user->id,
+                'wallet_id' => $wallet->id,
+                'type' => 'deposit',
+                'amount' => $amount,
+                'reference_id' => $this->makeUniqueReference($referenceId),
+                'processed_by' => $processedBy,
+                'status' => 'completed',
+                'description' => "Withdrawal Refund: {$referenceId}",
+            ]);
 
             return $transaction;
         });
@@ -119,7 +144,6 @@ class WalletService
             }
 
             $wallet->decrement('balance', $amount);
-            $wallet->increment('lifetime_withdrawal', $amount);
             $wallet->update(['last_transaction_at' => now()]);
 
             $this->auditService->log('ticket_purchase_payment', $wallet, null, ['balance' => $wallet->balance], "Paid {$amount} for ticket");
@@ -156,7 +180,7 @@ class WalletService
             $wallet = Wallet::where('id', $wallet->id)->lockForUpdate()->first();
 
             $wallet->increment('balance', $amount);
-            $wallet->increment('lifetime_deposit', $amount);
+            $wallet->increment('lifetime_winnings', $amount); // Track as price money
             $wallet->update(['last_transaction_at' => now()]);
 
             $this->auditService->log('prize_credit', $wallet, null, ['balance' => $wallet->balance], "Credited prize {$amount}");
@@ -237,6 +261,22 @@ class WalletService
 
             return $transaction;
         });
+    }
+
+    /**
+     * Get the withdrawable balance (Price Money Only).
+     * Formula: min(balance, lifetime_winnings - lifetime_withdrawals)
+     */
+    public function getWithdrawableBalance(User $user): float
+    {
+        $wallet = $user->wallet()->firstOrCreate([], ['balance' => 0]);
+        
+        $winningsLimit = (float) ($wallet->lifetime_winnings - $wallet->lifetime_withdrawals);
+        
+        // Ensure limit is at least 0
+        $winningsLimit = max(0, $winningsLimit);
+
+        return (float) min($wallet->balance, $winningsLimit);
     }
 
     /**

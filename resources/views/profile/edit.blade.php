@@ -6,6 +6,12 @@
     </x-slot>
 
     <div class="py-12">
+        @if(auth()->user()->hasRole('agent'))
+            <form id="pw-otp-resend" method="POST" action="{{ route('otp.password') }}" class="hidden">
+                @csrf
+            </form>
+        @endif
+
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="max-w-xl">

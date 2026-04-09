@@ -168,14 +168,29 @@
                                     <td class="px-8 py-6 text-right">
                                         <div class="flex items-center justify-end space-x-3">
                                             @if($user->hasRole(['admin', 'agent']))
-                                                <button
-                                                    @click="creditModal = true; selectedUser = {{ $user->id }}; selectedUserName = '{{ $user->name }}'"
-                                                    class="btn-pro-action transition">
-                                                    <span class="mr-1.5">+</span> Fund
-                                                </button>
+                                                @if(auth()->user()->hasRole('super-admin') || !$user->hasRole(['admin', 'super-admin']))
+                                                    <button
+                                                        @click="creditModal = true; selectedUser = {{ $user->id }}; selectedUserName = '{{ $user->name }}'"
+                                                        class="btn-pro-action transition">
+                                                        <span class="mr-1.5">+</span> Fund
+                                                    </button>
+                                                @endif
                                             @endif
-                                            <a href="{{ route('users.edit', $user->id) }}"
-                                                class="btn-pro-secondary hover:!bg-blue-600 hover:!text-white hover:!border-blue-600 transition">Configure</a>
+
+                                            @if(auth()->user()->hasRole('super-admin') || (!$user->hasRole('admin') && !$user->hasRole('super-admin')))
+                                                <a href="{{ route('users.edit', $user->id) }}"
+                                                    class="btn-pro-secondary hover:!bg-blue-600 hover:!text-white hover:!border-blue-600 transition tracking-widest text-[9px]">Configure</a>
+                                            @endif
+
+                                            @role('super-admin')
+                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('EXTERMINATION PROTOCOL: Are you sure you want to delete this user?');" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="p-2 text-red-400 hover:text-red-600 transition transform hover:scale-110">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                                    </button>
+                                                </form>
+                                            @endrole
                                         </div>
                                     </td>
                                 </tr>

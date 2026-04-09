@@ -286,7 +286,9 @@
         </div>
 
         <!-- Registration Modal -->
-        <div x-show="registerModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" x-cloak>
+        <div x-data="{ registerModal: {{ $errors->hasAny(['name', 'phone', 'email', 'password']) ? 'true' : 'false' }} }" 
+             x-show="registerModal" 
+             class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" x-cloak>
             <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <button @click="registerModal = false" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition font-black">✕</button>
                 <div class="mb-8">
@@ -295,9 +297,20 @@
                 </div>
                 <form action="{{ route('agent.users.store') }}" method="POST" class="space-y-4">
                     @csrf
-                    <input type="text" name="name" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-blue-600 transition text-sm" placeholder="Full Name" required>
-                    <input type="text" name="phone" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-blue-600 transition text-sm" placeholder="Phone Number" required>
-                    <input type="email" name="email" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-blue-600 transition text-sm" placeholder="Email (Optional)">
+                    <div class="space-y-1">
+                        <input type="text" name="name" value="{{ old('name') }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-blue-600 transition text-sm" placeholder="Full Name" required>
+                        @error('name') <p class="text-[10px] text-red-500 font-bold ml-4 italic">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="space-y-1">
+                        <input type="text" name="phone" value="{{ old('phone') }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-blue-600 transition text-sm" placeholder="Phone Number" required>
+                        @error('phone') <p class="text-[10px] text-red-500 font-bold ml-4 italic">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="space-y-1">
+                        <input type="email" name="email" value="{{ old('email') }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-blue-600 transition text-sm" placeholder="Email (Optional)">
+                        @error('email') <p class="text-[10px] text-red-500 font-bold ml-4 italic">{{ $message }}</p> @enderror
+                    </div>
                     
                     <div class="bg-blue-50 rounded-2xl p-4 border border-blue-100">
                         <div class="text-[9px] font-black text-blue-600 uppercase tracking-widest mb-1">Assigned Operational Area</div>
@@ -307,7 +320,10 @@
                         <p class="text-[8px] text-blue-400 font-bold uppercase mt-1">Users are locked to your service region</p>
                     </div>
 
-                    <input type="password" name="password" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-blue-600 transition text-sm" placeholder="Initial Password" required>
+                    <div class="space-y-1">
+                        <input type="password" name="password" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-blue-600 transition text-sm" placeholder="Initial Password" required>
+                        @error('password') <p class="text-[10px] text-red-500 font-bold ml-4 italic">{{ $message }}</p> @enderror
+                    </div>
 
                     <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-2xl shadow-xl shadow-blue-500/20 hover:bg-blue-700 transition duration-300 uppercase tracking-[0.2em] text-[10px]">
                         Finalize Onboarding

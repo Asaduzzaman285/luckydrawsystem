@@ -36,8 +36,14 @@ class AuthenticatedSessionController extends Controller
         }
 
         if ($user->hasRole('agent')) {
-            return redirect()->intended(route('agent.dashboard'))
-                ->with('success', 'Agent Portal Authorized. Welcome back.');
+            // Point 6: Generate and send OTP for Agent
+            app(\App\Services\Auth\OtpService::class)->generateAndSend($user, 'login');
+            
+            // Set session flag
+            $request->session()->put('auth.otp_verified', false);
+            $request->session()->put('auth.otp_user_id', $user->id);
+
+            return redirect()->route('otp.verify');
         }
 
         return redirect()->intended(route('dashboard'))

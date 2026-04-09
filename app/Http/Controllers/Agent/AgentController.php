@@ -82,20 +82,35 @@ class AgentController extends Controller
             'account_details' => 'required|string',
         ]);
 
-        if (!$wallet || $wallet->balance < $validated['amount']) {
-            return back()->with('error', 'Insufficient balance for this withdrawal.');
+        if (!$wallet || $this->walletService->getWithdrawableBalance($user) < $validated['amount']) {
+            return back()->with('error', 'Insufficient withdrawable (Price Money) balance.');
         }
 
-        WithdrawalRequest::create([
-            'user_id' => $user->id,
-            'target_agent_id' => $validated['target_agent_id'],
-            'amount' => $validated['amount'],
-            'payment_method' => $validated['payment_method'],
-            'account_details' => $validated['account_details'],
-            'status' => 'pending',
-        ]);
+        try {
+            DB::transaction(function () use ($user, $validated) {
+                // 1. Deduct balance immediately
+                $this->walletService->withdraw(
+                    $user, 
+                    $validated['amount'], 
+                    "WITHDRAWAL-REQ-PENDING-" . uniqid(),
+                    null // Processed by is null because it's pending
+                );
 
-        return redirect()->back()->with('success', 'Withdrawal request submitted to your agent.');
+                // 2. Create the request
+                WithdrawalRequest::create([
+                    'user_id' => $user->id,
+                    'target_agent_id' => $validated['target_agent_id'],
+                    'amount' => $validated['amount'],
+                    'payment_method' => $validated['payment_method'],
+                    'account_details' => $validated['account_details'],
+                    'status' => 'pending',
+                ]);
+            });
+
+            return redirect()->back()->with('success', 'Withdrawal request submitted. Balance deducted while pending.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to submit withdrawal: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -116,12 +131,20 @@ class AgentController extends Controller
 
         try {
             DB::transaction(function () use ($request, $agent) {
-                // Move balance: User -> Agent
-                $this->walletService->transfer(
-                    $request->user,
+                // Move balance: Already deducted from User, so now we just mark as approved and record Agent receiving it?
+                // Wait, if it was deducted from User, we just record that it's gone.
+                // If Agent approves, Agent might need to "receive" it to their wallet if they are paying out cash?
+                // The current logic at line 120 (transfer) moves balance.
+                // NEW LOGIC: If balance already deducted, we don't transfer. We just credit Agent??
+                // No, current logic (line 120) is: User -> Agent.
+                // Let's refine: If we deduct on Request, the balance is GONE from User already.
+                // So now we just credit the Agent.
+
+                $this->walletService->deposit(
                     $agent,
                     $request->amount,
-                    "WITHDRAWAL-APPROVAL-REQ{$request->id}"
+                    "WITHDRAWAL-APPROVAL-REQ{$request->id}",
+                    $agent->id
                 );
 
                 $request->update([
@@ -149,12 +172,22 @@ class AgentController extends Controller
             abort(403, 'Unauthorized.');
         }
 
-        $request->update([
-            'status' => 'rejected',
-            'processed_by' => $agent->id,
-            'processed_at' => now(),
-            'admin_notes' => $req->notes ?? 'Rejected by agent'
-        ]);
+        DB::transaction(function () use ($request, $agent, $req) {
+            // REFUND: Balance was deducted on request, now we return it.
+            $this->walletService->refundWithdrawal(
+                $request->user,
+                $request->amount,
+                "WITHDRAWAL-REFUND-REQ{$request->id}",
+                $agent->id
+            );
+
+            $request->update([
+                'status' => 'rejected',
+                'processed_by' => $agent->id,
+                'processed_at' => now(),
+                'admin_notes' => $req->notes ?? 'Rejected by agent'
+            ]);
+        });
 
         return back()->with('success', 'Withdrawal request rejected.');
     }
@@ -177,15 +210,28 @@ class AgentController extends Controller
             return back()->with('error', 'Insufficient wallet balance for this withdrawal.');
         }
 
-        WithdrawalRequest::create([
-            'user_id' => $agent->id,
-            'amount' => $validated['amount'],
-            'payment_method' => $validated['payment_method'],
-            'account_details' => $validated['account_details'],
-            'status' => 'pending',
-        ]);
+        try {
+            DB::transaction(function () use ($agent, $validated) {
+                // Deduct immediately
+                $this->walletService->withdraw(
+                    $agent,
+                    $validated['amount'],
+                    "AGENT-WITHDRAWAL-REQ-PENDING-" . uniqid()
+                );
 
-        return redirect()->back()->with('success', 'Withdrawal request submitted for admin approval.');
+                WithdrawalRequest::create([
+                    'user_id' => $agent->id,
+                    'amount' => $validated['amount'],
+                    'payment_method' => $validated['payment_method'],
+                    'account_details' => $validated['account_details'],
+                    'status' => 'pending',
+                ]);
+            });
+
+            return redirect()->back()->with('success', 'Withdrawal request submitted. Balance deducted while pending.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Failed to submit withdrawal: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -280,13 +326,25 @@ class AgentController extends Controller
         $user = User::findOrFail($validated['user_id']);
 
         try {
-            $this->walletService->transfer(
-                $agent,
-                $user,
-                $validated['amount'],
-                $validated['reference_id'] ?? null
-            );
-            return redirect()->back()->with('success', 'Credit processed successfully from your wallet');
+            DB::transaction(function () use ($agent, $user, $validated) {
+                // 1. Transfer the base amount
+                $this->walletService->transfer(
+                    $agent,
+                    $user,
+                    $validated['amount'],
+                    $validated['reference_id'] ?? null
+                );
+
+                // 2. Grant 10% Commission to the Agent
+                $commissionAmount = $validated['amount'] * 0.10;
+                $this->walletService->deposit(
+                    $agent,
+                    $commissionAmount,
+                    "AGENT-COMMISSION-DEP-U{$user->id}-" . uniqid(),
+                    1 // System/Admin ID for processing
+                );
+            });
+            return redirect()->back()->with('success', 'Credit processed successfully. You earned ' . ($validated['amount'] * 0.10) . ' TK commission!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to process credit: ' . $e->getMessage());
         }

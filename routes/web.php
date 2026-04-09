@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\WithdrawalController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Agent\AgentController;
+use App\Http\Controllers\Auth\OtpVerifyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,6 +26,7 @@ Route::get('/dashboard', function () {
     }
 
     $wallet = $user->wallet()->firstOrCreate([], ['balance' => 0]);
+    $withdrawableBalance = app(\App\Services\Wallet\WalletService::class)->getWithdrawableBalance($user);
     
     // Group tickets by transaction to show "Purchases" instead of single entries
     $tickets = $user->tickets()
@@ -39,7 +41,7 @@ Route::get('/dashboard', function () {
         $query->where('status', 'live');
     })->with('draw')->get();
 
-    return view('dashboard', compact('wallet', 'tickets', 'liveProducts'));
+    return view('dashboard', compact('wallet', 'tickets', 'liveProducts', 'withdrawableBalance'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -57,6 +59,7 @@ Route::middleware(['auth', 'role:admin|super-admin'])->group(function () {
     Route::resource('draws', DrawController::class);
     Route::resource('products', ProductController::class);
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+    Route::get('/reports/agents', [\App\Http\Controllers\Admin\AgentReportController::class, 'index'])->name('admin.reports.agents');
     Route::post('/users/{user}/credit', [\App\Http\Controllers\Admin\UserController::class, 'credit'])->name('users.credit');
     Route::post('/draws/{draw}/select-winner', [DrawController::class, 'selectWinner'])->name('draws.select-winner');
     Route::get('/draws/{draw}/random-ticket', [DrawController::class, 'getRandomTicket'])->name('draws.random-ticket');
@@ -77,8 +80,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/products/{product}/buy', [\App\Http\Controllers\TicketController::class, 'purchase'])->name('products.buy');
     Route::post('/withdraw/request', [\App\Http\Controllers\Agent\AgentController::class, 'requestWithdrawalFromAgent'])->name('withdraw.request');
 });
+// Point 6: OTP Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/otp-verify', [OtpVerifyController::class, 'show'])->name('otp.verify');
+    Route::post('/otp-verify', [OtpVerifyController::class, 'verify'])->name('otp.verify.submit');
+    Route::post('/otp-resend', [OtpVerifyController::class, 'resend'])->name('otp.resend');
+    Route::post('/otp-password', function() {
+        app(\App\Services\Auth\OtpService::class)->generateAndSend(auth()->user(), 'password_reset');
+        return back()->with('success', 'A 6-digit security code has been sent to your terminal/logs.');
+    })->name('otp.password');
+});
 
-Route::middleware(['auth', 'role:agent|super-admin'])->group(function () {
+Route::middleware(['auth', 'role:agent|super-admin', 'otp.verified'])->group(function () {
     Route::get('/agent', [AgentController::class, 'index'])->name('agent.dashboard');
     Route::post('/agent/users', [AgentController::class, 'createUser'])->name('agent.users.store');
     Route::post('/agent/deposit', [AgentController::class, 'deposit'])->name('agent.deposit.store');
