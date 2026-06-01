@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ShopWin — Sign In</title>
+<title>LuckoMart — Sign In</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -209,7 +211,7 @@
     <div class="brand-logo">
       <div class="logo-box">🛍</div>
       <div>
-        <div class="logo-name">Shop<span>Win</span></div>
+        <div class="logo-name">Lucko<span>Mart</span></div>
         <div class="logo-tagline">Shop · Earn Cashback · Win Big</div>
       </div>
     </div>
@@ -277,8 +279,7 @@
       <div class="fh">Welcome <em>Back!</em></div>
       <div class="fs">Sign in to shop, earn cashback & enter today's draw</div>
 
-      <!-- Session Status -->
-      <x-auth-session-status class="mb-4 font-bold text-xs text-emerald-600" :status="session('status')" />
+
 
       <form method="POST" action="{{ route('login') }}">
         @csrf
@@ -289,9 +290,7 @@
           <span class="fi">📱</span>
           <input type="text" name="login" value="{{ old('login') }}" placeholder="Enter phone or email" required autofocus />
         </div>
-        @error('login')
-            <p class="text-[10px] text-coral font-bold mt-1 uppercase tracking-tight">{{ $message }}</p>
-        @enderror
+
       </div>
 
       <div class="fg">
@@ -306,9 +305,7 @@
           <input type="password" name="password" id="pw" placeholder="Enter your password" required autocomplete="current-password" />
           <button class="pw-btn" onclick="togglePw()" type="button">👁</button>
         </div>
-        @error('password')
-            <p class="text-[10px] text-coral font-bold mt-1 uppercase tracking-tight">{{ $message }}</p>
-        @enderror
+
       </div>
 
       <div class="fr">
@@ -320,7 +317,7 @@
       <button class="btn-p" type="submit">🚀 &nbsp; Sign In & Start Earning</button>
       </form>
 
-      <div class="div-row">New to ShopWin?</div>
+      <div class="div-row">New to LuckoMart?</div>
       <a href="{{ route('register') }}" class="btn-g">🎁 Create Free Account — Get ৳200 Welcome Bonus!</a>
 
       <div class="trust">
@@ -337,6 +334,48 @@ function togglePw() {
   el.type = el.type==='password'?'text':'password';
   el.nextElementSibling.textContent = el.type==='password'?'👁':'🙈';
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            Toastify({
+                text: "{{ $error }}",
+                duration: 4000,
+                close: true,
+                gravity: "top", 
+                position: "center",
+                style: {
+                    background: "#FF6B6B",
+                    color: "#fff",
+                    borderRadius: "12px",
+                    padding: "12px 24px",
+                    fontWeight: "600",
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    boxShadow: "0 10px 25px rgba(255,107,107,0.4)"
+                }
+            }).showToast();
+        @endforeach
+    @endif
+
+    @if (session('status'))
+        Toastify({
+            text: "{{ session('status') }}",
+            duration: 4000,
+            close: true,
+            gravity: "top", 
+            position: "center",
+            style: {
+                background: "#00D68F",
+                color: "#fff",
+                borderRadius: "12px",
+                padding: "12px 24px",
+                fontWeight: "600",
+                fontFamily: "'Plus Jakarta Sans', sans-serif",
+                boxShadow: "0 10px 25px rgba(0,214,143,0.4)"
+            }
+        }).showToast();
+    @endif
+});
 </script>
 </body>
 </html>
