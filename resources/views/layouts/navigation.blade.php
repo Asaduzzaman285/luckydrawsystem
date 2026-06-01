@@ -10,8 +10,8 @@
                             class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center shadow-lg group-hover:rotate-12 transition shrink-0 font-black italic text-white border border-white/20">
                             L
                         </div>
-                        <span class="text-white font-black text-xl tracking-tighter lowercase italic">lucky<span
-                                class="text-blue-400">draw</span></span>
+                        <span class="text-white font-black text-xl tracking-tighter lowercase italic">lucko<span
+                                class="text-blue-400">mart</span></span>
                     </a>
                 </div>
 
@@ -137,7 +137,7 @@
 
             <x-responsive-nav-link :href="route('results.index')" :active="request()->routeIs('results.index')"
                 class="text-white/70 hover:text-white">
-                {{ __('Draw Results') }}
+                {{ __('Results') }}
             </x-responsive-nav-link>
 
             @can('create-draw')
@@ -158,7 +158,7 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')"
                 class="text-white/70 hover:text-white">
-                {{ __('Staff Management') }}
+                {{ __('Staff') }}
             </x-responsive-nav-link>
             @endcan
 

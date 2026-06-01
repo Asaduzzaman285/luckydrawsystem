@@ -18,11 +18,7 @@
                 </div>
             @endif
 
-            @if(session('debug_otp'))
-                <div class="mb-6 p-4 bg-amber-50 border border-amber-100 rounded-2xl text-amber-700 text-[10px] font-black uppercase italic text-center">
-                    {{ session('debug_otp') }}
-                </div>
-            @endif
+
 
             <form method="POST" action="{{ route('otp.verify.submit') }}" class="space-y-6">
                 @csrf

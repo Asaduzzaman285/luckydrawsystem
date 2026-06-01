@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>LuckyDraw Pro - Premium Lottery & Draw System</title>
+    <title>LuckoMart - Premium E-commerce Destination</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -830,14 +830,14 @@
             <!-- Logo -->
             <a href="/" class="nav-logo">
                 <div class="nav-logo-icon">L</div>
-                <span class="nav-logo-text">Lucky<span>Draw</span> Pro</span>
+                <span class="nav-logo-text">Lucko<span>Mart</span></span>
             </a>
 
             <!-- Desktop Links -->
             <ul class="nav-links">
                 <li><a href="/">Home</a></li>
                 <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#draw">Draw Results</a></li>
+                <li><a href="#draw">Flash Sales</a></li>
                 @if (Route::has('login'))
                     @if (auth()->check())
                         <li><a href="{{ url('/dashboard') }}" style="color: var(--blue-primary)">Dashboard</a></li>
@@ -871,7 +871,7 @@
     <div class="mobile-menu" id="mobileMenu">
         <a href="/">Home</a>
         <a href="#how-it-works">How It Works</a>
-        <a href="#draw">Draw Results</a>
+        <a href="#draw">Flash Sales</a>
         @if (Route::has('login'))
             @if (auth()->check())
                 <a href="{{ url('/dashboard') }}">Dashboard</a>
@@ -894,16 +894,15 @@
                     </div>
                 @endif
 
-                <div class="hero-badge fade-up">Trusted Digital Draw Platform</div>
+                <div class="hero-badge fade-up">Trusted E-commerce Platform</div>
 
                 <h1 class="fade-up delay-1">
-                    Buy Digital Products,<br>
-                    <span>Win Amazing Prizes</span>
+                    Discover Premium Products,<br>
+                    <span>Shop with Confidence</span>
                 </h1>
 
                 <p class="hero-sub fade-up delay-2">
-                    Purchase quality digital products and automatically receive entries into our transparent, provably
-                    fair promotional draws. Every purchase counts.
+                    Your premier destination for high-quality products and seamless shopping experiences. Explore our collection and find exactly what you need.
                 </p>
 
                 <div class="hero-cta fade-up delay-3">
@@ -932,18 +931,18 @@
 
             <!-- Right Card -->
             <div class="hero-card-wrap fade-up delay-2">
-                <div class="float-badge float-badge-1">🏆 $50,000 Grand Prize</div>
+                <div class="float-badge float-badge-1">🔥 Flash Sale Live</div>
                 <div class="hero-card">
                     <div class="card-header">
-                        <span class="card-title">Live Draws</span>
+                        <span class="card-title">Hot Deals</span>
                         <span class="live-dot">Live Now</span>
                     </div>
 
                     <div class="draw-card">
                         <div class="draw-card-icon">🏆</div>
                         <div style="flex:1">
-                            <div class="draw-card-name">Mega Jackpot #402</div>
-                            <div class="draw-card-prize">Prize: $50,000.00</div>
+                            <div class="draw-card-name">Premium Watch Collection</div>
+                            <div class="draw-card-prize">Price: $150.00</div>
                         </div>
                         <div class="draw-card-end">Ends in 2h</div>
                     </div>
@@ -951,8 +950,8 @@
                     <div class="draw-card" style="background:#f8fafc; border-color:var(--border)">
                         <div class="draw-card-icon" style="background:#e0f2fe; font-size:20px">💎</div>
                         <div style="flex:1">
-                            <div class="draw-card-name">Emerald Draw</div>
-                            <div class="draw-card-prize">Prize: $2,500.00</div>
+                            <div class="draw-card-name">Wireless Headphones</div>
+                            <div class="draw-card-prize">Price: $89.00</div>
                         </div>
                         <div class="draw-card-soon">Soon</div>
                     </div>
@@ -960,15 +959,15 @@
                     <div class="card-stats">
                         <div class="card-stat">
                             <div class="card-stat-val">12,453</div>
-                            <div class="card-stat-label">Total Entries</div>
+                            <div class="card-stat-label">Total Views</div>
                         </div>
                         <div class="card-stat">
                             <div class="card-stat-val">3,217</div>
-                            <div class="card-stat-label">Participants</div>
+                            <div class="card-stat-label">Active Shoppers</div>
                         </div>
                     </div>
                 </div>
-                <div class="float-badge float-badge-2">🎉 New winner every day!</div>
+                <div class="float-badge float-badge-2">🎉 New deals every day!</div>
             </div>
         </div>
     </section>
@@ -978,8 +977,8 @@
     <section class="stats-section">
         <div class="stats-inner">
             <div class="stat-item">
-                <div class="stat-val">$2.4M+</div>
-                <div class="stat-label">Prizes Awarded</div>
+                <div class="stat-val">2M+</div>
+                <div class="stat-label">Products Delivered</div>
             </div>
             <div class="stat-item">
                 <div class="stat-val">150K+</div>
@@ -987,7 +986,7 @@
             </div>
             <div class="stat-item">
                 <div class="stat-val">100%</div>
-                <div class="stat-label">Verifiable Fairness</div>
+                <div class="stat-label">Customer Satisfaction</div>
             </div>
             <div class="stat-item">
                 <div class="stat-val">24/7</div>
@@ -1003,27 +1002,27 @@
             <div class="section-header">
                 <div class="section-label">Simple Process</div>
                 <h2 class="section-title">How It Works</h2>
-                <p class="section-sub">Three simple steps to start winning</p>
+                <p class="section-sub">Three simple steps to start shopping</p>
             </div>
 
             <div class="steps-grid">
                 <div class="step-card">
                     <span class="step-number">STEP 1</span>
                     <div class="step-icon step-icon-1">🛒</div>
-                    <div class="step-title">Buy Product</div>
-                    <p class="step-desc">Purchase any digital product from our verified collection and unlock your draw entries instantly.</p>
+                    <div class="step-title">Browse Products</div>
+                    <p class="step-desc">Explore our wide collection of high-quality products and find exactly what you are looking for.</p>
                 </div>
                 <div class="step-card">
                     <span class="step-number">STEP 2</span>
                     <div class="step-icon step-icon-2">🎫</div>
-                    <div class="step-title">Get Entry</div>
-                    <p class="step-desc">Automatically receive draw entries based on your purchase. More purchases mean more chances to win.</p>
+                    <div class="step-title">Secure Checkout</div>
+                    <p class="step-desc">Add items to your cart and proceed to our secure checkout process for a seamless experience.</p>
                 </div>
                 <div class="step-card">
                     <span class="step-number">STEP 3</span>
                     <div class="step-icon step-icon-3">🏆</div>
-                    <div class="step-title">Transparent Draw</div>
-                    <p class="step-desc">Win prizes through our provably fair draw system with full cryptographic transparency and verification.</p>
+                    <div class="step-title">Fast Delivery</div>
+                    <p class="step-desc">Receive your products quickly with our reliable and fast delivery network.</p>
                 </div>
             </div>
         </div>
@@ -1033,9 +1032,9 @@
     <!-- ═══════════════ CURRENT DRAW ═══════════════ -->
     <section class="draw-section" id="draw">
         <div class="draw-section-inner">
-            <div class="draw-badge">● Active Draw</div>
-            <h2 class="draw-title">Current Promotional Draw</h2>
-            <p class="draw-subtitle">Draw #2461 · Grand Prize: ৳50,000</p>
+            <div class="draw-badge">● Limited Time Offer</div>
+            <h2 class="draw-title">Current Flash Sale</h2>
+            <p class="draw-subtitle">Flash Sale #2461 · Up to 50% Off</p>
 
             <div class="countdown-row" id="countdown">
                 <div class="countdown-box">
@@ -1059,20 +1058,20 @@
             <div class="draw-info-row">
                 <div class="draw-info-item">
                     <div class="draw-info-val">12,453</div>
-                    <div class="draw-info-label">Total Entries</div>
+                    <div class="draw-info-label">Total Views</div>
                 </div>
                 <div class="draw-info-item">
                     <div class="draw-info-val">3,217</div>
-                    <div class="draw-info-label">Participants</div>
+                    <div class="draw-info-label">Active Shoppers</div>
                 </div>
                 <div class="draw-info-item">
-                    <div class="draw-info-val">৳124,530</div>
-                    <div class="draw-info-label">Prize Pool</div>
+                    <div class="draw-info-val">1,530</div>
+                    <div class="draw-info-label">Stock Available</div>
                 </div>
             </div>
 
             <a href="{{ route('register') }}" class="btn-draw">
-                Buy Products to Enter
+                Browse Productss to Enter
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
             </a>
         </div>
@@ -1084,9 +1083,9 @@
         <div class="section-inner">
             <div class="products-header">
                 <div>
-                    <div class="section-label">Shop & Win</div>
+                    <div class="section-label">Top Picks</div>
                     <h2 class="section-title" style="margin-bottom:4px">Featured Products</h2>
-                    <p style="color:var(--text-muted); font-size:15px">Quality digital products with automatic entries</p>
+                    <p style="color:var(--text-muted); font-size:15px">Handpicked quality products just for you</p>
                 </div>
                 <a href="#" class="view-all">View All →</a>
             </div>
@@ -1095,7 +1094,7 @@
                 <div class="product-card">
                     <div class="product-img">📚</div>
                     <div class="product-body">
-                        <span class="product-entries">5 entries</span>
+                        <span class="product-entries">In Stock</span>
                         <div class="product-name">Premium eBook Collection</div>
                         <div class="product-price">৳499</div>
                         <a href="{{ route('register') }}" class="btn-buy">Buy Now</a>
@@ -1104,7 +1103,7 @@
                 <div class="product-card">
                     <div class="product-img">🎨</div>
                     <div class="product-body">
-                        <span class="product-entries">10 entries</span>
+                        <span class="product-entries">10% Off</span>
                         <div class="product-name">Design Templates Pack</div>
                         <div class="product-price">৳899</div>
                         <a href="{{ route('register') }}" class="btn-buy">Buy Now</a>
@@ -1113,7 +1112,7 @@
                 <div class="product-card">
                     <div class="product-img">💼</div>
                     <div class="product-body">
-                        <span class="product-entries">15 entries</span>
+                        <span class="product-entries">15% Off</span>
                         <div class="product-name">Business Course Access</div>
                         <div class="product-price">৳1499</div>
                         <a href="{{ route('register') }}" class="btn-buy">Buy Now</a>
@@ -1122,7 +1121,7 @@
                 <div class="product-card">
                     <div class="product-img">📷</div>
                     <div class="product-body">
-                        <span class="product-entries">3 entries</span>
+                        <span class="product-entries">Low Stock</span>
                         <div class="product-name">Stock Photo Bundle</div>
                         <div class="product-price">৳699</div>
                         <a href="{{ route('register') }}" class="btn-buy">Buy Now</a>
@@ -1138,48 +1137,48 @@
         <div class="section-inner">
             <div class="fair-grid">
                 <div>
-                    <div class="section-label">No Manipulation</div>
-                    <h2 class="section-title">Provably Fair System</h2>
-                    <p class="section-sub" style="margin-bottom:36px">Complete transparency in every draw</p>
+                    <div class="section-label">Why Choose Us</div>
+                    <h2 class="section-title">Secure & Reliable Shopping</h2>
+                    <p class="section-sub" style="margin-bottom:36px">We ensure the best experience for our customers</p>
 
                     <div class="fair-features">
                         <div class="fair-feature">
                             <div class="fair-icon fair-icon-1">#️⃣</div>
                             <div>
-                                <div class="fair-feature-title">Cryptographic Hashing</div>
-                                <p class="fair-feature-desc">Every draw uses server seed hashing that's published before the draw, ensuring no manipulation.</p>
+                                <div class="fair-feature-title">Secure Payments</div>
+                                <p class="fair-feature-desc">Your payment information is encrypted and securely processed.</p>
                             </div>
                         </div>
                         <div class="fair-feature">
                             <div class="fair-icon fair-icon-2">🔗</div>
                             <div>
-                                <div class="fair-feature-title">Immutable Records</div>
-                                <p class="fair-feature-desc">All draw results are permanently recorded and can be independently verified by anyone.</p>
+                                <div class="fair-feature-title">Quality Guarantee</div>
+                                <p class="fair-feature-desc">We guarantee the quality of our products and offer hassle-free returns.</p>
                             </div>
                         </div>
                         <div class="fair-feature">
                             <div class="fair-icon fair-icon-3">🔍</div>
                             <div>
-                                <div class="fair-feature-title">Public Verification</div>
-                                <p class="fair-feature-desc">Anyone can verify the fairness of any draw using our open verification tools.</p>
+                                <div class="fair-feature-title">Fast Shipping</div>
+                                <p class="fair-feature-desc">Enjoy fast and reliable shipping on all your orders.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="fair-card">
-                    <div class="fair-card-title">Server Seed Hash (Pre-Published)</div>
-                    <div class="fair-card-hash">a1f3d2e8c9b4a7e6d5c2b1a0f9e8d7c6b5a4e3d2c1b0a9f8e7d6c5b4a3e2d1c0b9</div>
+                    <div class="fair-card-title">Secure Payment Gateway</div>
+                    <div class="fair-card-hash">Verified by Visa, MasterCard, and SSL secure.</div>
 
-                    <div class="fair-card-title">Client Seed (User-Generated)</div>
-                    <div class="fair-card-hash">f3e4a2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6e5d4</div>
+                    <div class="fair-card-title">Buyer Protection</div>
+                    <div class="fair-card-hash">Full refund if you don't receive your order.</div>
 
-                    <div class="fair-card-title">Result Hash</div>
-                    <div class="fair-card-hash">a2d5e4f195d204f795f29b205e5f49a8a2d5b4e194c3a2f1e0d9c8b7a6e5d4c3b2a1</div>
+                    <div class="fair-card-title">Customer Support</div>
+                    <div class="fair-card-hash">24/7 dedicated support team ready to help you.</div>
 
                     <a href="#" class="verify-btn">
                         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        View Sample Verification
+                        Learn More
                     </a>
                 </div>
             </div>
@@ -1199,7 +1198,7 @@
             <div class="testimonials-grid">
                 <div class="testimonial-card">
                     <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"I love the transparency! I can actually verify that the draws are fair. Got great products too."</p>
+                    <p class="testimonial-text">"I love the quality! I can actually rely on this store. Got great products too."</p>
                     <div class="testimonial-author">
                         <div class="author-avatar">R</div>
                         <div>
@@ -1210,7 +1209,7 @@
                 </div>
                 <div class="testimonial-card">
                     <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"Finally a platform I can trust. The products are useful and the draws are completely transparent."</p>
+                    <p class="testimonial-text">"Finally a platform I can trust. The products are useful and the shipping is incredibly fast."</p>
                     <div class="testimonial-author">
                         <div class="author-avatar" style="background:#7c3aed">N</div>
                         <div>
@@ -1221,7 +1220,7 @@
                 </div>
                 <div class="testimonial-card">
                     <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"Won my first prize last month! The verification system is amazing. Everything is clear and fair."</p>
+                    <p class="testimonial-text">"Got my first order last month! The packaging is amazing. Everything is clear and fast."</p>
                     <div class="testimonial-author">
                         <div class="author-avatar" style="background:#059669">K</div>
                         <div>
@@ -1242,9 +1241,9 @@
                 <div>
                     <div class="footer-logo">
                         <div class="footer-logo-icon">L</div>
-                        <span class="footer-logo-text">LuckyDraw Pro</span>
+                        <span class="footer-logo-text">LuckoMart</span>
                     </div>
-                    <p class="footer-desc">A trusted digital product platform with transparent promotional draws. Every draw is provably fair.</p>
+                    <p class="footer-desc">Your premier destination for high-quality products and seamless shopping experiences.</p>
                 </div>
                 <div>
                     <div class="footer-col-title">Company</div>
@@ -1252,7 +1251,7 @@
                         <a href="#">About Us</a>
                         <a href="#how-it-works">How It Works</a>
                         <a href="#">Products</a>
-                        <a href="#draw">Draw Results</a>
+                        <a href="#draw">Flash Sales</a>
                     </div>
                 </div>
                 <div>
@@ -1260,14 +1259,14 @@
                     <div class="footer-links">
                         <a href="#">Terms of Service</a>
                         <a href="#">Privacy Policy</a>
-                        <a href="#">Fair Play Policy</a>
+                        <a href="#">Shipping Policy</a>
                         <a href="#">Refund Policy</a>
                     </div>
                 </div>
                 <div class="footer-contact">
                     <div class="footer-col-title">Contact</div>
                     <div class="footer-links">
-                        <a href="mailto:support@luckydrawpro.com">support@luckydrawpro.com</a>
+                        <a href="mailto:support@luckomart.com">support@luckomart.com</a>
                         <a href="tel:+8801234567890">+880 1234-567890</a>
                         <span style="color:#9ca3af; font-size:14px">Dhaka, Bangladesh</span>
                     </div>
@@ -1275,8 +1274,8 @@
             </div>
 
             <div class="footer-bottom">
-                <span>&copy; 2026 LuckyDraw Pro. All rights reserved.</span>
-                <span class="footer-disclaimer">This is not a gambling platform.</span>
+                <span>&copy; 2026 LuckoMart. All rights reserved.</span>
+                <span class="footer-disclaimer">Shop with confidence.</span>
             </div>
         </div>
     </footer>
@@ -1306,13 +1305,13 @@
             target.setHours(target.getHours() + 14);
             target.setMinutes(target.getMinutes() + 32);
 
-            const stored = localStorage.getItem('draw_target');
-            const drawTarget = stored ? new Date(parseInt(stored)) : target;
-            if (!stored) localStorage.setItem('draw_target', drawTarget.getTime());
+            const stored = localStorage.getItem('sale_target');
+            const saleTarget = stored ? new Date(parseInt(stored)) : target;
+            if (!stored) localStorage.setItem('sale_target', saleTarget.getTime());
 
             function tick() {
                 const now = new Date();
-                const diff = drawTarget - now;
+                const diff = saleTarget - now;
                 if (diff <= 0) {
                     document.getElementById('cd-days').textContent = '00';
                     document.getElementById('cd-hours').textContent = '00';

@@ -32,7 +32,7 @@
         </div>
 
         @if(auth()->user()->hasRole('agent'))
-            <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100" x-data="{ sending: false, sent: false, error: null }">
                 <p class="text-xs font-bold text-blue-600 mb-4 tracking-widest uppercase italic">🔐 Security Verification Required</p>
                 
                 <div class="space-y-4">
@@ -40,11 +40,38 @@
                     <div class="flex gap-2">
                         <x-text-input id="otp_code" name="otp_code" type="text" class="block w-full text-center font-black tracking-[0.5em]" placeholder="000000" maxlength="6" />
                         <button type="button" 
-                                onclick="event.preventDefault(); document.getElementById('pw-otp-resend').submit();"
-                                class="px-4 py-2 bg-slate-900 text-white text-[10px] font-black rounded-xl uppercase tracking-widest hover:bg-slate-700 transition italic shrink-0">
-                            Get Code
+                                @click="
+                                    sending = true; sent = false; error = null;
+                                    fetch('{{ route('otp.password') }}', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                            'Accept': 'application/json'
+                                        }
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        sending = false;
+                                        if (data.success) { sent = true; } else { error = 'Failed to send.'; }
+                                    })
+                                    .catch(err => {
+                                        sending = false;
+                                        error = 'Network error.';
+                                    })
+                                "
+                                :disabled="sending"
+                                class="px-4 py-3 bg-slate-900 text-white text-[10px] font-black rounded-xl uppercase tracking-widest hover:bg-slate-700 transition italic shrink-0 flex items-center gap-2">
+                            <span x-show="!sending">Get Code</span>
+                            <span x-show="sending" class="flex gap-1">
+                                <span class="w-1 h-1 bg-white rounded-full animate-bounce"></span>
+                                <span class="w-1 h-1 bg-white rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                                <span class="w-1 h-1 bg-white rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                            </span>
                         </button>
                     </div>
+                    <div x-show="sent" class="text-[9px] text-emerald-600 font-black uppercase italic">✓ Verification code sent!</div>
+                    <div x-show="error" class="text-[9px] text-red-600 font-black uppercase italic" x-text="error"></div>
                     <x-input-error :messages="$errors->updatePassword->get('otp_code')" class="mt-2" />
                     <p class="text-[9px] text-blue-400 font-bold italic mt-1">Codes are sent to your terminal/logs for security.</p>
                 </div>

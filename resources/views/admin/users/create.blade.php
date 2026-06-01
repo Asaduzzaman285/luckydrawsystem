@@ -40,7 +40,7 @@
                         </div>
                         <div class="space-y-2">
                             <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email (Optional)</label>
-                            <input type="email" name="email" value="{{ old('email') }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-amber-400 transition" placeholder="e.g. john@luckydraw.com">
+                            <input type="email" name="email" value="{{ old('email') }}" class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-amber-400 transition" placeholder="e.g. john@luckomart.com">
                         </div>
                     </div>
 

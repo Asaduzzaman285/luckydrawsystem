@@ -151,8 +151,8 @@
                                 </select>
                             </div>
 
-                            <!-- Selection Method (1-3) -->
-                            <div x-show="selectedTier <= 3" class="mb-4">
+                            <!-- Selection Method (1-3 + 5) -->
+                            <div x-show="selectedTier <= 3 || selectedTier == 5" class="mb-4">
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic">Selection Method</label>
                                 <div class="flex space-x-2">
                                     <button @click="selectionMethod = 'manual'" :class="selectionMethod === 'manual' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'" class="flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition italic">Machine 1</button>
@@ -160,9 +160,9 @@
                                 </div>
                             </div>
 
-                            <!-- Manual Interaction (1-3) -->
-                            <div x-show="selectedTier <= 3" class="space-y-4">
-                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic" x-text="selectionMethod === 'manual' ? 'Step 2: Machine 1 (Manual Entry)' : 'Step 2: Machine 2 (Auto Result)'"></label>
+                            <!-- Manual Interaction (1-3 + 5) -->
+                            <div x-show="(selectedTier <= 3 || selectedTier == 5) && selectionMethod === 'manual'" class="space-y-4">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic">Step 2: Machine 1 (Manual Entry)</label>
                                 <form action="{{ route('draws.pick-tier', $draw->id) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="tier_id" :value="selectedTier">
@@ -180,7 +180,7 @@
                             </div>
 
                             <!-- Algorithmic Interaction (4-5) -->
-                            <div x-show="selectedTier >= 4" class="space-y-4">
+                            <div x-show="selectedTier == 4 || (selectedTier == 5 && selectionMethod === 'auto')" class="space-y-4">
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic">Step 2: Run Selection Protocol</label>
                                 <button @click="fetchPreview()" :disabled="loading || isTierWon(selectedTier)" class="w-full bg-slate-900 text-white text-[10px] font-black py-5 rounded-2xl uppercase tracking-widest hover:bg-blue-600 transition shadow-xl disabled:opacity-50 italic">
                                     <span x-show="!loading && !isTierWon(selectedTier)">Initialize Random Pick</span>

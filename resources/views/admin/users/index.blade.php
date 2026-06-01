@@ -244,7 +244,7 @@
                                         Address (Optional)</label>
                                     <input type="email" name="email"
                                         class="w-full bg-slate-50 border-slate-200 rounded-2xl py-4 px-6 font-bold text-slate-900 focus:ring-blue-600 transition"
-                                        placeholder="e.g. john@luckydraw.com">
+                                        placeholder="e.g. john@luckomart.com">
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

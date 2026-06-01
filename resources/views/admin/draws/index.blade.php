@@ -8,7 +8,7 @@
                     <span class="text-blue-600">management</span>
                 </nav>
                 <h1 class="text-pro-title">draw infrastructure</h1>
-                <p class="text-sm font-bold text-slate-400 mt-2">Initialize and monitor active lucky draw event containers</p>
+                <p class="text-sm font-bold text-slate-400 mt-2">Initialize and monitor active promotional event containers</p>
             </div>
             <button @click="$dispatch('open-create-modal')" class="btn-pro-primary !bg-blue-600 !text-white !shadow-blue-500/20">
                 <span class="mr-2 text-lg">+</span> Create New Draw

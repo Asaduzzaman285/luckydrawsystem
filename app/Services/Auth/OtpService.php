@@ -5,6 +5,7 @@ namespace App\Services\Auth;
 use App\Models\User;
 use App\Models\OtpVerification;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 
 class OtpService
@@ -31,13 +32,35 @@ class OtpService
             'is_used' => false,
         ]);
 
-        // 4. "Send" the OTP (For now, logging only)
+        // 4. Send the OTP via MimSMS API
+        $phone = ltrim($user->phone, '+');
+        if (str_starts_with($phone, '01')) {
+            $phone = '88' . $phone;
+        }
+
+        try {
+            $response = Http::post('https://api.mimsms.com/api/SmsSending/SMS', [
+                'UserName' => config('services.mimsms.username'),
+                'Apikey' => config('services.mimsms.api_key'),
+                'MobileNumber' => $phone,
+                'CampaignId' => 'null',
+                'SenderName' => config('services.mimsms.sender_name'),
+                'TransactionType' => 'T',
+                'Message' => "Your LuckoMart OTP code is: {$code}. Please do not share this code."
+            ]);
+
+            if ($response->successful()) {
+                Log::info("MimSMS Sent Successfully to {$phone}", ['response' => $response->json()]);
+            } else {
+                Log::error("MimSMS Failed to Send to {$phone}", ['status' => $response->status(), 'response' => $response->body()]);
+            }
+        } catch (\Exception $e) {
+            Log::error("MimSMS Exception for user {$user->id}: " . $e->getMessage());
+        }
+
         Log::info("OTP GENERATED for User {$user->id} ({$user->phone}): {$code}. Type: {$type}");
 
-        // Optionally flash to session for testing purposes if in local env
-        if (config('app.env') === 'local') {
-            session()->flash('debug_otp', "DEBUG OTP (Check Logs in Production): {$code}");
-        }
+
 
         return $otp;
     }

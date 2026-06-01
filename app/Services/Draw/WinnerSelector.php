@@ -237,7 +237,7 @@ class WinnerSelector
      */
     public function manualSelectWinner(Draw $draw, Ticket $ticket, int $tierId): void
     {
-        if ($tierId > 3) throw new Exception("Manual selection for 1-3 only.");
+        if ($tierId > 3 && $tierId !== 5) throw new Exception("Manual selection for 1-3 and 5 only.");
         if ($ticket->draw_id !== $draw->id) throw new Exception("Ticket mismatch.");
         if ($ticket->is_winner && $ticket->prize_tier_id !== $tierId) throw new Exception("Exclusion: Already a winner.");
 
@@ -246,7 +246,7 @@ class WinnerSelector
 
             $totalSales = $this->getFreshTotalSales($draw);
             $prizePool = $totalSales * 0.55;
-            $share = [1 => 0.30, 2 => 0.10, 3 => 0.07][$tierId];
+            $share = [1 => 0.30, 2 => 0.10, 3 => 0.07, 5 => 0.03][$tierId];
             $prizeAmount = $prizePool * $share;
 
             $ticket->update(['is_winner' => true, 'prize_tier_id' => $tierId, 'prize_amount' => $prizeAmount, 'status' => 'pending_verification']);
@@ -272,7 +272,7 @@ class WinnerSelector
         $eligibleUserIds = Ticket::where('draw_id', $draw->id)
             ->select('user_id', DB::raw('count(*) as ticket_count'))
             ->groupBy('user_id')
-            ->having('ticket_count', '>=', 1)
+            ->having('ticket_count', '>=', 50)
             ->pluck('user_id');
 
         return Ticket::where('draw_id', $draw->id)

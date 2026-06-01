@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'LuckyDraw Pro') }}</title>
+    <title>{{ config('app.name', 'LuckoMart') }}</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap" rel="stylesheet">
@@ -42,13 +42,13 @@
                             <span class="text-blue-600 font-black text-4xl italic" style="font-family:'Syne',sans-serif">L</span>
                         </div>
                         <div class="mt-6">
-                            <h2 class="text-3xl font-black tracking-tighter lowercase italic" style="font-family:'Syne',sans-serif">lucky<span class="text-blue-200">draw</span></h2>
-                            <p class="text-[9px] font-black tracking-[0.4em] uppercase opacity-60 mt-2">Security Protocol v4.0</p>
+                            <h2 class="text-3xl font-black tracking-tighter lowercase italic" style="font-family:'Syne',sans-serif">lucko<span class="text-blue-200">mart</span></h2>
+                            <p class="text-[9px] font-black tracking-[0.4em] uppercase opacity-60 mt-2">Secure Checkout</p>
                         </div>
                     </a>
                     
                     <div class="max-w-xs mx-auto">
-                        <p class="text-sm font-medium leading-relaxed opacity-80 italic">Unified access terminal for premium digital assets and exclusive lucky draw participation.</p>
+                        <p class="text-sm font-medium leading-relaxed opacity-80 italic">Your premier destination for high-quality products and seamless shopping experiences.</p>
                     </div>
                 </div>
 

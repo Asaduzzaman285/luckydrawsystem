@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="min-h-screen bg-var(--background) pb-24"
         x-data="{ 
-            registerModal: false, 
+            registerModal: {{ $errors->hasAny(['name', 'phone', 'email', 'password']) ? 'true' : 'false' }}, 
             depositModal: false, 
             payoutModal: false,
             searchQuery: '',
@@ -286,8 +286,7 @@
         </div>
 
         <!-- Registration Modal -->
-        <div x-data="{ registerModal: {{ $errors->hasAny(['name', 'phone', 'email', 'password']) ? 'true' : 'false' }} }" 
-             x-show="registerModal" 
+        <div x-show="registerModal" 
              class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" x-cloak>
             <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <button @click="registerModal = false" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition font-black">✕</button>

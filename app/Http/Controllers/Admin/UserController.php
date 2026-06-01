@@ -64,15 +64,20 @@ class UserController extends Controller
      */
     public function store(Request $request, AgentReassignmentService $reassignmentService)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|string|email|max:255|unique:users',
-            'phone' => 'required|string|max:20|unique:users,phone',
-            'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|string|in:admin,agent',
-            'district_id' => 'nullable|exists:districts,id',
-            'upazilla_id' => 'nullable|exists:upazillas,id',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'nullable|string|email|max:255|unique:users',
+                'phone' => 'required|string|max:20|unique:users,phone',
+                'password' => 'required|string|min:8|confirmed',
+                'role' => 'required|string|in:admin,agent',
+                'district_id' => 'nullable|exists:districts,id',
+                'upazilla_id' => 'nullable|exists:upazillas,id',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::error('Validation Failed:', $e->errors());
+            throw $e;
+        }
 
         // Security Check: Only Super Admin can create Admins
         if ($validated['role'] === 'admin' && !auth()->user()->hasRole('super-admin')) {

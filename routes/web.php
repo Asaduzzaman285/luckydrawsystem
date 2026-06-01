@@ -85,8 +85,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/otp-verify', [OtpVerifyController::class, 'show'])->name('otp.verify');
     Route::post('/otp-verify', [OtpVerifyController::class, 'verify'])->name('otp.verify.submit');
     Route::post('/otp-resend', [OtpVerifyController::class, 'resend'])->name('otp.resend');
-    Route::post('/otp-password', function() {
+    Route::post('/otp-password', function(Request $request) {
         app(\App\Services\Auth\OtpService::class)->generateAndSend(auth()->user(), 'password_reset');
+        
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Verification code sent!']);
+        }
+        
         return back()->with('success', 'A 6-digit security code has been sent to your terminal/logs.');
     })->name('otp.password');
 });

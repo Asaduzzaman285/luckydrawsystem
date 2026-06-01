@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'mimsms' => [
+        'username' => env('MIMSMS_USERNAME'),
+        'api_key' => env('MIMSMS_API_KEY'),
+        'sender_name' => env('MIMSMS_SENDER_NAME', 'MiM SMS'),
+    ],
+
 ];

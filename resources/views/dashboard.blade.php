@@ -105,7 +105,7 @@
                     <div class="text-5xl mb-4">❓</div>
                     <h3 class="text-xl font-black text-slate-900 tracking-tighter mb-2">No Agent Assigned</h3>
                     <p class="text-sm text-slate-400 font-bold mb-8">Your account is currently not linked to a regional representative.</p>
-                    <a href="mailto:admin@luckydraw.pro" class="inline-flex bg-blue-600 text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg italic">Contact Admin</a>
+                    <a href="mailto:admin@luckomart.com" class="inline-flex bg-blue-600 text-white px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg italic">Contact Admin</a>
                 </div>
                 @endif
             </div>
