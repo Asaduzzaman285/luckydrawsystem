@@ -71,6 +71,21 @@ class TicketController extends Controller
                 
                 // Update prize_pool_total (55% of total sales)
                 $draw->update(['prize_pool_total' => $draw->total_sales * 0.55]);
+
+                // 4. Grant 10% Referral Commission
+                $user = Auth::user();
+                if ($user->referred_by) {
+                    $referrer = \App\Models\User::find($user->referred_by);
+                    if ($referrer) {
+                        $commissionAmount = $totalPrice * 0.10;
+                        $this->walletService->deposit(
+                            $referrer,
+                            $commissionAmount,
+                            "REFERRAL-COMMISSION-U{$user->id}-T" . $transaction->id,
+                            1 // Admin ID
+                        );
+                    }
+                }
             });
 
             return back()->with('success', 'Product purchased successfully! You received ' . $totalEntries . ' entries. Good luck!');

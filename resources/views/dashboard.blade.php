@@ -16,6 +16,9 @@
                         <div>
                             <div class="text-[10px] font-black text-white/60 uppercase tracking-widest italic">member account</div>
                             <div class="text-lg font-black text-white tracking-tight leading-none tracking-tighter">{{ Auth::user()->name }}</div>
+                            <div class="text-[9px] font-black text-white/80 uppercase tracking-widest italic mt-1" title="Share this code to earn 10% commission when your friends buy tickets!">
+                                Referral Code: <span class="bg-white/20 px-2 py-0.5 rounded text-white cursor-pointer hover:bg-white/30 transition" onclick="navigator.clipboard.writeText('{{ Auth::user()->referral_code }}'); alert('Referral code copied!');">{{ Auth::user()->referral_code ?? 'Generating...' }} 📋</span>
+                            </div>
                         </div>
                     </div>
                     

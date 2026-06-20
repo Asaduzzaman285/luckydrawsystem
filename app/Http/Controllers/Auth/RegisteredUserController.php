@@ -40,9 +40,18 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'district_id' => ['required', 'exists:districts,id'],
             'upazilla_id' => ['required', 'exists:upazillas,id'],
+            'referral_code' => ['nullable', 'string', 'exists:users,referral_code'],
         ]);
 
         $agentId = $agentAssignmentService->getAgentForLocation($request->district_id, $request->upazilla_id);
+
+        $referredBy = null;
+        if ($request->filled('referral_code')) {
+            $referrer = User::where('referral_code', $request->referral_code)->first();
+            if ($referrer) {
+                $referredBy = $referrer->id;
+            }
+        }
 
         $user = User::create([
             'name' => $request->name,
@@ -52,6 +61,7 @@ class RegisteredUserController extends Controller
             'district_id' => $request->district_id,
             'upazilla_id' => $request->upazilla_id,
             'agent_id' => $agentId,
+            'referred_by' => $referredBy,
         ]);
 
         $user->assignRole('user');

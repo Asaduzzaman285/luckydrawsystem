@@ -29,6 +29,8 @@ class User extends Authenticatable
         'district_id',
         'upazilla_id',
         'agent_id',
+        'referral_code',
+        'referred_by',
     ];
 
     /**
@@ -110,5 +112,24 @@ class User extends Authenticatable
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function referrer()
+    {
+        return $this->belongsTo(User::class, 'referred_by');
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(User::class, 'referred_by');
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (empty($user->referral_code)) {
+                $user->referral_code = strtoupper(\Illuminate\Support\Str::random(8));
+            }
+        });
     }
 }

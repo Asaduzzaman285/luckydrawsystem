@@ -304,6 +304,7 @@ class AgentController extends Controller
             'upazilla_id' => $agent->upazilla_id,
             'created_by' => $agent->id,
             'agent_id' => $agent->id, // Also set as agent_id
+            'referred_by' => $agent->id, // Automatically apply agent's referral code
         ]);
 
         $user->assignRole('user');

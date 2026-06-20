@@ -360,6 +360,17 @@
         @enderror
       </div>
 
+      <div class="fg">
+        <label class="fl">Referral Code <span class="opt-tag">Optional</span></label>
+        <div class="fw">
+          <span class="fi">🎁</span>
+          <input type="text" name="referral_code" value="{{ old('referral_code') }}" placeholder="Enter code if you have one" />
+        </div>
+        @error('referral_code')
+            <p class="text-[10px] text-coral font-bold mt-1 uppercase tracking-tight">{{ $message }}</p>
+        @enderror
+      </div>
+
       <!-- SECURITY -->
       <div class="sec-div">🔐 Set Password</div>
       <div class="fg-row">
