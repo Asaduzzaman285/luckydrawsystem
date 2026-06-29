@@ -263,7 +263,6 @@
     <div class="fc">
       <div class="form-topbar">
         <a href="{{ route('login') }}" class="back-l">← Back to Sign In</a>
-        <div class="bonus-pill"><span>🎁 ৳200 Welcome Bonus on Join!</span></div>
       </div>
 
       <div class="prog-bar"><div class="prog-fill"></div></div>
@@ -276,11 +275,6 @@
 
       <!-- what you get -->
       <div class="join-perks">
-        <div class="jp">
-          <div class="jp-val">৳200</div>
-          <div class="jp-label">Welcome Bonus</div>
-        </div>
-        <div class="jp-div"></div>
         <div class="jp">
           <div class="jp-val">15%</div>
           <div class="jp-label">Max Cashback</div>

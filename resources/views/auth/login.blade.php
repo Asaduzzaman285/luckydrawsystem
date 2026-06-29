@@ -272,9 +272,7 @@
   <!-- RIGHT FORM -->
   <main class="form-side">
     <div class="fc">
-      <div class="cb-pill">
-        <span>🎁 Sign in & claim your pending ৳450 cashback reward!</span>
-      </div>
+
 
       <div class="fh">Welcome <em>Back!</em></div>
       <div class="fs">Sign in to shop, earn cashback & enter today's draw</div>
@@ -318,7 +316,7 @@
       </form>
 
       <div class="div-row">New to LuckoMart?</div>
-      <a href="{{ route('register') }}" class="btn-g">🎁 Create Free Account — Get ৳200 Welcome Bonus!</a>
+      <a href="{{ route('register') }}" class="btn-g">🎁 Create Free Account</a>
 
       <div class="trust">
         <div class="ti">SSL Secured</div>
