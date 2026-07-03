@@ -109,8 +109,8 @@
                             </div>
 
                             <!-- Manual Interaction (1-3 + 5) -->
-                            <div x-show="(selectedTier <= 3 || selectedTier == 5) && selectionMethod === 'manual'" class="space-y-4">
-                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic">Step 2: Machine 1 (Manual Entry)</label>
+                            <div x-show="selectedTier <= 3 || (selectedTier == 5 && selectionMethod === 'manual')" class="space-y-4">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic" x-text="`Step 2: ${selectionMethod === 'auto' ? 'Machine 2 (Auto Entry)' : 'Machine 1 (Manual Entry)'}`"></label>
                                 <form action="{{ route('draws.pick-tier', $draw->id) }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="tier_id" :value="selectedTier">
