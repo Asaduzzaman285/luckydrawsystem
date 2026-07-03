@@ -50,40 +50,53 @@
                     @endcan
 
                     @can('approve-withdrawal')
-                    <x-nav-link :href="route('admin.withdrawals.index')" :active="request()->routeIs('admin.withdrawals.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
-                        {{ __('Withdrawals') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
-                        {{ __('Staff') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.reports')" :active="request()->routeIs('admin.reports')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
-                        {{ __('Reports') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('admin.deposit-requests.index')" :active="request()->routeIs('admin.deposit-requests.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
-                        {{ __('Agent Deposits') }}
-                    </x-nav-link>
+                    <div class="hidden lg:flex lg:items-center">
+                        <x-dropdown align="left" width="48">
+                            <x-slot name="trigger">
+                                <button class="inline-flex items-center px-3 py-2 border border-transparent text-[8px] leading-4 font-bold rounded-md text-white/70 hover:text-white uppercase tracking-tighter transition ease-in-out duration-150">
+                                    <div>Finance & Staff</div>
+                                    <div class="ms-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('admin.withdrawals.index')" class="text-xs font-bold text-slate-700">Withdrawals</x-dropdown-link>
+                                <x-dropdown-link :href="route('users.index')" class="text-xs font-bold text-slate-700">Staff</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.reports')" class="text-xs font-bold text-slate-700">Reports</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.deposit-requests.index')" class="text-xs font-bold text-slate-700">Agent Deposits</x-dropdown-link>
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
                     @endcan
 
                     @can('deposit-to-user')
-                    <x-nav-link :href="route('agent.dashboard')" :active="request()->routeIs('agent.dashboard')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
-                        {{ __('Agent Portal') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('agent.prizes.index')" :active="request()->routeIs('agent.prizes.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
-                        {{ __('Prize Handover') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('agent.deposit-requests.index')" :active="request()->routeIs('agent.deposit-requests.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
-                        {{ __('Deposit Requests') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('agent.reports')" :active="request()->routeIs('agent.reports')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
-                        {{ __('Reports') }}
-                    </x-nav-link>
+                    <div class="hidden lg:flex lg:items-center">
+                        <x-dropdown align="left" width="48">
+                            <x-slot name="trigger">
+                                <button class="inline-flex items-center px-3 py-2 border border-transparent text-[8px] leading-4 font-bold rounded-md text-white/70 hover:text-white uppercase tracking-tighter transition ease-in-out duration-150">
+                                    <div>Agent Console</div>
+                                    <div class="ms-1">
+                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </button>
+                            </x-slot>
+                            <x-slot name="content">
+                                <x-dropdown-link :href="route('agent.dashboard')" class="text-xs font-bold text-slate-700">Agent Portal</x-dropdown-link>
+                                <x-dropdown-link :href="route('agent.prizes.index')" class="text-xs font-bold text-slate-700">Prize Handover</x-dropdown-link>
+                                <x-dropdown-link :href="route('agent.deposit-requests.index')" class="text-xs font-bold text-slate-700">Deposit Requests</x-dropdown-link>
+                                <x-dropdown-link :href="route('agent.reports')" class="text-xs font-bold text-slate-700">Reports</x-dropdown-link>
+                                @role('agent')
+                                <x-dropdown-link :href="route('agent.admin-deposit.create')" class="text-xs font-bold text-slate-700">Request Deposit</x-dropdown-link>
+                                @endrole
+                            </x-slot>
+                        </x-dropdown>
+                    </div>
                     @endcan
-
-                    @role('agent')
-                    <x-nav-link :href="route('agent.admin-deposit.create')" :active="request()->routeIs('agent.admin-deposit.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
-                        {{ __('Request Deposit') }}
-                    </x-nav-link>
-                    @endrole
                 </div>
             </div>
 
