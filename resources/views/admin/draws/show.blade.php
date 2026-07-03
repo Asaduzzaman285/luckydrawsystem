@@ -1,58 +1,5 @@
 <x-app-layout>
-    <div class="min-h-screen bg-var(--background) pb-24" x-data='{ 
-            winnerModal: false,
-            selectedTier: 1, 
-            selectionMethod: "manual",
-            ticketNumber: "", 
-            autoUserName: "",
-            loading: false, 
-            previewData: null,
-            error: null,
-            winners: {!! json_encode((object)$winners->mapWithKeys(fn($w, $k) => [$k => true])->toArray()) !!},
-            isTierWon(id) {
-                return this.winners.hasOwnProperty(String(id));
-            },
-            tierNames: {
-                1: "1st Prize / Grand Winner",
-                2: "2nd Prize / Runner Up",
-                3: "3rd Prize",
-                4: "4th Prize / Lucky Selection",
-                5: "5th Prize / Fortune Selection"
-            },
-            async fetchRandomTicket() {
-                this.loading = true;
-                this.error = null;
-                this.ticketNumber = "";
-                this.autoUserName = "";
-                try {
-                    const response = await fetch(`/draws/{{ $draw->id }}/random-ticket`);
-                    const data = await response.json();
-                    if (data.error) throw new Error(data.error);
-                    this.ticketNumber = data.ticket_number;
-                    this.autoUserName = data.user_name;
-                } catch (e) {
-                    this.error = e.message;
-                    alert("Machine 2 Error: " + e.message); // Added alert so it doesn't silently fail
-                } finally {
-                    this.loading = false;
-                }
-            },
-            async fetchPreview() {
-                this.loading = true;
-                this.error = null;
-                this.previewData = null;
-                try {
-                    const response = await fetch(`/draws/{{ $draw->id }}/preview/${this.selectedTier}`);
-                    const data = await response.json();
-                    // Don"t throw if no tickets, just show the empty state
-                    this.previewData = data;
-                } catch (e) {
-                    this.error = e.message;
-                } finally {
-                    this.loading = false;
-                }
-            }
-        }'>
+    <div class="min-h-screen bg-var(--background) pb-24" x-data="winnerConsole()">
         
         <!-- Professional Header -->
         <div class="bg-gradient-to-r from-[#1a56db] to-[#1e3a8a] pt-8 pb-20 px-4 sm:px-8 shadow-inner">
@@ -378,4 +325,68 @@
 
         </div>
     </div>
+    
+    @push('scripts')
+    <script>
+        function winnerConsole() {
+            return {
+                winnerModal: false,
+                selectedTier: 1, 
+                selectionMethod: 'manual',
+                ticketNumber: '', 
+                autoUserName: '',
+                loading: false, 
+                previewData: null,
+                error: null,
+                winners: {!! json_encode((object)$winners->mapWithKeys(fn($w, $k) => [$k => true])->toArray()) !!},
+                
+                isTierWon(id) {
+                    return this.winners.hasOwnProperty(String(id));
+                },
+                
+                tierNames: {
+                    1: '1st Prize / Grand Winner',
+                    2: '2nd Prize / Runner Up',
+                    3: '3rd Prize',
+                    4: '4th Prize / Lucky Selection',
+                    5: '5th Prize / Fortune Selection'
+                },
+                
+                async fetchRandomTicket() {
+                    this.loading = true;
+                    this.error = null;
+                    this.ticketNumber = '';
+                    this.autoUserName = '';
+                    try {
+                        const response = await fetch(`/draws/{{ $draw->id }}/random-ticket`);
+                        const data = await response.json();
+                        if (data.error) throw new Error(data.error);
+                        this.ticketNumber = data.ticket_number;
+                        this.autoUserName = data.user_name;
+                    } catch (e) {
+                        this.error = e.message;
+                        alert("Machine 2 Error: " + e.message);
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                
+                async fetchPreview() {
+                    this.loading = true;
+                    this.error = null;
+                    this.previewData = null;
+                    try {
+                        const response = await fetch(`/draws/{{ $draw->id }}/preview/${this.selectedTier}`);
+                        const data = await response.json();
+                        this.previewData = data;
+                    } catch (e) {
+                        this.error = e.message;
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            };
+        }
+    </script>
+    @endpush
 </x-app-layout>
