@@ -8,7 +8,7 @@
             loading: false, 
             previewData: null,
             error: null,
-            winners: {{ json_encode((object)$winners->mapWithKeys(fn($w, $k) => [$k => true])->toArray()) }},
+            winners: {!! json_encode((object)$winners->mapWithKeys(fn($w, $k) => [$k => true])->toArray()) !!},
             isTierWon(id) {
                 return this.winners.hasOwnProperty(String(id));
             },
