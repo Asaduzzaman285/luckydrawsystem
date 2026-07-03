@@ -127,6 +127,10 @@
                             {{ __('Transactions') }}
                         </x-dropdown-link>
 
+                        <x-dropdown-link :href="route('deposit.request.create')" class="hover:bg-blue-50">
+                            {{ __('Deposit Money') }}
+                        </x-dropdown-link>
+
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

@@ -30,6 +30,9 @@
                                 <div x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:leave="transition ease-in duration-200" x-transition:leave-end="opacity-0 -translate-y-4" class="balance-text text-sm font-black text-white tracking-tighter pt-0 italic">৳ {{ number_format($wallet->balance ?? 0, 2) }}</div>
                             </div>
                         </div>
+                        <a href="{{ route('deposit.request.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white text-[8px] font-black px-4 py-2.5 rounded-xl uppercase tracking-widest transition shadow-lg border border-blue-500 italic">
+                            Deposit
+                        </a>
                         <button @click="$dispatch('open-withdraw-modal')" class="bg-white/10 hover:bg-white/20 text-white text-[8px] font-black px-4 py-2.5 rounded-xl uppercase tracking-widest transition shadow-lg border border-white/10 italic">
                             Withdraw
                         </button>
