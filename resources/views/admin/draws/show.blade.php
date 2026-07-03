@@ -1,10 +1,10 @@
 <x-app-layout>
-    <div class="min-h-screen bg-var(--background) pb-24" x-data="{ 
+    <div class="min-h-screen bg-var(--background) pb-24" x-data='{ 
             winnerModal: false,
             selectedTier: 1, 
-            selectionMethod: 'manual',
-            ticketNumber: '', 
-            autoUserName: '',
+            selectionMethod: "manual",
+            ticketNumber: "", 
+            autoUserName: "",
             loading: false, 
             previewData: null,
             error: null,
@@ -13,17 +13,17 @@
                 return this.winners.hasOwnProperty(String(id));
             },
             tierNames: {
-                1: '1st Prize / Grand Winner',
-                2: '2nd Prize / Runner Up',
-                3: '3rd Prize',
-                4: '4th Prize / Lucky Selection',
-                5: '5th Prize / Fortune Selection'
+                1: "1st Prize / Grand Winner",
+                2: "2nd Prize / Runner Up",
+                3: "3rd Prize",
+                4: "4th Prize / Lucky Selection",
+                5: "5th Prize / Fortune Selection"
             },
             async fetchRandomTicket() {
                 this.loading = true;
                 this.error = null;
-                this.ticketNumber = '';
-                this.autoUserName = '';
+                this.ticketNumber = "";
+                this.autoUserName = "";
                 try {
                     const response = await fetch(`/draws/{{ $draw->id }}/random-ticket`);
                     const data = await response.json();
@@ -44,7 +44,7 @@
                 try {
                     const response = await fetch(`/draws/{{ $draw->id }}/preview/${this.selectedTier}`);
                     const data = await response.json();
-                    // Don't throw if no tickets, just show the empty state
+                    // Don"t throw if no tickets, just show the empty state
                     this.previewData = data;
                 } catch (e) {
                     this.error = e.message;
@@ -52,7 +52,7 @@
                     this.loading = false;
                 }
             }
-        }">
+        }'>
         
         <!-- Professional Header -->
         <div class="bg-gradient-to-r from-[#1a56db] to-[#1e3a8a] pt-8 pb-20 px-4 sm:px-8 shadow-inner">
