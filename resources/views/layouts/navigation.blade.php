@@ -16,7 +16,7 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-4 sm:-my-px sm:ms-10 sm:flex items-center text-nowrap">
+                <div class="hidden space-x-2 lg:-my-px lg:ms-6 lg:flex items-center text-nowrap">
                     @php
                         $dashboardRoute = route('dashboard');
                         if (Auth::user()->hasRole('agent')) {
@@ -26,7 +26,7 @@
                         }
                     @endphp
                     <x-nav-link :href="$dashboardRoute" :active="request()->routeIs('dashboard') || request()->routeIs('admin.dashboard') || request()->routeIs('agent.dashboard')"
-                        class="text-white/70 hover:text-white hover:border-blue-400 transition font-bold uppercase tracking-tighter text-[9px]">
+                        class="text-white/70 hover:text-white hover:border-blue-400 transition font-bold uppercase tracking-tighter text-[8px]">
                         @if(Auth::user()->hasRole('super-admin') || Auth::user()->hasRole('admin'))
                             {{ __('Admin Hub') }}
                         @elseif(Auth::user()->hasRole('agent'))
@@ -36,51 +36,51 @@
                         @endif
                     </x-nav-link>
 
-                    <x-nav-link :href="route('results.index')" :active="request()->routeIs('results.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('results.index')" :active="request()->routeIs('results.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Results') }}
                     </x-nav-link>
 
                     @can('create-draw')
-                    <x-nav-link :href="route('draws.index')" :active="request()->routeIs('draws.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('draws.index')" :active="request()->routeIs('draws.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Draws') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Products') }}
                     </x-nav-link>
                     @endcan
 
                     @can('approve-withdrawal')
-                    <x-nav-link :href="route('admin.withdrawals.index')" :active="request()->routeIs('admin.withdrawals.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('admin.withdrawals.index')" :active="request()->routeIs('admin.withdrawals.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Withdrawals') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Staff') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.reports')" :active="request()->routeIs('admin.reports')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('admin.reports')" :active="request()->routeIs('admin.reports')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Reports') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.deposit-requests.index')" :active="request()->routeIs('admin.deposit-requests.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('admin.deposit-requests.index')" :active="request()->routeIs('admin.deposit-requests.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Agent Deposits') }}
                     </x-nav-link>
                     @endcan
 
                     @can('deposit-to-user')
-                    <x-nav-link :href="route('agent.dashboard')" :active="request()->routeIs('agent.dashboard')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('agent.dashboard')" :active="request()->routeIs('agent.dashboard')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Agent Portal') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('agent.prizes.index')" :active="request()->routeIs('agent.prizes.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('agent.prizes.index')" :active="request()->routeIs('agent.prizes.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Prize Handover') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('agent.deposit-requests.index')" :active="request()->routeIs('agent.deposit-requests.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('agent.deposit-requests.index')" :active="request()->routeIs('agent.deposit-requests.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Deposit Requests') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('agent.reports')" :active="request()->routeIs('agent.reports')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('agent.reports')" :active="request()->routeIs('agent.reports')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Reports') }}
                     </x-nav-link>
                     @endcan
 
                     @role('agent')
-                    <x-nav-link :href="route('agent.admin-deposit.create')" :active="request()->routeIs('agent.admin-deposit.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                    <x-nav-link :href="route('agent.admin-deposit.create')" :active="request()->routeIs('agent.admin-deposit.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[8px]">
                         {{ __('Request Deposit') }}
                     </x-nav-link>
                     @endrole
@@ -88,7 +88,7 @@
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden lg:flex lg:items-center lg:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-4 py-2 border border-white/10 text-xs leading-4 font-black rounded-xl text-white bg-white/5 hover:bg-white/10 transition ease-in-out duration-150">
@@ -128,7 +128,7 @@
             </div>
 
             <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
+            <div class="-me-2 flex items-center lg:hidden">
                 <button @click="open = ! open"
                     class="inline-flex items-center justify-center p-2 rounded-md text-white/70 hover:text-white hover:bg-white/5 focus:outline-none transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -144,7 +144,7 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-[#1e3a8a] border-t border-white/10">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden lg:hidden bg-[#1e3a8a] border-t border-white/10">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')"
                 class="text-white/70 hover:text-white hover:bg-white/5">
