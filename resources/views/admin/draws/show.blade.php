@@ -116,11 +116,14 @@
                                     <input type="hidden" name="tier_id" :value="selectedTier">
                                     <div class="relative">
                                         <input type="text" name="ticket_number" x-model="ticketNumber" placeholder="Enter Winning Code..." 
-                                            class="w-full bg-slate-50 border-slate-200 rounded-2xl py-5 px-8 text-sm font-black text-slate-900 focus:ring-blue-600 focus:border-blue-600 transition shadow-inner" required :disabled="winners[selectedTier] || (selectionMethod === 'auto' && loading)">
+                                            class="w-full bg-slate-50 border-slate-200 rounded-2xl py-5 px-8 text-sm font-black text-slate-900 focus:ring-blue-600 focus:border-blue-600 transition shadow-inner" required :disabled="winners[selectedTier] || (selectionMethod === 'auto' && loadingTicket)">
                                         
-                                        <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 bg-blue-600 text-white text-[10px] font-black px-8 py-3 rounded-xl uppercase tracking-widest hover:bg-blue-700 transition shadow-lg italic disabled:opacity-50" :disabled="isTierWon(selectedTier) || !ticketNumber || (selectionMethod === 'auto' && loading)">Award Now</button>
+                                        <button type="submit" class="absolute right-4 top-1/2 -translate-y-1/2 bg-blue-600 text-white text-[10px] font-black px-8 py-3 rounded-xl uppercase tracking-widest hover:bg-blue-700 transition shadow-lg italic disabled:opacity-50" :disabled="isTierWon(selectedTier) || !ticketNumber || (selectionMethod === 'auto' && loadingTicket)">Award Now</button>
                                     </div>
                                     <p x-show="autoUserName" class="mt-2 text-[10px] font-black text-blue-600 italic uppercase">Selected: <span x-text="autoUserName"></span></p>
+                                    <template x-if="ticketError">
+                                        <p class="mt-2 text-[10px] font-black text-red-600 italic uppercase" x-text="ticketError"></p>
+                                    </template>
                                 </form>
                                 <template x-if="isTierWon(selectedTier)">
                                     <p class="text-[10px] font-black text-emerald-600 uppercase italic">✓ Tier already awarded.</p>
@@ -130,22 +133,22 @@
                             <!-- Algorithmic Interaction (4-5) -->
                             <div x-show="selectedTier == 4 || (selectedTier == 5 && selectionMethod === 'auto')" class="space-y-4">
                                 <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block italic">Step 2: Run Selection Protocol</label>
-                                <button @click="fetchPreview()" :disabled="loading || isTierWon(selectedTier)" class="w-full bg-slate-900 text-white text-[10px] font-black py-5 rounded-2xl uppercase tracking-widest hover:bg-blue-600 transition shadow-xl disabled:opacity-50 italic">
-                                    <span x-show="!loading && !isTierWon(selectedTier)">Initialize Random Pick</span>
-                                    <span x-show="loading">Scanning Ledger...</span>
-                                    <span x-show="!loading && isTierWon(selectedTier)">Tier Awarded</span>
+                                <button @click="fetchPreview()" :disabled="loadingPreview || isTierWon(selectedTier)" class="w-full bg-slate-900 text-white text-[10px] font-black py-5 rounded-2xl uppercase tracking-widest hover:bg-blue-600 transition shadow-xl disabled:opacity-50 italic">
+                                    <span x-show="!loadingPreview && !isTierWon(selectedTier)">Initialize Random Pick</span>
+                                    <span x-show="loadingPreview">Scanning Ledger...</span>
+                                    <span x-show="!loadingPreview && isTierWon(selectedTier)">Tier Awarded</span>
                                 </button>
                             </div>
                         </div>
 
                         <!-- Preview Area -->
                         <div class="bg-slate-50 rounded-[2.5rem] p-8 border border-slate-100 min-h-[300px] flex flex-col shadow-inner">
-                            <div x-show="!previewData && !error && !loading" class="flex-1 flex flex-col items-center justify-center text-center">
+                            <div x-show="!previewData && !error && !loadingPreview" class="flex-1 flex flex-col items-center justify-center text-center">
                                 <div class="text-4xl mb-4 opacity-20">🎯</div>
                                 <p class="text-[10px] font-black text-slate-300 uppercase tracking-widest">Waiting for selection...</p>
                             </div>
 
-                            <div x-show="loading" class="flex-1 flex flex-col items-center justify-center">
+                            <div x-show="loadingPreview" class="flex-1 flex flex-col items-center justify-center">
                                 <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
                             </div>
 
@@ -335,9 +338,11 @@
                 selectionMethod: 'manual',
                 ticketNumber: '', 
                 autoUserName: '',
-                loading: false, 
+                loadingTicket: false, 
+                loadingPreview: false,
                 previewData: null,
                 error: null,
+                ticketError: null,
                 winners: {!! json_encode((object)$winners->mapWithKeys(fn($w, $k) => [$k => true])->toArray()) !!},
                 
                 isTierWon(id) {
@@ -353,36 +358,48 @@
                 },
                 
                 async fetchRandomTicket() {
-                    this.loading = true;
-                    this.error = null;
+                    this.loadingTicket = true;
+                    this.ticketError = null;
                     this.ticketNumber = '';
                     this.autoUserName = '';
                     try {
                         const response = await fetch(`/draws/{{ $draw->id }}/random-ticket`);
+                        
+                        // If not OK, handle differently
+                        if (!response.ok) {
+                            const errData = await response.json().catch(() => null);
+                            throw new Error(errData?.error || `HTTP Error ${response.status}`);
+                        }
+                        
                         const data = await response.json();
                         if (data.error) throw new Error(data.error);
                         this.ticketNumber = data.ticket_number;
                         this.autoUserName = data.user_name;
                     } catch (e) {
-                        this.error = e.message;
-                        alert("Machine 2 Error: " + e.message);
+                        this.ticketError = e.message;
                     } finally {
-                        this.loading = false;
+                        this.loadingTicket = false;
                     }
                 },
                 
                 async fetchPreview() {
-                    this.loading = true;
+                    this.loadingPreview = true;
                     this.error = null;
                     this.previewData = null;
                     try {
                         const response = await fetch(`/draws/{{ $draw->id }}/preview/${this.selectedTier}`);
+                        
+                        if (!response.ok) {
+                            const errData = await response.json().catch(() => null);
+                            throw new Error(errData?.error || `HTTP Error ${response.status}`);
+                        }
+                        
                         const data = await response.json();
                         this.previewData = data;
                     } catch (e) {
                         this.error = e.message;
                     } finally {
-                        this.loading = false;
+                        this.loadingPreview = false;
                     }
                 }
             };
