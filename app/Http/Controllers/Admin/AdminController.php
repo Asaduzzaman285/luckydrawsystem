@@ -72,4 +72,27 @@ class AdminController extends Controller
 
         return back()->with('success', 'Withdrawal approved successfully');
     }
+
+    /**
+     * Admin Reports: View all transactions processed by all agents.
+     */
+    public function reports(Request $request)
+    {
+        $query = Transaction::with(['user', 'processedBy']);
+
+        // Filter by agent
+        if ($request->filled('agent_id')) {
+            $query->where('processed_by', $request->agent_id);
+        }
+
+        // Filter by type
+        if ($request->has('type') && in_array($request->type, ['deposit', 'withdrawal'])) {
+            $query->where('type', $request->type);
+        }
+
+        $transactions = $query->latest()->paginate(20);
+        $agents = User::role('agent')->orderBy('name')->get();
+
+        return view('admin.reports', compact('transactions', 'agents'));
+    }
 }

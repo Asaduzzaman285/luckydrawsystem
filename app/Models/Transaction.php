@@ -40,4 +40,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class, 'processed_by');
     }
+
+    public function processedBy()
+    {
+        return $this->belongsTo(User::class, 'processed_by');
+    }
 }

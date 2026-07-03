@@ -135,4 +135,113 @@ class DepositRequestController extends Controller
 
         return back()->with('success', 'Deposit request rejected.');
     }
+
+    // =============================================
+    // Agent -> Admin Deposit Request Methods
+    // =============================================
+
+    /**
+     * Show the form for an agent to request deposit from admin.
+     */
+    public function agentCreate()
+    {
+        // Find an admin user to display
+        $admin = User::role('admin')->first() ?? User::role('super-admin')->first();
+
+        return view('agent.admin-deposit-request', compact('admin'));
+    }
+
+    /**
+     * Store agent's deposit request to admin.
+     */
+    public function agentStore(Request $request)
+    {
+        $request->validate([
+            'amount' => 'required|numeric|min:10',
+            'payment_method' => 'required|in:bKash,Nagad',
+            'transaction_id' => 'required|string|unique:deposit_requests,transaction_id',
+        ]);
+
+        $agent = Auth::user();
+        $admin = User::role('admin')->first() ?? User::role('super-admin')->first();
+
+        if (!$admin) {
+            return back()->with('error', 'No admin found in the system.');
+        }
+
+        DepositRequest::create([
+            'user_id' => $agent->id, // The agent is the one requesting
+            'agent_id' => $admin->id, // The admin is who approves
+            'amount' => $request->amount,
+            'payment_method' => $request->payment_method,
+            'transaction_id' => $request->transaction_id,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('agent.dashboard')->with('success', 'Deposit request sent to admin. Waiting for approval.');
+    }
+
+    /**
+     * Admin: View all deposit requests from agents.
+     */
+    public function adminIndex()
+    {
+        $requests = DepositRequest::whereHas('user', function ($q) {
+                $q->role('agent');
+            })
+            ->with(['user', 'agent'])
+            ->latest()
+            ->get();
+
+        return view('admin.deposit-requests.index', compact('requests'));
+    }
+
+    /**
+     * Admin: Approve an agent's deposit request.
+     */
+    public function adminApprove(DepositRequest $depositRequest)
+    {
+        if ($depositRequest->status !== 'pending') {
+            return back()->with('error', 'This request is already processed.');
+        }
+
+        try {
+            DB::transaction(function () use ($depositRequest) {
+                $depositRequest->update(['status' => 'approved']);
+
+                // Credit the agent's wallet
+                $this->walletService->deposit(
+                    $depositRequest->user, // The agent who requested
+                    $depositRequest->amount,
+                    "ADMIN-DEPOSIT-REQ-{$depositRequest->id}-{$depositRequest->transaction_id}",
+                    Auth::id() // Processed by admin
+                );
+            });
+
+            return back()->with('success', 'Agent deposit request approved and wallet credited.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error approving deposit: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Admin: Reject an agent's deposit request.
+     */
+    public function adminReject(Request $request, DepositRequest $depositRequest)
+    {
+        if ($depositRequest->status !== 'pending') {
+            return back()->with('error', 'This request is already processed.');
+        }
+
+        $request->validate([
+            'rejection_reason' => 'required|string|max:255',
+        ]);
+
+        $depositRequest->update([
+            'status' => 'rejected',
+            'rejection_reason' => $request->rejection_reason,
+        ]);
+
+        return back()->with('success', 'Agent deposit request rejected.');
+    }
 }

@@ -56,6 +56,12 @@
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
                         {{ __('Staff') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.reports')" :active="request()->routeIs('admin.reports')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                        {{ __('Reports') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.deposit-requests.index')" :active="request()->routeIs('admin.deposit-requests.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                        {{ __('Agent Deposits') }}
+                    </x-nav-link>
                     @endcan
 
                     @can('deposit-to-user')
@@ -72,6 +78,12 @@
                         {{ __('Reports') }}
                     </x-nav-link>
                     @endcan
+
+                    @role('agent')
+                    <x-nav-link :href="route('agent.admin-deposit.create')" :active="request()->routeIs('agent.admin-deposit.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                        {{ __('Request Deposit') }}
+                    </x-nav-link>
+                    @endrole
                 </div>
             </div>
 
@@ -170,6 +182,14 @@
                 class="text-white/70 hover:text-white">
                 {{ __('Staff') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.reports')" :active="request()->routeIs('admin.reports')"
+                class="text-white/70 hover:text-white">
+                {{ __('Reports') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('admin.deposit-requests.index')" :active="request()->routeIs('admin.deposit-requests.*')"
+                class="text-white/70 hover:text-white">
+                {{ __('Agent Deposits') }}
+            </x-responsive-nav-link>
             @endcan
 
             @can('deposit-to-user')
@@ -190,6 +210,13 @@
                 {{ __('Reports') }}
             </x-responsive-nav-link>
             @endcan
+
+            @role('agent')
+            <x-responsive-nav-link :href="route('agent.admin-deposit.create')" :active="request()->routeIs('agent.admin-deposit.*')"
+                class="text-white/70 hover:text-white">
+                {{ __('Request Deposit') }}
+            </x-responsive-nav-link>
+            @endrole
         </div>
 
         <!-- Responsive Settings Options -->

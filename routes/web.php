@@ -103,7 +103,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('otp.password');
 });
 
-Route::middleware(['auth', 'role:agent|super-admin', 'otp.verified'])->group(function () {
+Route::middleware(['auth', 'role:agent|admin|super-admin', 'otp.verified'])->group(function () {
     Route::get('/agent', [AgentController::class, 'index'])->name('agent.dashboard');
     Route::post('/agent/users', [AgentController::class, 'createUser'])->name('agent.users.store');
     Route::post('/agent/deposit', [AgentController::class, 'deposit'])->name('agent.deposit.store');
@@ -114,13 +114,30 @@ Route::middleware(['auth', 'role:agent|super-admin', 'otp.verified'])->group(fun
     Route::get('/agent/prizes', [AgentController::class, 'prizes'])->name('agent.prizes.index');
     Route::post('/agent/prizes/{ticket}/distribute', [AgentController::class, 'distributePrize'])->name('agent.prizes.distribute');
 
-    // Agent Deposit Requests
+    // Agent Deposit Requests (from customers)
     Route::get('/agent/deposit-requests', [\App\Http\Controllers\DepositRequestController::class, 'index'])->name('agent.deposit-requests.index');
     Route::post('/agent/deposit-requests/{depositRequest}/approve', [\App\Http\Controllers\DepositRequestController::class, 'approve'])->name('agent.deposit-requests.approve');
     Route::post('/agent/deposit-requests/{depositRequest}/reject', [\App\Http\Controllers\DepositRequestController::class, 'reject'])->name('agent.deposit-requests.reject');
 
     // Agent Reports
     Route::get('/agent/reports', [AgentController::class, 'reports'])->name('agent.reports');
+});
+
+// Admin Reports & Admin Deposit Requests (from agents)
+Route::middleware(['auth', 'role:admin|super-admin'])->group(function () {
+    // Admin sees ALL agents' transaction reports
+    Route::get('/admin/reports', [\App\Http\Controllers\Admin\AdminController::class, 'reports'])->name('admin.reports');
+    
+    // Agent-to-Admin deposit requests
+    Route::get('/admin/deposit-requests', [\App\Http\Controllers\DepositRequestController::class, 'adminIndex'])->name('admin.deposit-requests.index');
+    Route::post('/admin/deposit-requests/{depositRequest}/approve', [\App\Http\Controllers\DepositRequestController::class, 'adminApprove'])->name('admin.deposit-requests.approve');
+    Route::post('/admin/deposit-requests/{depositRequest}/reject', [\App\Http\Controllers\DepositRequestController::class, 'adminReject'])->name('admin.deposit-requests.reject');
+});
+
+// Agent deposit request to admin (agent submits request)
+Route::middleware(['auth', 'role:agent'])->group(function () {
+    Route::get('/agent/admin-deposit/request', [\App\Http\Controllers\DepositRequestController::class, 'agentCreate'])->name('agent.admin-deposit.create');
+    Route::post('/agent/admin-deposit/request', [\App\Http\Controllers\DepositRequestController::class, 'agentStore'])->name('agent.admin-deposit.store');
 });
 
 Route::get('/results', [ResultController::class, 'index'])->name('results.index');
