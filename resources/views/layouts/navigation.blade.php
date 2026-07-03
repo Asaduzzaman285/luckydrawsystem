@@ -65,6 +65,12 @@
                     <x-nav-link :href="route('agent.prizes.index')" :active="request()->routeIs('agent.prizes.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
                         {{ __('Prize Handover') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('agent.deposit-requests.index')" :active="request()->routeIs('agent.deposit-requests.*')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                        {{ __('Deposit Requests') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('agent.reports')" :active="request()->routeIs('agent.reports')" class="text-white/70 hover:text-white transition font-bold uppercase tracking-tighter text-[9px]">
+                        {{ __('Reports') }}
+                    </x-nav-link>
                     @endcan
                 </div>
             </div>
@@ -90,6 +96,10 @@
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')" class="hover:bg-blue-50">
                             {{ __('My Profile') }}
+                        </x-dropdown-link>
+                        
+                        <x-dropdown-link :href="route('user.transactions')" class="hover:bg-blue-50">
+                            {{ __('Transactions') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -171,6 +181,14 @@
                 class="text-white/70 hover:text-white">
                 {{ __('Prize Handover') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('agent.deposit-requests.index')" :active="request()->routeIs('agent.deposit-requests.*')"
+                class="text-white/70 hover:text-white">
+                {{ __('Deposit Requests') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('agent.reports')" :active="request()->routeIs('agent.reports')"
+                class="text-white/70 hover:text-white">
+                {{ __('Reports') }}
+            </x-responsive-nav-link>
             @endcan
         </div>
 
@@ -184,6 +202,10 @@
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')" class="text-white/70">
                     {{ __('Profile') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('user.transactions')" class="text-white/70">
+                    {{ __('Transactions') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->

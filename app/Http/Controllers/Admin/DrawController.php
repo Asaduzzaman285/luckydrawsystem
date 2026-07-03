@@ -306,7 +306,7 @@ class DrawController extends Controller
 
         return response()->json([
             'ticket_number' => $ticket->ticket_number,
-            'user_name' => $ticket->user->name
+            'user_name' => $ticket->user ? $ticket->user->name : 'Unknown User'
         ]);
     }
 }

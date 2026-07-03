@@ -350,4 +350,21 @@ class AgentController extends Controller
             return redirect()->back()->with('error', 'Failed to process credit: ' . $e->getMessage());
         }
     }
+    /**
+     * View Agent Reports for Deposits and Withdrawals processed by this agent.
+     */
+    public function reports(Request $request)
+    {
+        $agentId = Auth::id();
+        
+        $query = Transaction::where('processed_by', $agentId)->with('user');
+
+        if ($request->has('type') && in_array($request->type, ['deposit', 'withdrawal'])) {
+            $query->where('type', $request->type);
+        }
+
+        $transactions = $query->latest()->paginate(20);
+
+        return view('agent.reports', compact('transactions'));
+    }
 }

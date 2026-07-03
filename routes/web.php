@@ -79,6 +79,13 @@ Route::middleware(['auth', 'role:admin|super-admin'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/products/{product}/buy', [\App\Http\Controllers\TicketController::class, 'purchase'])->name('products.buy');
     Route::post('/withdraw/request', [\App\Http\Controllers\Agent\AgentController::class, 'requestWithdrawalFromAgent'])->name('withdraw.request');
+    
+    // Deposit Requests
+    Route::get('/deposit/request', [\App\Http\Controllers\DepositRequestController::class, 'create'])->name('deposit.request.create');
+    Route::post('/deposit/request', [\App\Http\Controllers\DepositRequestController::class, 'store'])->name('deposit.request.store');
+
+    // User Transaction History
+    Route::get('/transactions', [\App\Http\Controllers\UserTransactionController::class, 'index'])->name('user.transactions');
 });
 // Point 6: OTP Routes
 Route::middleware(['auth'])->group(function () {
@@ -106,6 +113,14 @@ Route::middleware(['auth', 'role:agent|super-admin', 'otp.verified'])->group(fun
     
     Route::get('/agent/prizes', [AgentController::class, 'prizes'])->name('agent.prizes.index');
     Route::post('/agent/prizes/{ticket}/distribute', [AgentController::class, 'distributePrize'])->name('agent.prizes.distribute');
+
+    // Agent Deposit Requests
+    Route::get('/agent/deposit-requests', [\App\Http\Controllers\DepositRequestController::class, 'index'])->name('agent.deposit-requests.index');
+    Route::post('/agent/deposit-requests/{depositRequest}/approve', [\App\Http\Controllers\DepositRequestController::class, 'approve'])->name('agent.deposit-requests.approve');
+    Route::post('/agent/deposit-requests/{depositRequest}/reject', [\App\Http\Controllers\DepositRequestController::class, 'reject'])->name('agent.deposit-requests.reject');
+
+    // Agent Reports
+    Route::get('/agent/reports', [AgentController::class, 'reports'])->name('agent.reports');
 });
 
 Route::get('/results', [ResultController::class, 'index'])->name('results.index');

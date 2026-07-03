@@ -32,6 +32,7 @@
                     this.autoUserName = data.user_name;
                 } catch (e) {
                     this.error = e.message;
+                    alert("Machine 2 Error: " + e.message); // Added alert so it doesn't silently fail
                 } finally {
                     this.loading = false;
                 }

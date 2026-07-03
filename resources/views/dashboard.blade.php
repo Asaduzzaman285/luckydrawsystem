@@ -52,7 +52,7 @@
              x-transition:leave-start="opacity-100"
              x-transition:leave-end="opacity-0"
              x-cloak>
-            <div class="bg-white w-full max-w-2xl rounded-[3rem] p-10 shadow-2xl relative border border-white" @click.away="agentModal = false">
+            <div class="bg-white w-full max-w-2xl rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-2xl relative border border-white" @click.away="agentModal = false">
                 <button @click="agentModal = false" class="absolute top-8 right-8 text-slate-300 hover:text-blue-600 transition font-black text-xl">✕</button>
                 
                 @if($associateAgent)
@@ -120,7 +120,7 @@
              x-show="open" 
              class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" 
              x-cloak>
-            <div class="bg-white w-full max-w-md rounded-[2.5rem] p-10 shadow-2xl relative border border-white" @click.away="open = false">
+            <div class="bg-white w-full max-w-md rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-10 shadow-2xl relative border border-white" @click.away="open = false">
                 <button @click="open = false" class="absolute top-8 right-8 text-slate-300 hover:text-blue-600 transition font-black text-xl">✕</button>
                 
                 <div class="mb-8 text-center">
@@ -174,7 +174,7 @@
              x-transition:leave-start="opacity-100"
              x-transition:leave-end="opacity-0"
              x-cloak>
-            <div class="bg-white w-full max-w-4xl rounded-[3rem] p-10 shadow-2xl relative border border-white" @click.away="ticketsModal = false">
+            <div class="bg-white w-full max-w-4xl rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-2xl relative border border-white" @click.away="ticketsModal = false">
                 <button @click="ticketsModal = false" class="absolute top-8 right-8 text-slate-300 hover:text-blue-600 transition font-black text-xl">✕</button>
                 
                 <div class="mb-8">
@@ -339,14 +339,14 @@
                     <h3 class="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] italic">Previous / <span class="text-blue-600 italic font-bold">Participations</span></h3>
                     <a href="{{ route('results.index') }}" class="text-[9px] font-black text-blue-600 uppercase tracking-widest hover:underline italic">View All Winners</a>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left">
+                <div class="overflow-x-auto pb-4">
+                    <table class="w-full text-left min-w-[600px]">
                         <thead>
                             <tr class="bg-white">
-                                <th class="px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 italic">Protocol ID</th>
-                                <th class="px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 italic">Identity Segment</th>
-                                <th class="px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 italic">Status</th>
-                                <th class="px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 italic text-right">Timestamp</th>
+                                <th class="px-6 sm:px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 italic">Protocol ID</th>
+                                <th class="px-6 sm:px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 italic">Identity Segment</th>
+                                <th class="px-6 sm:px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 italic">Status</th>
+                                <th class="px-6 sm:px-10 py-5 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 italic text-right">Timestamp</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
@@ -356,11 +356,11 @@
                                     $hasWinner = $ticketGroup->contains('is_winner', true);
                                 @endphp
                                 <tr class="hover:bg-blue-50/30 transition">
-                                    <td class="px-10 py-6">
+                                    <td class="px-6 sm:px-10 py-6">
                                         <div class="font-black text-slate-900 text-sm tracking-tight italic">{{ $firstTicket->draw->title }}</div>
                                         <div class="text-[9px] text-slate-400 font-bold mt-1 italic tracking-widest uppercase">{{ $firstTicket->product->name ?? 'Direct' }}</div>
                                     </td>
-                                    <td class="px-10 py-6">
+                                    <td class="px-6 sm:px-10 py-6">
                                         <div class="flex flex-wrap items-center gap-2 max-w-sm">
                                             @foreach($ticketGroup->take(10) as $ticket)
                                                 <span class="text-[9px] font-black {{ $ticket->is_winner ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400' }} px-3 py-1 rounded uppercase tracking-tighter italic border border-slate-200/50 shadow-sm">
@@ -378,14 +378,14 @@
                                             @endif
                                         </div>
                                     </td>
-                                    <td class="px-10 py-6">
+                                    <td class="px-6 sm:px-10 py-6">
                                         @if($hasWinner)
                                             <span class="inline-flex items-center px-3 py-1.5 rounded-full text-[8px] font-black bg-emerald-500/10 text-emerald-600 uppercase tracking-widest animate-pulse border border-emerald-500/20 italic">Winner Identified</span>
                                         @else
                                             <span class="inline-flex items-center px-3 py-1 rounded text-[8px] font-black bg-slate-50 text-slate-400 uppercase tracking-widest italic border border-slate-100">{{ $firstTicket->status }}</span>
                                         @endif
                                     </td>
-                                    <td class="px-10 py-6 text-right">
+                                    <td class="px-6 sm:px-10 py-6 text-right">
                                         <div class="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em] italic">{{ $firstTicket->created_at->format('d M, Y') }}</div>
                                     </td>
                                 </tr>
