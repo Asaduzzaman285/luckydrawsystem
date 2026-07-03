@@ -20,6 +20,68 @@
         <div class="px-4 md:px-8 max-w-7xl mx-auto">
             <div class="bg-white rounded-[2rem] overflow-hidden shadow-xl shadow-blue-900/5 border border-white">
                 <div class="px-4 md:px-8 py-5 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
+                    <h3 class="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] italic">Deposit Requests / <span class="text-blue-600 font-bold italic">{{ $depositRequests->total() }} Records</span></h3>
+                </div>
+                
+                <div class="overflow-x-auto border-b border-slate-100">
+                    <table class="w-full text-left min-w-[600px]">
+                        <thead>
+                            <tr class="bg-white">
+                                <th class="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Transaction ID</th>
+                                <th class="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Method</th>
+                                <th class="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Date</th>
+                                <th class="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Status</th>
+                                <th class="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            @forelse($depositRequests as $deposit)
+                                <tr class="hover:bg-blue-50/30 transition">
+                                    <td class="px-6 py-4">
+                                        <div class="text-[9px] font-black text-slate-400 tracking-widest uppercase italic">{{ $deposit->transaction_id }}</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-black bg-blue-50 text-blue-600 uppercase tracking-widest italic border border-blue-100">{{ $deposit->payment_method }}</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">{{ $deposit->created_at->format('M d, Y h:i A') }}</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        @if($deposit->status == 'pending')
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-black bg-amber-50 text-amber-600 uppercase tracking-widest italic border border-amber-100">Pending</span>
+                                        @elseif($deposit->status == 'approved')
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-black bg-emerald-50 text-emerald-600 uppercase tracking-widest italic border border-emerald-100">Approved</span>
+                                        @else
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[8px] font-black bg-red-50 text-red-600 uppercase tracking-widest italic border border-red-100">Rejected</span>
+                                        @endif
+                                        @if($deposit->status == 'rejected' && $deposit->rejection_reason)
+                                            <div class="text-[8px] text-red-400 mt-1 uppercase italic">{{ $deposit->rejection_reason }}</div>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="text-[11px] font-black text-emerald-600 italic">
+                                            ৳ {{ number_format($deposit->amount, 2) }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-6 py-12 text-center text-[10px] font-black text-slate-300 uppercase tracking-widest italic">
+                                        No deposit requests found.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                
+                @if($depositRequests->hasPages())
+                    <div class="px-6 py-4 bg-slate-50/50 border-b border-slate-100">
+                        {{ $depositRequests->appends(['page' => request('page')])->links() }}
+                    </div>
+                @endif
+                
+                <div class="px-4 md:px-8 py-5 border-b border-slate-50 flex justify-between items-center bg-slate-50/50 mt-4">
                     <h3 class="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] italic">Transactions / <span class="text-blue-600 font-bold italic">{{ $transactions->total() }} Records</span></h3>
                 </div>
                 

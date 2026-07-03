@@ -13,7 +13,11 @@ class UserTransactionController extends Controller
         $transactions = Transaction::where('user_id', Auth::id())
             ->latest()
             ->paginate(20);
+            
+        $depositRequests = \App\Models\DepositRequest::where('user_id', Auth::id())
+            ->latest()
+            ->paginate(10, ['*'], 'deposits_page');
 
-        return view('user.transactions.index', compact('transactions'));
+        return view('user.transactions.index', compact('transactions', 'depositRequests'));
     }
 }
