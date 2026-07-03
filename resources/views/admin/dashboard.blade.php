@@ -83,7 +83,7 @@
             <!-- Operational Charts -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
                 <!-- Agents By District Chart -->
-                <div class="bg-white p-8 rounded-[2rem] border border-white shadow-xl shadow-blue-900/5">
+                <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-white shadow-xl shadow-blue-900/5">
                     <h3 class="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] italic mb-6">Agents Distribution / <span class="text-slate-400 italic font-bold">By District</span></h3>
                     <div class="h-[250px]">
                         <canvas id="agentsDistrictChart"></canvas>
@@ -91,7 +91,7 @@
                 </div>
 
                 <!-- Operations Summary Chart -->
-                <div class="bg-white p-8 rounded-[2rem] border border-white shadow-xl shadow-blue-900/5">
+                <div class="bg-white p-6 sm:p-8 rounded-[2rem] border border-white shadow-xl shadow-blue-900/5">
                     <h3 class="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] italic mb-6">Operations Glance / <span class="text-slate-400 italic font-bold">Overall Stats</span></h3>
                     <div class="h-[250px]">
                         <canvas id="operationsSummaryChart"></canvas>
@@ -106,13 +106,13 @@
                     <a href="{{ route('admin.withdrawals.index') }}" class="text-[9px] font-black text-blue-600 uppercase tracking-widest hover:underline">View All Requests</a>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
+                    <table class="w-full text-left min-w-[600px]">
                         <thead>
                             <tr class="bg-white">
-                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Member</th>
-                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Amount</th>
-                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Reference</th>
-                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 text-right">Administrative Action</th>
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Member</th>
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Amount</th>
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Reference</th>
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 text-right">Administrative Action</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">

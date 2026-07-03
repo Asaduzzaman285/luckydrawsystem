@@ -73,7 +73,7 @@
 
             <!-- Agent Growth Hero -->
             <div class="mb-10">
-                <div class="bg-white rounded-[2rem] overflow-hidden shadow-xl shadow-blue-900/5 relative p-8 sm:p-12 text-slate-900 border border-white">
+                <div class="bg-white rounded-[2rem] overflow-hidden shadow-xl shadow-blue-900/5 relative p-6 sm:p-12 text-slate-900 border border-white">
                     <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
                         <div>
                             <h2 class="text-3xl font-black tracking-tighter italic lowercase mb-4">Operations / <span class="text-blue-600">Summary</span></h2>
@@ -88,7 +88,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-blue-50 p-8 rounded-3xl border border-blue-100 text-center min-w-[240px] shadow-inner">
+                        <div class="bg-blue-50 p-6 sm:p-8 rounded-3xl border border-blue-100 text-center min-w-0 sm:min-w-[240px] shadow-inner w-full md:w-auto">
                             <div class="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-2">My Commission</div>
                             <div class="text-4xl font-black text-blue-700 tracking-tighter leading-none mb-4 italic">৳ {{ number_format($stats['wallet_balance'], 2) }}</div>
                             <button @click="payoutModal = true" class="w-full bg-blue-600 text-white text-[10px] font-black py-4 rounded-xl uppercase tracking-widest hover:bg-blue-700 shadow-lg shadow-blue-500/20 transition-all">Request payout</button>
@@ -105,20 +105,20 @@
                         <h3 class="text-[10px] font-black text-slate-900 uppercase tracking-[0.2em] italic">user / <span class="text-blue-600">withdrawal requests</span></h3>
                         <span class="bg-blue-600 text-white text-[8px] font-black px-3 py-1 rounded-full animate-pulse">{{ $pendingUserWithdrawals->count() }} PENDING</span>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead>
-                                <tr class="bg-white">
-                                    <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Member</th>
-                                    <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Amount</th>
-                                    <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Method</th>
-                                    <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 text-right">Action</th>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left min-w-[500px]">
+                        <thead>
+                            <tr class="bg-white">
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Member</th>
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Amount</th>
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Method</th>
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-50">
                                 @foreach($pendingUserWithdrawals as $req)
                                     <tr class="hover:bg-blue-50/30 transition">
-                                        <td class="px-8 py-4">
+                                        <td class="px-4 sm:px-8 py-4">
                                             <div class="font-black text-slate-900 text-xs tracking-tight italic">{{ $req->user->name }}</div>
                                             <div class="text-[9px] text-slate-400 font-bold mt-1">{{ $req->user->phone }}</div>
                                         </td>
@@ -156,13 +156,13 @@
                     <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">Last 10 Records</p>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left">
+                    <table class="w-full text-left min-w-[500px]">
                         <thead>
                             <tr class="bg-white">
-                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Method</th>
-                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Amount</th>
-                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Identity Status</th>
-                                <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 text-right">Age</th>
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Method</th>
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Amount</th>
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Identity Status</th>
+                                <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 text-right">Age</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-50">
@@ -207,12 +207,12 @@
                         <p class="text-[8px] font-black text-slate-400 uppercase tracking-widest">{{ $managedUsers->count() }} Profiles</p>
                     </div>
                     <div class="overflow-x-auto max-h-[400px]">
-                        <table class="w-full text-left">
+                        <table class="w-full text-left min-w-[400px]">
                             <thead>
                                 <tr class="bg-white">
-                                    <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Member</th>
-                                    <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Balance</th>
-                                    <th class="px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 text-right">Status</th>
+                                    <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Member</th>
+                                    <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50">Balance</th>
+                                    <th class="px-4 sm:px-8 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-50 text-right">Status</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-50">
@@ -288,7 +288,7 @@
         <!-- Registration Modal -->
         <div x-show="registerModal" 
              class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" x-cloak>
-            <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="bg-white w-full max-w-md rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <button @click="registerModal = false" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition font-black">✕</button>
                 <div class="mb-8">
                     <h3 class="text-2xl font-black text-slate-900 tracking-tighter lowercase italic">onboard / <span class="text-blue-600">user</span></h3>
@@ -333,7 +333,7 @@
 
         <!-- Deposit Modal -->
         <div x-show="depositModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" x-cloak>
-            <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="bg-white w-full max-w-md rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <button @click="depositModal = false" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition font-black">✕</button>
                 <div class="mb-8">
                     <h3 class="text-2xl font-black text-slate-900 tracking-tighter lowercase italic">credit / <span class="text-emerald-600">transfer</span></h3>
@@ -417,7 +417,7 @@
 
         <!-- Payout Modal -->
         <div x-show="payoutModal" class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-hidden" x-cloak>
-            <div class="bg-white w-full max-w-md rounded-[3rem] p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="bg-white w-full max-w-md rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-2xl relative border border-white max-h-[90vh] overflow-y-auto custom-scrollbar">
                 <button @click="payoutModal = false" class="absolute top-8 right-8 text-slate-300 hover:text-slate-900 transition font-black">✕</button>
                 <div class="mb-8">
                     <h3 class="text-2xl font-black text-slate-900 tracking-tighter lowercase italic">payout / <span class="text-blue-600">withdrawal</span></h3>

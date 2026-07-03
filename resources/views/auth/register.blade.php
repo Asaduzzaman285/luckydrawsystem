@@ -172,7 +172,18 @@
 
   .form-side::-webkit-scrollbar { width: 4px; }
   .form-side::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-  @media(max-width:768px){ .brand{display:none;} .fg-row{grid-template-columns:1fr;} }
+  @media(max-width:768px){
+    .brand{display:none;}
+    .fg-row{grid-template-columns:1fr;}
+    .page { height: auto; min-height: 100vh; }
+    .form-side { padding: 24px 20px; min-height: 100vh; }
+    .fc { max-width: 100%; }
+    .fh { font-size: 22px; }
+    input[type=text], input[type=password], input[type=email], select { padding: 12px 14px 12px 42px; font-size: 14px; }
+    .btn-p { padding: 14px; font-size: 14px; }
+    .join-perks { flex-direction: column; gap: 12px; }
+    .jp-div { width: 100%; height: 1px; }
+  }
 </style>
 </head>
 <body>

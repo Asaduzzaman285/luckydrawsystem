@@ -190,7 +190,16 @@
 
   .form-side::-webkit-scrollbar { width: 4px; }
   .form-side::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-  @media(max-width:768px){ .brand{display:none;} }
+  @media(max-width:768px){
+    .brand{display:none;}
+    html, body { overflow: auto; overflow-x: hidden; }
+    .page { height: auto; min-height: 100vh; }
+    .form-side { padding: 24px 20px; min-height: 100vh; }
+    .fc { max-width: 100%; }
+    .fh { font-size: 22px; }
+    input[type=text], input[type=password] { padding: 12px 14px 12px 42px; font-size: 14px; }
+    .btn-p { padding: 14px; font-size: 14px; }
+  }
 </style>
 </head>
 <body>
