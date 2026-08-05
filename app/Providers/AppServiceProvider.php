@@ -22,5 +22,9 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\Gate::before(function ($user, $ability) {
             return $user->hasRole('super-admin') ? true : null;
         });
+
+        if (env('APP_ENV') !== 'local') {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
     }
 }
